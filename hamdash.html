@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Refresh" content="300" />
+    <title>VA3HDL Ham Radio Dashboard</title>
+<!--
+	Hamdash
+	license: MIT
+	https://www.va3hdl.com/projects/hamdash
+
+
+.d8888. d888888b db    db db      d88888b .d8888.
+88'  YP `~~88~~' `8b  d8' 88      88'     88'  YP
+`8bo.      88     `8bd8'  88      88ooooo `8bo.
+  `Y8b.    88       88    88      88~~~~~   `Y8b.
+db   8D    88       88    88booo. 88.     db   8D
+`8888Y'    YP       YP    Y88888P Y88888P `8888Y'
+
+
+-->
+    <style>
+      body {
+        background: black;
+        font-size: 100%;
+      }
+
+      .iframe-container {
+        background-color: black;
+        left: 0px;
+        border: 0px none;
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+        bottom: 0px;
+        z-index: -2;
+      }
+
+      .img-zoom {
+        background-color: black;
+        left: 0px;
+        border: 0px none;
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+        bottom: 0px;
+        z-index: -2;
+      }
+
+      /* Style for the fullscreen container (menu options) */
+      .full-screen {
+        height: 100%;
+        border: 0px none;
+        width: 100%;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        -ms-zoom: 1;
+        -moz-transform: scale(1);
+        -moz-transform-origin: 0 0;
+        -o-transform: scale(1);
+        -o-transform-origin: 0 0;
+        -webkit-transform: scale(1);
+        -webkit-transform-origin: 0 0;
+      }
+
+      .default-frame {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        left: 0px;
+        border: 0px none;
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+        bottom: 0px;
+      }
+
+      .top-bar {
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr;
+        background-color: #333;
+        color: #fff;
+        padding: 1vh;
+        border: 0px none;
+        overflow: hidden;
+        position: relative;
+        width: auto;
+      }
+
+      .child {
+        position: relative;
+        display: grid;
+        height: 4.2vh;
+        border: 1px solid hsl(210deg 8% 50%);
+        border-radius: 5px;
+        background: hsl(210deg 15% 20%);
+        color: white;
+        font-family: Inconsolata Nerd Font Mono, monospace, Monaco, sans-serif;
+        font-size: 2vw;
+      }
+
+      /* Style for the dashboard container */
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 0px;
+        border: 0px none;
+        margin-bottom: 0px;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Style for the image container */
+      .image-container {
+        position: relative;
+        float: inline-start;
+        margin-right: 0px;
+        border: 0px;
+        width: 24.9vw;
+        height: 31vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center; /* Horizontal centering */
+        align-items: center; /* Vertical centering */
+      }
+
+      /* Style for the image */
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Style for the image titles */
+      .image-title {
+        position: absolute;
+        top: 6%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white; /* font color */
+        background-color: black;
+        font-size: 1.2vw;
+        border-left: 0.25vw solid black;
+        border-right: 0.25vw solid black;
+        font-family: Bebas Neue, monospace, Monaco, sans-serif;
+        padding-top: 4px;
+      }
+
+      /* Style for the full screen image */
+      .image-large {
+        display: block;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: 100%;
+      }
+
+      /* Style for the left menu options */
+      .menu {
+        display: grid;
+        /* grid-row: 9 / span 1; /* Update with number of menu items */
+        grid-gap: 3px;
+        position: absolute;
+        width: auto;
+        height: auto;
+        margin-top: 70px;
+        left: 0px;
+        z-index: 2;
+      }
+
+      #mySidenav a {
+        position: relative;
+        float: inline-start;
+        left: -120px;
+        transition: 0.3s;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 12px;
+        padding-bottom: 8px;
+        width: 100px;
+        text-decoration: none;
+        font-family: Bebas Neue Bold, monospace, Monaco, sans-serif;
+        font-size: 28px;
+        text-align: right;
+        color: white;
+        border-radius: 0 5px 5px 0;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      #mySidenav a:hover {
+        left: 0;
+      }
+    </style>
+  </head>
+  <!--
+.d8888.  .o88b. d8888b. d888888b d8888b. d888888b .d8888.
+88'  YP d8P  Y8 88  `8D   `88'   88  `8D `~~88~~' 88'  YP
+`8bo.   8P      88oobY'    88    88oodD'    88    `8bo.
+  `Y8b. 8b      88`8b      88    88~~~      88      `Y8b.
+db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
+`8888Y'  `Y88P' 88   YD Y888888P 88         YP    `8888Y'
+
+
+-->
+  <script src="wheelzoom.js"></script>
+
+  <script>
+    // Menu items - Structure is Color code, Option, target URL, scaling 1=Original Size
+    // [color code, menu text, link, scale factor]
+    const aURL = [
+      ["add10d", "BACK", "#", "1"],
+      ["ff9100", "Refresh", "#", "1"],
+      ["0dd1a7", "Help", "#", "1"],
+      [
+        "2196F3",
+        "CAT",
+        "file:///home/psabbag/Dropbox/Radio/CAThtml/CAT_Frequencies.html",
+        "1",
+      ],
+      ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
+      [
+        "2196F3",
+        "CONTEST",
+        "https://www.contestcalendar.com/fivewkcal.html",
+        "1",
+      ],
+      ["2196F3", "HAMCLOCK", "http://192.168.0.111:8081/live.html", "1"],
+      [
+        "2196F3",
+        "LIGHTNING",
+        "https://map.blitzortung.org/#3.87/36.5/-89.41",
+        "1",
+      ],
+      ["2196F3", "PISTAR", "http://pi-star.local/", "1.2"],
+      [
+        "2196F3",
+        "RADAR",
+        "https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON",
+        "1",
+      ],
+      ["2196F3", "TIME.IS", "https://time.is/", "1"],
+      [
+        "2196F3",
+        "WINDS",
+        "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-78.79,44.09,3000",
+        "1",
+      ],
+    ];
+
+    // Dashboard items - Structure is Title, Image Source URL
+    // [Title, Image Source URL]
+    const aIMG = [
+      ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
+      [
+        "LOCAL RADAR",
+        "https://s.w-x.co/staticmaps/wu/wxtype/county_loc/bgm/animate.png",
+      ],
+      [
+        "NOAA D-RAP",
+        "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
+      ],
+      [
+        "ISS POSITION",
+        "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544",
+      ],
+      [
+        "SATELLITE CAN",
+        "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/can/EXTENT3/GOES16-CAN-EXTENT3-1125x560.gif",
+      ],
+      [
+        "SATELLITE CGL",
+        "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/cgl/EXTENT3/GOES16-CGL-EXTENT3-600x600.gif",
+      ],
+      [
+        "LIGHTNING",
+        "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa",
+      ],
+      [
+        "LIGHTNING LOCAL",
+        "https://www.blitzortung.org/en/Images/image_b_ny.png",
+      ],
+      ["HAMCLOCK", "http://192.168.0.111/hamclock/last_map.bmp"],
+      [
+        "SW BROADCAST",
+        "https://www.short-wave.info/php/transmitter-site-map.php?mobile=false&lat=52.67|-21.96|-15.53|-9.42|-17.76|-17.53|46.34|50.73|42.81|39.75|50.89|29.60|6.23|39.40|-15.53|43.51|46.34|-21.96|34.38|44.15|39.36|46.34|39.91|39.91|46.34|27.46|24.88|27.46|36.28|39.36|42.04|36.28|36.21|12.69|18.22|24.17|42.04|29.60|-15.73|-7.90|36.21|12.69|36.21|29.15|30.65|-21.96|33.50|-38.83|36.28|36.21|27.46&lon=9.75|27.60|28.00|160.05|168.36|146.05|-67.83|4.39|23.19|116.81|-113.85|55.79|-10.70|32.86|28.00|-79.63|-67.83|27.64|108.61|86.90|75.72|-67.83|-76.58|-76.58|-67.83|-80.93|102.50|-80.93|-86.10|75.72|12.32|-86.10|-86.89|-8.02|-63.02|54.25|12.32|55.79|46.45|-14.38|-86.89|-8.02|-86.89|47.77|-87.09|27.64|-86.47|176.42|-86.10|-86.89|-80.93&freq=3975|4930|4965|5020|5040|5055|5130|5780|5900|5985|6030|6040|6050|6050|6065|6070|6160|6195|7285|7295|7415|7490|9265|9265|9330|9395|9440|9455|9475|9600|9705|9930|9980|11640|11775|11810|11870|11880|11965|12095|12160|13630|13845|15540|15555|15580|15610|15720|15810|15825|17790&az=ND|20|ND|ND|ND|ND|245|ND|126|257|ND|313|ND|310|315|ND|245|350|317|270|308|245|242|242|245|355|283|285|50|308|206|180|90|111|320|90|210|211|295|27|85|111|90|310|5|350|85|35|40|46|160",
+      ],
+      ["BAYVIEW AVE", "https://ww5.yorkmaps.ca/webtrafficimages/loc230.jpg"],
+      ["HF PROPAGATION", "https://www.hamqsl.com/solarpich.php"],
+    ];
+
+    // https://www.hamqsl.com/solar100sc.php
+    // https://www.hamqsl.com/solarbc.php
+    // https://www.hamqsl.com/solarpich.php
+
+    var largeShow = 0;
+
+    // This function shows the embedded websites
+    function MenuOpt(num) {
+      document.getElementById("FullScreen").style.display = "block";
+      document.getElementById("iFrameContainer").style.zIndex = 1;
+      document.getElementById("FullScreen").src = aURL[num][2];
+      document.getElementById("FullScreen").style.transform =
+        "scale(" + aURL[num][3] + ")";
+      if (num == 0) {
+        wheelzoom(document.querySelectorAll("img"));
+      } else if (num == 1) {
+        location.reload(true);
+      } else if (num == 2) {
+        alert(`Double click on an image to expand to full screen.
+Double click again to close full screen view.
+The content refreshes automatically every 5 minutes.
+`);
+      }
+    }
+
+    // This function shows the larger images when double click to enlarge
+    function larger(event) {
+      var targetElement = event.target || event.srcElement;
+      if (largeShow == 1) {
+        largeShow = 0;
+        document.getElementById("imgZoom").style.display = "none";
+        document.getElementById("imgZoom").style.zIndex = -2;
+      } else {
+        largeShow = 1;
+        document.getElementById("imgZoom").style.display = "block";
+        document.getElementById("imgZoom").style.zIndex = 3;
+        document.getElementById("ImageLarge").src =
+          targetElement.style.backgroundImage
+            .replace(/^url\(["']?/, "")
+            .replace(/["']?\)$/, "");
+      }
+    }
+
+    function start() {
+      // Get the parent div for Menu container
+      var parentDiv = document.getElementById("myMenu");
+      // Append the new div to the parent div
+      aURL.forEach(function (innerArray, index) {
+        // Create a new div element
+        var newDiv = document.createElement("div");
+        // Set some properties for the new div
+        newDiv.id = "mySidenav";
+        newDiv.className = "sidenav";
+        newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
+        parentDiv.appendChild(newDiv);
+      });
+
+      // Get the parent div for Dashboard container
+      var parentDiv = document.getElementById("dash");
+      // Append the new div to the parent div
+      aIMG.forEach(function (innerArray, index) {
+        // Create a new div element
+        var newDiv = document.createElement("div");
+        // Set some properties for the new div
+        newDiv.className = "image-container";
+        // Create a new img element
+        var newImg = document.createElement("img");
+        newImg.id = `"Image${index}"`;
+        newImg.src = innerArray[1];
+        newImg.ondblclick = larger;
+        parentDiv.appendChild(newDiv);
+        newDiv.appendChild(newImg);
+        // Create a new div element for img title
+        var newTtl = document.createElement("div");
+        newTtl.className = "image-title";
+        newTtl.innerHTML = innerArray[0];
+        newDiv.appendChild(newTtl);
+      });
+
+      // assign wheelzoom functionality to all 12 images
+      wheelzoom(document.querySelectorAll("img"));
+
+      window.addEventListener("resize", function () {
+        "use strict";
+        window.location.reload();
+      });
+    }
+
+    // This function update the time on the top bar
+    function updateTopBar() {
+      const now = new Date();
+
+      const options = { weekday: "long", month: "long", day: "numeric" };
+
+      const localDate = now.toLocaleDateString("en-US", options);
+      const localTime = now.toLocaleTimeString("en-US", {
+        hour12: true,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      });
+
+      const utcDate = now.toISOString().slice(0, 10);
+      const utcTime = now.toISOString().slice(11, 19) + " UTC";
+
+      const topBarLeft = document.getElementById("topBarLeft");
+      topBarLeft.textContent = `${localDate} - ${localTime}`;
+      const topBarCenter = document.getElementById("topBarCenter");
+      topBarCenter.textContent = `VA3HDL - FN04ga`;
+      const topBarRight = document.getElementById("topBarRight");
+      topBarRight.textContent = `${utcDate} ${utcTime}`;
+    }
+
+    // Update every second
+    setInterval(updateTopBar, 1000);
+
+    // Initial call to update
+    updateTopBar();
+  </script>
+  <!--
+d8888b.  .d88b.  d8888b. db    db
+88  `8D .8P  Y8. 88  `8D `8b  d8'
+88oooY' 88    88 88   88  `8bd8'
+88~~~b. 88    88 88   88    88
+88   8D `8b  d8' 88  .8D    88
+Y8888P'  `Y88P'  Y8888D'    YP
+
+
+-->
+  <body onload="start()">
+    <div id="iFrameContainer" class="iframe-container">
+      <iframe
+        class="full-screen"
+        id="FullScreen"
+        src=""
+        title="Zoom"
+        scrolling="no"
+      ></iframe>
+    </div>
+
+    <div id="imgZoom" class="img-zoom">
+      <img
+        class="image-large"
+        id="ImageLarge"
+        alt="pic"
+        ondblclick="larger(event);"
+      />
+    </div>
+
+    <div id="myMenu" class="menu">
+      <!-- Menu container -->
+    </div>
+
+    <div id="defaultFrame" class="default-frame">
+      <div class="top-bar">
+        <div
+          id="topBarLeft"
+          class="child"
+          style="text-align: left; padding-left: 7px; color: blanchedalmond"
+        ></div>
+        <div
+          id="topBarCenter"
+          class="child"
+          style="text-align: center; color: rgb(0, 119, 255)"
+        ></div>
+        <div
+          id="topBarRight"
+          class="child"
+          style="text-align: right; padding-right: 5px; color: aquamarine"
+        ></div>
+      </div>
+      <div id="dash" class="dashboard">
+        <!-- Images container -->
+      </div>
+    </div>
+  </body>
+</html>
