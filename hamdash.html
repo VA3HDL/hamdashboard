@@ -213,8 +213,10 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
   <script src="wheelzoom.js"></script>
 
   <script>
-    // Menu items - Structure is Color code, Option, target URL, scaling 1=Original Size
-    // [color code, menu text, link, scale factor]
+    // Menu items
+    // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size
+    // The values are [color code, menu text, target link, scale factor],
+    // add new lines following the structure for extra menu options. The comma at the end is important!
     const aURL = [
       ["add10d", "BACK", "#", "1"],
       ["ff9100", "Refresh", "#", "1"],
@@ -248,13 +250,17 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       ],
     ];
 
-    // Dashboard items - Structure is Title, Image Source URL
-    // [Title, Image Source URL]
+    // Dashboard items
+    // Structure is Title, Image Source URL
+    // [Title, Image Source URL],
+    // the comma at the end is important!
+    // You can't add more items because there are only 12 placeholders on the dashboard
+    // but you can replace the titles and the images with anything you want.
     const aIMG = [
       ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
       [
         "LOCAL RADAR",
-        "https://s.w-x.co/staticmaps/wu/wxtype/county_loc/bgm/animate.png",
+        "https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
       ],
       [
         "NOAA D-RAP",
@@ -398,7 +404,8 @@ The content refreshes automatically every 5 minutes.
       const topBarLeft = document.getElementById("topBarLeft");
       topBarLeft.textContent = `${localDate} - ${localTime}`;
       const topBarCenter = document.getElementById("topBarCenter");
-      topBarCenter.textContent = `VA3HDL - FN04ga`;
+      // replace below with your callsign and locator (or any other text you want)
+      topBarCenter.textContent = `CALLSIGN - Locator`;
       const topBarRight = document.getElementById("topBarRight");
       topBarRight.textContent = `${utcDate} ${utcTime}`;
     }
