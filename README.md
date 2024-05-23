@@ -16,3 +16,5 @@ Is that easy!
 73
 
 ![VA3HDL Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/dashboard_sample.png?raw=true)
+
+![N4NBC Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/N4NBC-sample.jpg?raw=true)
