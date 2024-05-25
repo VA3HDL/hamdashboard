@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Refresh" content="300" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css?family=Victor Mono|Audiowide|Bebas Neue"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <title>VA3HDL Ham Radio Dashboard</title>
 <!--
 	Hamdash
@@ -94,13 +104,13 @@ db   8D    88       88    88booo. 88.     db   8D
       .child {
         position: relative;
         display: grid;
-        height: 4.2vh;
         border: 1px solid hsl(210deg 8% 50%);
         border-radius: 5px;
         background: hsl(210deg 15% 20%);
         color: white;
-        font-family: Inconsolata Nerd Font Mono, monospace, Monaco, sans-serif;
-        font-size: 2vw;
+        padding: 0.5vh;
+        font-family: "Victor Mono", Monaco, sans-serif;
+        font-size: 1.4vw;
       }
 
       /* Style for the dashboard container */
@@ -144,11 +154,14 @@ db   8D    88       88    88booo. 88.     db   8D
         transform: translate(-50%, -50%);
         color: white; /* font color */
         background-color: black;
-        font-size: 1.2vw;
+        font-size: 1vw;
         border-left: 0.25vw solid black;
         border-right: 0.25vw solid black;
-        font-family: Bebas Neue, monospace, Monaco, sans-serif;
-        padding-top: 4px;
+        font-family: "Roboto Condensed", Monaco, sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
+        padding-top: 1px;
       }
 
       /* Style for the full screen image */
@@ -187,8 +200,11 @@ db   8D    88       88    88booo. 88.     db   8D
         padding-bottom: 8px;
         width: 100px;
         text-decoration: none;
-        font-family: Bebas Neue Bold, monospace, Monaco, sans-serif;
-        font-size: 28px;
+        font-family: "Bebas Neue", Monaco, sans-serif;
+        font-size: 1.2vw;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
         text-align: right;
         color: white;
         border-radius: 0 5px 5px 0;
@@ -213,6 +229,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
   <script src="wheelzoom.js"></script>
 
   <script>
+    // CUT START
+    const topBarCenterText = `VA3HDL - FN04ga`;
     // Menu items
     // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size
     // The values are [color code, menu text, target link, scale factor],
@@ -228,6 +246,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         "https://www.contestcalendar.com/fivewkcal.html",
         "1",
       ],
+      ["2196F3", "DX CLUSTER", "https://dxcluster.ha8tks.hu/map/", "1"],
       [
         "2196F3",
         "LIGHTNING",
@@ -242,6 +261,12 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         "1",
       ],
       ["2196F3", "TIME.IS", "https://time.is/", "1"],
+      [
+        "2196F3",
+        "WEATHER",
+        "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=44.0157&lon=-79.4591&zoom=5",
+        "1",
+      ],
       [
         "2196F3",
         "WINDS",
@@ -298,21 +323,33 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       "https://www.hamqsl.com/solar100sc.php",
       "https://www.hamqsl.com/solarpich.php"],
     ];
+    // CUT END
 
     var largeShow = 0;
     var aIdx = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
     // This function shows the embedded websites
     function MenuOpt(num) {
+      // Stop refreshes
+      window.stop();
+      clearTimeout(getSlideId);
+      //
       document.getElementById("FullScreen").style.display = "block";
       document.getElementById("iFrameContainer").style.zIndex = 1;
       document.getElementById("FullScreen").src = aURL[num][2];
       document.getElementById("FullScreen").style.transform =
         "scale(" + aURL[num][3] + ")";
       if (num == 0) {
+        // Start refreshes
+        window.location.reload(true);
+        getSlideId = setInterval(() => slide(), 5000);
+        //
         wheelzoom(document.querySelectorAll("img"));
       } else if (num == 1) {
-        location.reload(true);
+        // Start refreshes
+        window.location.reload(true);
+        getSlideId = setInterval(() => slide(), 5000);
+        //
       } else if (num == 2) {
         alert(`Double click on an image to expand to full screen.
 Double click again to close full screen view.
@@ -326,10 +363,18 @@ The content refreshes automatically every 5 minutes.
     function larger(event) {
       var targetElement = event.target || event.srcElement;
       if (largeShow == 1) {
+        // Start refreshes
+        window.location.reload(true);
+        getSlideId = setInterval(() => slide(), 5000);
+        //
         largeShow = 0;
         document.getElementById("imgZoom").style.display = "none";
         document.getElementById("imgZoom").style.zIndex = -2;
       } else {
+        // Stop refreshes
+        window.stop();
+        clearTimeout(getSlideId);
+        //
         largeShow = 1;
         document.getElementById("imgZoom").style.display = "block";
         document.getElementById("imgZoom").style.zIndex = 3;
@@ -340,6 +385,7 @@ The content refreshes automatically every 5 minutes.
       }
     }
 
+    // Manually rotate images
     function rotate(event) {
       event.preventDefault();
       var targetElement = event.target || event.srcElement;
@@ -351,6 +397,35 @@ The content refreshes automatically every 5 minutes.
         }
         document.getElementById(targetElement.id).src = aIMG[i][aIdx[i]];
       }
+    }
+
+    // Automatically rotate images
+    function slide() {
+      // get the locations with multiple images
+      aIMG.forEach(function (innerArray, i) {
+        if (aIMG[i].length > 2) {
+          ++aIdx[i];
+          if (aIdx[i] > aIMG[i].length - 1) {
+            aIdx[i] = 1;
+          }
+          // console.log("Image" + i, " ", aIMG[i][aIdx[i]]);
+          img = document.getElementById("Image" + i);
+          img.src = aIMG[i][aIdx[i]];
+          // img.style.opacity = 0;
+          // img.style.transform = "translateX(-100%)";
+        }
+      });
+      // setTimeout(() => {
+      //   aIMG.forEach(function (innerArray, i) {
+      //     if (aIMG[i].length > 2) {
+      //       console.log("Image" + i);
+      //       img = document.getElementById("Image" + i);
+      //       // img.style.opacity = 1;
+      //       // img.style.transform = "translateX(0)";
+      //       img.src = aIMG[i][aIdx[i]];
+      //     }
+      //   });
+      // }, 1000);
     }
 
     function start() {
@@ -377,7 +452,7 @@ The content refreshes automatically every 5 minutes.
         newDiv.className = "image-container";
         // Create a new img element
         var newImg = document.createElement("img");
-        newImg.id = `"Image${index}"`;
+        newImg.id = `Image${index}`;
         newImg.src = innerArray[1];
         newImg.oncontextmenu = rotate;
         newImg.ondblclick = larger;
@@ -397,6 +472,8 @@ The content refreshes automatically every 5 minutes.
         "use strict";
         window.location.reload();
       });
+
+      getSlideId = setInterval(() => slide(), 30000);
     }
 
     // This function update the time on the top bar
@@ -420,8 +497,7 @@ The content refreshes automatically every 5 minutes.
       const topBarLeft = document.getElementById("topBarLeft");
       topBarLeft.textContent = `${localDate} - ${localTime}`;
       const topBarCenter = document.getElementById("topBarCenter");
-      // replace below with your callsign and locator (or any other text you want)
-      topBarCenter.textContent = `CALLSIGN - Locator`;
+      topBarCenter.textContent = topBarCenterText;
       const topBarRight = document.getElementById("topBarRight");
       topBarRight.textContent = `${utcDate} ${utcTime}`;
     }
