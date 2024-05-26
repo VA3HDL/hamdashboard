@@ -26,9 +26,9 @@ Is that easy!
 
 ## Samples
 
-![VA3HDL Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/dashboard_sample.png?raw=true)
+![VA3HDL Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/dashboard_sample.png?raw=true)
 
-![N4NBC Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/N4NBC-sample.jpg?raw=true)
+![N4NBC Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N4NBC-sample.jpg?raw=true)
 
 ### Dual menu example:
-![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/DualMenu.png?raw=true)
+![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
