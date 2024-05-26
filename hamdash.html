@@ -384,20 +384,20 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       document.getElementById("FullScreen").style.display = "block";
       document.getElementById("iFrameContainer").style.zIndex = 1;
       document.getElementById("FullScreen").src = aURL[num][2];
-      document.getElementById("FullScreen").style.transform =
-        "scale(" + aURL[num][3] + ")";
-      if (num == 0) {
+      document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
+
+      if (aURL[num][1].toLowerCase()=="back") {
         // Start refreshes
         window.location.reload(true);
         getSlideId = setInterval(() => slide(), 5000);
         //
         wheelzoom(document.querySelectorAll("img"));
-      } else if (num == 1) {
+      } else if (aURL[num][1].toLowerCase()=="refresh") {
         // Start refreshes
         window.location.reload(true);
         getSlideId = setInterval(() => slide(), 5000);
         //
-      } else if (num == 2) {
+      } else if (aURL[num][1].toLowerCase()=="help") {
         alert(`Double click on an image to expand to full screen.
 Double click again to close full screen view.
 Right click on an image to display the next one.
@@ -484,7 +484,6 @@ The content refreshes automatically every 5 minutes.
         // Create a new div element
         var newDiv = document.createElement("div");
         newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
-        console.log(innerArray[4]);
         if (innerArray[4] == "R") {
           // Set some properties for the new div
           newDiv.id = "mySidenavR";
