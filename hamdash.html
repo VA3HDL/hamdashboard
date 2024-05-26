@@ -37,6 +37,8 @@ db   8D    88       88    88booo. 88.     db   8D
       body {
         background: black;
         font-size: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
       }
 
       .iframe-container {
@@ -187,9 +189,10 @@ db   8D    88       88    88booo. 88.     db   8D
         width: auto;
         height: auto;
         margin-top: 70px;
-        left: 0px;
+        left: -100px;
         z-index: 2;
         overflow: hidden;
+        transition: 0.3s;
       }
 
       /* Style for the right menu options */
@@ -197,18 +200,28 @@ db   8D    88       88    88booo. 88.     db   8D
         display: grid;
         grid-gap: 3px;
         position: absolute;
-        width: auto;
+        width: 30px;
         height: auto;
         margin-top: 70px;
         right: 0px;
         z-index: 2;
-        overflow: hidden;
+        transition: 0.3s;
+      }
+
+      #myMenu:hover {
+        width: 140px;
+        left: 0px;
+      }
+
+      #myMenuR:hover {
+        width: 140px;
+        right: 0px;
       }
 
       #mySidenav a {
         position: relative;
         float: inline-start;
-        left: -120px;
+        left: -20px;
         transition: 0.3s;
         padding-left: 15px;
         padding-right: 15px;
@@ -234,7 +247,7 @@ db   8D    88       88    88booo. 88.     db   8D
       #mySidenavR a {
         position: relative;
         float: inline-start;
-        right: -120px;
+        right: -20px;
         transition: 0.3s;
         padding-left: 15px;
         padding-right: 15px;
@@ -255,6 +268,7 @@ db   8D    88       88    88booo. 88.     db   8D
 
       #mySidenavR a:hover {
         right: 0;
+        width: 130px;
       }
     </style>
   </head>
@@ -384,20 +398,21 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       document.getElementById("FullScreen").style.display = "block";
       document.getElementById("iFrameContainer").style.zIndex = 1;
       document.getElementById("FullScreen").src = aURL[num][2];
-      document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
+      document.getElementById("FullScreen").style.transform =
+        "scale(" + aURL[num][3] + ")";
 
-      if (aURL[num][1].toLowerCase()=="back") {
+      if (aURL[num][1].toLowerCase() == "back") {
         // Start refreshes
         window.location.reload(true);
         getSlideId = setInterval(() => slide(), 5000);
         //
         wheelzoom(document.querySelectorAll("img"));
-      } else if (aURL[num][1].toLowerCase()=="refresh") {
+      } else if (aURL[num][1].toLowerCase() == "refresh") {
         // Start refreshes
         window.location.reload(true);
         getSlideId = setInterval(() => slide(), 5000);
         //
-      } else if (aURL[num][1].toLowerCase()=="help") {
+      } else if (aURL[num][1].toLowerCase() == "help") {
         alert(`Double click on an image to expand to full screen.
 Double click again to close full screen view.
 Right click on an image to display the next one.
