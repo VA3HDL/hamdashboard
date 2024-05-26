@@ -22,6 +22,7 @@ Is that easy!
 - Ability to add multiple images per position. Images are rotated automatically every 30 seconds.
 - Autorefresh is now paused automatically when switching to a website (from menu) or when an image is zoomed-in to full screen
 - Moved configuration variables to the top of the script and added extra commentary to ease the initial setup
+- Added menu to the right of the page. Now the left menu has ham radio links and right menu has weather links
 
 ## Samples
 

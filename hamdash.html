@@ -109,7 +109,7 @@ db   8D    88       88    88booo. 88.     db   8D
         background: hsl(210deg 15% 20%);
         color: white;
         padding: 0.5vh;
-        font-family: "Victor Mono", Monaco, sans-serif;
+        font-family: "Victor Mono", sans-serif;
         font-size: 1.4vw;
       }
 
@@ -157,7 +157,7 @@ db   8D    88       88    88booo. 88.     db   8D
         font-size: 1vw;
         border-left: 0.25vw solid black;
         border-right: 0.25vw solid black;
-        font-family: "Roboto Condensed", Monaco, sans-serif;
+        font-family: "Roboto Condensed", sans-serif;
         font-optical-sizing: auto;
         font-weight: 300;
         font-style: normal;
@@ -179,7 +179,6 @@ db   8D    88       88    88booo. 88.     db   8D
       /* Style for the left menu options */
       .menu {
         display: grid;
-        /* grid-row: 9 / span 1; /* Update with number of menu items */
         grid-gap: 3px;
         position: absolute;
         width: auto;
@@ -187,6 +186,20 @@ db   8D    88       88    88booo. 88.     db   8D
         margin-top: 70px;
         left: 0px;
         z-index: 2;
+        overflow: hidden;
+      }
+
+      /* Style for the right menu options */
+      .menuR {
+        display: grid;
+        grid-gap: 3px;
+        position: absolute;
+        width: auto;
+        height: auto;
+        margin-top: 70px;
+        right: 0px;
+        z-index: 2;
+        overflow: hidden;
       }
 
       #mySidenav a {
@@ -200,7 +213,7 @@ db   8D    88       88    88booo. 88.     db   8D
         padding-bottom: 8px;
         width: 100px;
         text-decoration: none;
-        font-family: "Bebas Neue", Monaco, sans-serif;
+        font-family: "Bebas Neue", sans-serif;
         font-size: 1.2vw;
         font-optical-sizing: auto;
         font-weight: 300;
@@ -213,6 +226,32 @@ db   8D    88       88    88booo. 88.     db   8D
 
       #mySidenav a:hover {
         left: 0;
+      }
+
+      #mySidenavR a {
+        position: relative;
+        float: inline-start;
+        right: -120px;
+        transition: 0.3s;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 12px;
+        padding-bottom: 8px;
+        width: 100px;
+        text-decoration: none;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.2vw;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
+        text-align: left;
+        color: white;
+        border-radius: 5px 0px 0px 5px;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      #mySidenavR a:hover {
+        right: 0;
       }
     </style>
   </head>
@@ -232,11 +271,12 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     // CUT START
     const topBarCenterText = `VA3HDL - FN04ga`;
     // Menu items
-    // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size
-    // The values are [color code, menu text, target link, scale factor],
+    // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
+    // The values are [color code, menu text, target link, scale factor, side],
     // add new lines following the structure for extra menu options. The comma at the end is important!
     const aURL = [
       ["add10d", "BACK", "#", "1"],
+      ["add10d", "BACK", "#", "1", "R"],
       ["ff9100", "Refresh", "#", "1"],
       ["0dd1a7", "Help", "#", "1"],
       ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
@@ -252,6 +292,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         "LIGHTNING",
         "https://map.blitzortung.org/#3.87/36.5/-89.41",
         "1",
+        "R",
       ],
       ["2196F3", "PISTAR", "http://pi-star.local/", "1.2"],
       [
@@ -259,19 +300,22 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         "RADAR",
         "https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON",
         "1",
+        "R"
       ],
-      ["2196F3", "TIME.IS", "https://time.is/", "1"],
+      ["2196F3", "TIME.IS", "https://time.is/", "1", "R"],
       [
         "2196F3",
         "WEATHER",
         "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=44.0157&lon=-79.4591&zoom=5",
         "1",
+        "R",
       ],
       [
         "2196F3",
         "WINDS",
         "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-78.79,44.09,3000",
         "1",
+        "R",
       ],
     ];
 
@@ -431,15 +475,24 @@ The content refreshes automatically every 5 minutes.
     function start() {
       // Get the parent div for Menu container
       var parentDiv = document.getElementById("myMenu");
+      var parentDivR = document.getElementById("myMenuR");
       // Append the new div to the parent div
       aURL.forEach(function (innerArray, index) {
         // Create a new div element
         var newDiv = document.createElement("div");
+        newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
+        console.log(innerArray[4]);
+        if (innerArray[4] == "R") {
+          // Set some properties for the new div
+          newDiv.id = "mySidenavR";
+          newDiv.className = "sidenavR";
+          parentDivR.appendChild(newDiv);
+        } else {
         // Set some properties for the new div
         newDiv.id = "mySidenav";
         newDiv.className = "sidenav";
-        newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
         parentDiv.appendChild(newDiv);
+        }
       });
 
       // Get the parent div for Dashboard container
@@ -539,7 +592,11 @@ Y8888P'  `Y88P'  Y8888D'    YP
     </div>
 
     <div id="myMenu" class="menu">
-      <!-- Menu container -->
+      <!-- Left Menu container -->
+    </div>
+
+    <div id="myMenuR" class="menuR">
+      <!-- Right Menu container -->
     </div>
 
     <div id="defaultFrame" class="default-frame">
