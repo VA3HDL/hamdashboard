@@ -13,10 +13,15 @@
 
 Is that easy!
 
-73
+73 de Pablo, VA3HDL
 
-## 2024.05.25 Changelog:
-### Improvements
+## Updates
+### 2024.05.27 Changelog:
+
+- Moved the configuration parts of the JavaScript code to its own file "config.js" so it is easy to upgrade after updates to the main code. Suggested by Lou KI5FTY.
+- Improved menu usability
+
+### 2024.05.25 Changelog:
 
 - Removed dependencies to local installed fonts. Fonts now are loaded from Google Fonts directly to ensure consistency.
 - Ability to add multiple images per position. Images are rotated automatically every 30 seconds.
