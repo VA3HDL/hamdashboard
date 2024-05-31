@@ -1,9 +1,12 @@
-[YouTube video](https://www.youtube.com/watch?v=sIdqMQTGNSc)
+[YouTube - Presentation video](https://www.youtube.com/watch?v=sIdqMQTGNSc)
+
 
 ### Instructions
 1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
 2. Open hamdash.html with any browser of your preference and you done.
 3. With any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
+
+[YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
 
 ### Quick Help
 * Double click on an image to expand to full screen.
@@ -34,6 +37,8 @@ Is that easy!
 ![VA3HDL Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/dashboard_sample.png?raw=true)
 
 ![N4NBC Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N4NBC-sample.jpg?raw=true)
+
+![KM4ACK Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/KM4ACK-sample.jpg?raw=true)
 
 ### Dual menu example:
 ![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
