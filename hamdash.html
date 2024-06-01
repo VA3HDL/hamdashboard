@@ -147,7 +147,6 @@ db   8D    88       88    88booo. 88.     db   8D
       .image-container img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
       }
 
       /* Style for the image titles */
@@ -187,8 +186,8 @@ db   8D    88       88    88booo. 88.     db   8D
         position: absolute;
         width: auto;
         height: auto;
-        margin-top: 70px;
-        left: -100px;
+        margin-top: 10vh;
+        left: calc(-5.2vw - 0px);
         z-index: 2;
         overflow: hidden;
         transition: 0.3s;
@@ -201,32 +200,32 @@ db   8D    88       88    88booo. 88.     db   8D
         position: absolute;
         width: 30px;
         height: auto;
-        margin-top: 70px;
-        right: 0px;
+        margin-top: 10vh;
+        right: -5px;
         z-index: 2;
         transition: 0.3s;
       }
 
       #myMenu:hover {
-        width: 140px;
+        width: 7vw;
         left: 0px;
       }
 
       #myMenuR:hover {
-        width: 140px;
+        width: 7vw;
         right: 0px;
       }
 
       #mySidenav a {
         position: relative;
         float: inline-start;
-        left: -20px;
+        left: calc(-0.2vw - 10px);
         transition: 0.3s;
         padding-left: 15px;
         padding-right: 15px;
         padding-top: 12px;
         padding-bottom: 8px;
-        width: 100px;
+        width: 5vw;
         text-decoration: none;
         font-family: "Bebas Neue", sans-serif;
         font-size: 1.2vw;
@@ -246,13 +245,13 @@ db   8D    88       88    88booo. 88.     db   8D
       #mySidenavR a {
         position: relative;
         float: inline-start;
-        right: -20px;
+        right: calc(-0.2vw - 10px);
         transition: 0.3s;
         padding-left: 15px;
         padding-right: 15px;
         padding-top: 12px;
         padding-bottom: 8px;
-        width: 100px;
+        width: 7vw;
         text-decoration: none;
         font-family: "Bebas Neue", sans-serif;
         font-size: 1.2vw;
@@ -267,7 +266,7 @@ db   8D    88       88    88booo. 88.     db   8D
 
       #mySidenavR a:hover {
         right: 0;
-        width: 130px;
+        width: 7vw;
       }
     </style>
   </head>
@@ -403,10 +402,10 @@ The content refreshes automatically every 5 minutes.
           newDiv.className = "sidenavR";
           parentDivR.appendChild(newDiv);
         } else {
-        // Set some properties for the new div
-        newDiv.id = "mySidenav";
-        newDiv.className = "sidenav";
-        parentDiv.appendChild(newDiv);
+          // Set some properties for the new div
+          newDiv.id = "mySidenav";
+          newDiv.className = "sidenav";
+          parentDiv.appendChild(newDiv);
         }
       });
 
@@ -517,17 +516,17 @@ Y8888P'  `Y88P'  Y8888D'    YP
           id="topBarLeft"
           class="child"
           style="text-align: left; padding-left: 7px; color: blanchedalmond"
-        ></div>
+        >&nbsp;</div>
         <div
           id="topBarCenter"
           class="child"
           style="text-align: center; color: rgb(0, 119, 255)"
-        ></div>
+        >&nbsp;</div>
         <div
           id="topBarRight"
           class="child"
           style="text-align: right; padding-right: 5px; color: aquamarine"
-        ></div>
+        >&nbsp;</div>
       </div>
       <div id="dash" class="dashboard">
         <!-- Images container -->
