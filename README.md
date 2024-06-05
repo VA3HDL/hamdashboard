@@ -41,6 +41,14 @@ There is very little that can be done on the client side if the source site does
 As a workaround for these issues, I've tested running a local proxy on my computer to strip out the x-frame-options header coming from the source server and it worked well on some cases. But setting up a proxy adds another layer of complexity to the setup.
 
 ## Updates
+
+If you want to upgrade to the latest version, the only file you need to update is hamdash.html (do not overwrite your config.js file.)
+
+### 2024.06.05 Changelog:
+
+- Added image loading error handling
+- Added workaround to prevent images being cached on the browser and not getting updated
+
 ### 2024.05.27 Changelog:
 
 - Moved the configuration parts of the JavaScript code to its own file "config.js" so it is easy to upgrade after updates to the main code. Suggested by Lou KI5FTY.
