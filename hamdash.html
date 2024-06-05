@@ -145,8 +145,8 @@ db   8D    88       88    88booo. 88.     db   8D
 
       /* Style for the image */
       .image-container img {
-        width: 100%;
         height: 100%;
+        width: 100%;
       }
 
       /* Style for the image titles */
@@ -285,6 +285,11 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
   <script>
     var largeShow = 0;
     var aIdx = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    var help = "Double click on an image to expand to full screen.\n";
+    help += "Double click again to close full screen view.\n";
+    help += "Right click on an image to display the next one.\n";
+    help += "The content refreshes automatically every 5 minutes.\n";
+    help += "Images rotates every 30 seconds.\n";
 
     // This function shows the embedded websites
     function MenuOpt(num) {
@@ -310,11 +315,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         getSlideId = setInterval(() => slide(), 5000);
         //
       } else if (aURL[num][1].toLowerCase() == "help") {
-        alert(`Double click on an image to expand to full screen.
-Double click again to close full screen view.
-Right click on an image to display the next one.
-The content refreshes automatically every 5 minutes.
-`);
+        alert(help);
       }
     }
 
@@ -344,6 +345,14 @@ The content refreshes automatically every 5 minutes.
       }
     }
 
+    // Check if the image URL already include parameters, then avoid the random timestamp
+    function imgURL(url) {
+      if (url.includes("?")) {
+        return url;
+      }
+      return url + "?_=" + Date.now();
+    }
+
     // Manually rotate images
     function rotate(event) {
       event.preventDefault();
@@ -354,7 +363,9 @@ The content refreshes automatically every 5 minutes.
         if (aIdx[i] > aIMG[i].length - 1) {
           aIdx[i] = 1;
         }
-        document.getElementById(targetElement.id).src = aIMG[i][aIdx[i]];
+        document.getElementById(targetElement.id).src = imgURL(
+          aIMG[i][aIdx[i]]
+        );
       }
     }
 
@@ -369,7 +380,7 @@ The content refreshes automatically every 5 minutes.
           }
           // console.log("Image" + i, " ", aIMG[i][aIdx[i]]);
           img = document.getElementById("Image" + i);
-          img.src = aIMG[i][aIdx[i]];
+          img.src = imgURL(aIMG[i][aIdx[i]]);
           // img.style.opacity = 0;
           // img.style.transform = "translateX(-100%)";
         }
@@ -381,7 +392,7 @@ The content refreshes automatically every 5 minutes.
       //       img = document.getElementById("Image" + i);
       //       // img.style.opacity = 1;
       //       // img.style.transform = "translateX(0)";
-      //       img.src = aIMG[i][aIdx[i]];
+      //       img.src = imgURL(aIMG[i][aIdx[i]]);
       //     }
       //   });
       // }, 1000);
@@ -420,10 +431,28 @@ The content refreshes automatically every 5 minutes.
         // Create a new img element
         var newImg = document.createElement("img");
         newImg.id = `Image${index}`;
-        newImg.src = innerArray[1];
+        newImg.src = imgURL(innerArray[1]);
         newImg.oncontextmenu = rotate;
         newImg.ondblclick = larger;
         parentDiv.appendChild(newDiv);
+        newImg.onerror = function () {
+          text = "Failed to load image";
+          console.log(text, this.src);
+          if (this.src.includes("?")){
+            // Retry without passing variables first to see if fixes the error
+            console.log("Trying without caching prevention");
+            newImg.src = this.src.split("?")[0];
+          } else {
+            el = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="330">
+                  <g>
+                    <text style="font-size:34px; line-height:1.25; white-space:pre; fill:#ffaa00; fill-opacity:1; stroke:#ffaa00; stroke-opacity:1;">
+                      <tspan x="100" y="150">${text}</tspan>
+          		      </text>
+                  </g>
+                </svg>`;
+            newImg.src = "data:image/svg+xml;base64," + window.btoa(el);
+          }
+        };
         newDiv.appendChild(newImg);
         // Create a new div element for img title
         var newTtl = document.createElement("div");
@@ -446,10 +475,11 @@ The content refreshes automatically every 5 minutes.
     // This function update the time on the top bar
     function updateTopBar() {
       const now = new Date();
-
-      const options = { weekday: "long", month: "long", day: "numeric" };
-
-      const localDate = now.toLocaleDateString("en-US", options);
+      const localDate = now.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      });
       const localTime = now.toLocaleTimeString("en-US", {
         hour12: true,
         hour: "2-digit",
@@ -471,7 +501,6 @@ The content refreshes automatically every 5 minutes.
 
     // Update every second
     setInterval(updateTopBar, 1000);
-
   </script>
   <!--
 d8888b.  .d88b.  d8888b. db    db
@@ -485,12 +514,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
 -->
   <body onload="start()">
     <div id="iFrameContainer" class="iframe-container">
-      <iframe
-        class="full-screen"
-        id="FullScreen"
-        src=""
-        title="Zoom"
-      ></iframe>
+      <iframe class="full-screen" id="FullScreen" src="" title="Zoom"></iframe>
     </div>
 
     <div id="imgZoom" class="img-zoom">
@@ -516,17 +540,23 @@ Y8888P'  `Y88P'  Y8888D'    YP
           id="topBarLeft"
           class="child"
           style="text-align: left; padding-left: 7px; color: blanchedalmond"
-        >&nbsp;</div>
+        >
+          &nbsp;
+        </div>
         <div
           id="topBarCenter"
           class="child"
           style="text-align: center; color: rgb(0, 119, 255)"
-        >&nbsp;</div>
+        >
+          &nbsp;
+        </div>
         <div
           id="topBarRight"
           class="child"
           style="text-align: right; padding-right: 5px; color: aquamarine"
-        >&nbsp;</div>
+        >
+          &nbsp;
+        </div>
       </div>
       <div id="dash" class="dashboard">
         <!-- Images container -->
