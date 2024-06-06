@@ -73,5 +73,7 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 ![TI3GB Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/TI3GB-sample.png?raw=true)
 
+![N5NG Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N5NG-sample.jpg?raw=true)
+
 ### Dual menu example:
 ![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
