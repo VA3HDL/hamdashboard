@@ -1,5 +1,6 @@
 [YouTube - Presentation video](https://www.youtube.com/watch?v=sIdqMQTGNSc)
 
+[Hamdash Demo](https://va3hdl.github.io/hamdash/)  -- Test it before download
 
 ### Instructions:
 1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
