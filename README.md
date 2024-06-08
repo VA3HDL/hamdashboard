@@ -45,6 +45,10 @@ As a workaround for these issues, I've tested running a local proxy on my comput
 
 If you want to upgrade to the latest version, the only file you need to update is hamdash.html (do not overwrite your config.js file.)
 
+### 2024.06.08 Changelog:
+
+- Added support to play videos (along with the images.) Some modernized sites provide .mp4 videos instead of animated GIFS. Check updated demo!
+
 ### 2024.06.05 Changelog:
 
 - Added image loading error handling
