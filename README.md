@@ -13,6 +13,8 @@
 
 [YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
 
+[YouTube - Raspberry Pi instructions contributed by Andreas M0FXB](https://www.youtube.com/watch?v=Km_vOCvCMFM)
+
 ### Quick Help:
 * Double click on an image to expand to full screen.
 * Double click again to close full screen view.
