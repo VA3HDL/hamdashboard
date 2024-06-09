@@ -40,6 +40,8 @@ This error can occur if the server has certain security measures in place, such 
 
 4. Then reboot the pi-star
 
+![Pi-Star](https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true =x250)
+
 ### More on iFrame embedding:
 There is very little that can be done on the client side if the source site does not allow embedding the site inside another page (like the dashboard!) specially if the user  can't change the server settings (most cases.)
 
