@@ -38,9 +38,9 @@ This error can occur if the server has certain security measures in place, such 
 
         rpi-ro
 
-4. Then reboot the pi-star
+4. Then reboot the pi-star and should look like this:
 
-![Pi-Star](https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true =x250)
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true" width="400">
 
 ### More on iFrame embedding:
 There is very little that can be done on the client side if the source site does not allow embedding the site inside another page (like the dashboard!) specially if the user  can't change the server settings (most cases.)
