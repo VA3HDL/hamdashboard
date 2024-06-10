@@ -91,5 +91,7 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 ![N4TDX Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N4TDX-sample.png?raw=true)
 
+![WG5EEK Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/WG5EEK-sample.jpg?raw=true)
+
 ### Dual menu example:
 ![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
