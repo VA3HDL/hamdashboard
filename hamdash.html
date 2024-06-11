@@ -299,7 +299,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     help += "Double click again to close full screen view.\n";
     help += "Right click on an image to display the next one.\n";
     help += "The content refreshes automatically every 5 minutes.\n";
-    help += "Images rotates every 30 seconds.\n";
+    help += "Images rotates every 30 seconds automatically.\n";
 
     const videoExtensions = [".mp4", ".webm", ".ogg", ".ogv"];
 
@@ -464,6 +464,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         video.id = `Video${index}`;
         video.classList.add("media", "hidden");
         video.controls = true;
+        video.muted = true;
         video.autoplay = true;
         video.loop = true;
         const source = document.createElement("source");
