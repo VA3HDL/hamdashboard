@@ -278,6 +278,37 @@ db   8D    88       88    88booo. 88.     db   8D
         right: 0;
         width: 7vw;
       }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 50px;
+        box-sizing: border-box;
+        z-index: 3;
+        font-family: "Roboto Condensed", sans-serif;
+
+      }
+
+      .overlay-content {
+        background-color: #333;
+        padding: 20px;
+        border-radius: 10px;
+        max-height: 80vh; /* Ensures the overlay content is scrollable if it exceeds the viewport height */
+        overflow-y: auto;
+      }
+
+      .close-btn {
+        cursor: pointer;
+        color: white;
+        float: right;
+        font-size: 20px;
+      }
     </style>
   </head>
   <!--
@@ -314,6 +345,16 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       return "";
     }
 
+    function oldformatArray(arr) {
+      return arr.join("<br>");
+    }
+
+    function formatArray(arr) {
+        return arr.map(innerArray =>
+            innerArray.map(item => typeof item === 'string' ? `"${item}"` : item).join(', ')
+        ).join('<br>');
+    }
+
     // This function shows the embedded websites
     function MenuOpt(num) {
       // Stop refreshes
@@ -339,7 +380,15 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         //
       } else if (aURL[num][1].toLowerCase() == "help") {
         alert(help);
+      } else if (aURL[num][1].toLowerCase() == "sources") {
+        document.getElementById("array1").innerHTML = "<br>" + formatArray(aURL) + "<br><br>";
+        document.getElementById("array2").innerHTML = "<br>" + formatArray(aIMG) + "<br>";
+        document.getElementById("overlay").style.display = "block";
       }
+    }
+
+    function hideOverlay() {
+      document.getElementById("overlay").style.display = "none";
     }
 
     // This function shows the larger images when double click to enlarge
@@ -432,6 +481,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       // Get the parent div for Menu container
       var parentDiv = document.getElementById("myMenu");
       var parentDivR = document.getElementById("myMenuR");
+      // Append the Sources option to the right side menu
+      aURL.push(["0dd1a7", "Sources", "#", "1", "R"]);
       // Append the new div to the parent div
       aURL.forEach(function (innerArray, index) {
         // Create a new div element
@@ -615,6 +666,20 @@ Y8888P'  `Y88P'  Y8888D'    YP
       </div>
       <div id="dash" class="dashboard">
         <!-- Images container -->
+      </div>
+    </div>
+
+    <div id="overlay" class="overlay">
+      <div class="close-btn" onclick="hideOverlay()">&#10006;</div>
+      <div class="overlay-content">
+        <div class="array-container">
+          <div class="array-title"><B>Menu Options:</B></div>
+          <div id="array1" class="array-content"></div>
+        </div>
+        <div class="array-container">
+          <div class="array-title"><B>Image Sources:</B></div>
+          <div id="array2" class="array-content"></div>
+        </div>
       </div>
     </div>
   </body>
