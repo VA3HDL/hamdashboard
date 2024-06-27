@@ -84,7 +84,10 @@ Check updated demo!
 - Added menu to the right of the page. Now the left menu has ham radio links and right menu has weather links
 
 ## Host your dashboard with Cloudflare Pages, free
-![How to host your dashboard with Cloudflare Pages, free](https://w3rdw.radio/posts/hamdashboard/)
+
+Tutorial contributed by Robert W3RDW
+
+[How to host your dashboard with Cloudflare Pages, free](https://w3rdw.radio/posts/hamdashboard/)
 
 ## Samples
 
@@ -113,6 +116,8 @@ Check updated demo!
 ![OES MarTech Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/OESmartech.jpg?raw=true)
 
 ![TheSky Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/TheSky.jpg?raw=true)
+
+![KJ7T Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/KJ7T-sample.png?raw=true)
 
 ### Dual menu example:
 ![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
