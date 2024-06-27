@@ -83,6 +83,9 @@ Check updated demo!
 - Moved configuration variables to the top of the script and added extra commentary to ease the initial setup
 - Added menu to the right of the page. Now the left menu has ham radio links and right menu has weather links
 
+## Host your dashboard with Cloudflare Pages, free
+![How to host your dashboard with Cloudflare Pages, free](https://w3rdw.radio/posts/hamdashboard/)
+
 ## Samples
 
 ![VA3HDL Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/dashboard_sample.png?raw=true)
