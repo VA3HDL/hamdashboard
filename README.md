@@ -34,15 +34,23 @@ This error can occur if the server has certain security measures in place, such 
 
         rpi-rw
 
-2. In the file /etc/nginx/default.d/security.conf comment the line below with a "#" in front, like this:
+2. Edit the file nginx security.conf file:
+
+        sudo nano /etc/nginx/default.d/security.conf
+   
+3. comment the line below with a "#" in front, like this:
 
         # add_header X-Frame-Options  "SAMEORIGIN";
 
-3. Run this command to switch back to Read Only mode:
+4. Run this command to switch back to Read Only mode:
 
         rpi-ro
 
-4. Then reboot the pi-star and should look like this:
+5. Then restart the nginx service:
+   
+        sudo systemctl restart nginx.service
+
+or reboot the pi-star and should look like this:
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true" width="400">
 
