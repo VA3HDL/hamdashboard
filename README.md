@@ -46,11 +46,9 @@ This error can occur if the server has certain security measures in place, such 
 
         rpi-ro
 
-5. Then restart the nginx service:
+5. Now you can either reboot your Pi-Star, or just restart the nginx service:
    
         sudo systemctl restart nginx.service
-
-or reboot the pi-star and should look like this:
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true" width="400">
 
@@ -110,6 +108,10 @@ Tutorial contributed by Robert W3RDW
 ![N5NG Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N5NG-sample.png?raw=true)
 
 ![VK3MLT Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/VK3MLT-sample.png?raw=true)
+
+![VK5TUX Sample Dashboard](examples/VK5TUX_Sample_VA3HDL_Ham_Radio_Dashboard.png?raw=true)
+
+![VK5TUX Sample Dashboard Sources](examples/VK5TUX_Sample_VA3HDL_Ham_Radio_Dashboard_Sources.png?raw=true)
 
 ![N4TDX Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/N4TDX-sample.png?raw=true)
 
