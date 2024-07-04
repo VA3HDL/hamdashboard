@@ -326,11 +326,12 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
   <script>
     var largeShow = 0;
     var aIdx = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    var aInt = [null,null,null,null,null,null,null,null,null,null,null,null];
     var help = "Double click on an image to expand to full screen.\n";
     help += "Double click again to close full screen view.\n";
     help += "Right click on an image to display the next one.\n";
     help += "The content refreshes automatically every 5 minutes.\n";
-    help += "Images rotates every 30 seconds automatically.\n";
+    help += "Images rotates every 5 seconds automatically.\n";
 
     const videoExtensions = [".mp4", ".webm", ".ogg", ".ogv"];
 
@@ -355,11 +356,34 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         ).join('<br>');
     }
 
+    function setRot(){
+      if (typeof tileDelay === 'undefined') {
+        // If no individual tile rotation is defined then default is 5s or 5000ms
+        aInt[0] = setInterval(() => slide(), 5000);
+      } else {
+        tileDelay.forEach( function(tile,i) {
+          if (aIMG[i].length > 2) {
+            aInt[i] = setInterval(() => slide(i), tile);
+          }
+        });
+      }
+    }
+
+    function rotStop(){
+      if (typeof tileDelay === 'undefined') {
+        clearTimeout(aInt[0]);
+      } else {
+        tileDelay.forEach( function(tile,i) {
+          clearTimeout(aInt[i]);
+        });
+      }
+    }
+
     // This function shows the embedded websites
     function MenuOpt(num) {
       // Stop refreshes
       window.stop();
-      clearTimeout(getSlideId);
+      rotStop();
       //
       document.getElementById("FullScreen").style.display = "block";
       document.getElementById("iFrameContainer").style.zIndex = 1;
@@ -370,13 +394,13 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       if (aURL[num][1].toLowerCase() == "back") {
         // Start refreshes
         window.location.reload(true);
-        getSlideId = setInterval(() => slide(), 5000);
+        setRot();
         //
         wheelzoom(document.querySelectorAll("img"));
       } else if (aURL[num][1].toLowerCase() == "refresh") {
         // Start refreshes
         window.location.reload(true);
-        getSlideId = setInterval(() => slide(), 5000);
+        setRot();
         //
       } else if (aURL[num][1].toLowerCase() == "help") {
         alert(help);
@@ -397,7 +421,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       if (largeShow == 1) {
         // Start refreshes
         window.location.reload(true);
-        getSlideId = setInterval(() => slide(), 5000);
+        setRot();
         //
         largeShow = 0;
         document.getElementById("imgZoom").style.display = "none";
@@ -405,7 +429,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       } else {
         // Stop refreshes
         window.stop();
-        clearTimeout(getSlideId);
+        rotStop();
         //
         largeShow = 1;
         largeIdx = +targetElement.id.match(/\d+/)[0];
@@ -451,35 +475,44 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       }
     }
 
-    // Automatically rotate images
-    function slide() {
-      // get the locations with multiple images
-      aIMG.forEach(function (innerArray, i) {
-        if (aIMG[i].length > 2) {
-          ++aIdx[i];
-          if (aIdx[i] > aIMG[i].length - 1) {
-            aIdx[i] = 1;
-          }
-          // console.log("Image" + i, " ", aIMG[i][aIdx[i]]);
-          if (isVideo(aIMG[i][aIdx[i]])) {
-            // Is video
-            vid = document.getElementById("Video" + i);
-            vid.src = imgURL(aIMG[i][aIdx[i]]);
-            vid.classList.remove("hidden");
-            // Hide image
-            img = document.getElementById("Image" + i);
-            img.classList.add("hidden");
-          } else {
-            // Is image
-            img = document.getElementById("Image" + i);
-            img.src = imgURL(aIMG[i][aIdx[i]]);
-            img.classList.remove("hidden");
-            // Hide video
-            vid = document.getElementById("Video" + i);
-            vid.classList.add("hidden");
-          }
+    function imgRot(i){
+      if (aIMG[i].length > 2) {
+        ++aIdx[i];
+        if (aIdx[i] > aIMG[i].length - 1) {
+          aIdx[i] = 1;
         }
-      });
+        if (isVideo(aIMG[i][aIdx[i]])) {
+          // Is video
+          vid = document.getElementById("Video" + i);
+          vid.src = imgURL(aIMG[i][aIdx[i]]);
+          vid.classList.remove("hidden");
+          // Hide image
+          img = document.getElementById("Image" + i);
+          img.classList.add("hidden");
+        } else {
+          // Is image
+          img = document.getElementById("Image" + i);
+          img.src = imgURL(aIMG[i][aIdx[i]]);
+          img.classList.remove("hidden");
+          // Hide video
+          vid = document.getElementById("Video" + i);
+          vid.classList.add("hidden");
+        }
+      }
+    }
+
+    // Automatically rotate images
+    function slide(i) {
+      // check all tiles or one tile
+      if (typeof i === 'undefined') {
+        // get the locations with multiple images
+        aIMG.forEach(function (innerArray, i) {
+          imgRot(i);
+        });
+      } else {
+        // Only one tile as per timeout call
+        imgRot(i);
+      }
     }
 
     function start() {
@@ -580,7 +613,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         window.location.reload();
       });
 
-      getSlideId = setInterval(() => slide(), 5000);
+      setRot();
     }
 
     // This function update the time on the top bar

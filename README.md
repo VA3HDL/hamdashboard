@@ -68,6 +68,9 @@ Check updated demo!
 ### 2024.07.04 Changelog:
 
 - Full screen images will rotate with mouse right click (when there is more than one image on the selected tile)
+- Added the ability to set individual image rotation at different intervals per tile adding a line like this at the end of the config.js file:
+
+        const tileDelay = [5000,4000,3000,2000,1000,6000,7000,8000,9000,8500,7500,6500];
 
 ### 2024.06.12 Changelog:
 
