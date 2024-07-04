@@ -408,6 +408,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         clearTimeout(getSlideId);
         //
         largeShow = 1;
+        largeIdx = +targetElement.id.match(/\d+/)[0];
         document.getElementById("imgZoom").style.display = "block";
         document.getElementById("imgZoom").style.zIndex = 3;
         document.getElementById("ImageLarge").src =
@@ -429,7 +430,11 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     function rotate(event) {
       event.preventDefault();
       var targetElement = event.target || event.srcElement;
-      i = +targetElement.id.match(/\d+/)[0];
+      if (largeShow == 1) {
+        i = largeIdx;
+      } else {
+        i = +targetElement.id.match(/\d+/)[0];
+      }
       if (aIMG[i].length > 2) {
         ++aIdx[i];
         if (aIdx[i] > aIMG[i].length - 1) {
@@ -575,7 +580,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         window.location.reload();
       });
 
-      getSlideId = setInterval(() => slide(), 30000);
+      getSlideId = setInterval(() => slide(), 5000);
     }
 
     // This function update the time on the top bar
@@ -629,6 +634,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
         id="ImageLarge"
         alt="pic"
         ondblclick="larger(event);"
+        oncontextmenu="rotate(event);"
       />
     </div>
 
