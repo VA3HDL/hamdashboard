@@ -65,6 +65,10 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 Check updated demo!
 
+### 2024.07.04 Changelog:
+
+- Full screen images will rotate with mouse right click (when there is more than one image on the selected tile)
+
 ### 2024.06.12 Changelog:
 
 - Added menu option (right side menu) to display on screen the various sources for images and menu options to facilitate sharing URL sources in our user community
