@@ -1,0 +1,11 @@
+#I found this helpful to find the LOCAL radar stations on a map.
+
+https://radar.weather.gov/?settings=v1_eyJhZ2VuZGEiOnsiaWQiOiJsb2NhbCIsImNlbnRlciI6Wy04MC4wMTIsMzYuODc5XSwibG9jYXRpb24iOm51bGwsInpvb20iOjUuMjc1NzQxNDMyMDM4MDg5LCJmaWx0ZXIiOm51bGx9LCJhbmltYXRpbmciOmZhbHNlLCJiYXNlIjoic3RhbmRhcmQiLCJhcnRjYyI6ZmFsc2UsImNvdW50eSI6ZmFsc2UsImN3YSI6ZmFsc2UsInJmYyI6ZmFsc2UsInN0YXRlIjpmYWxzZSwibWVudSI6dHJ1ZSwic2hvcnRGdXNlZE9ubHkiOnRydWUsIm9wYWNpdHkiOnsiYWxlcnRzIjowLjgsImxvY2FsIjowLjYsImxvY2FsU3RhdGlvbnMiOjAuOCwibmF0aW9uYWwiOjAuNn19
+
+
+#If that link doesn't work:
+#This link, then in the upper left of the map, click "Select View" then click "Local radar"
+https://radar.weather.gov/
+
+#When you find the local RADAR station call sign this is where the gifs are stored:
+https://radar.weather.gov/ridge/standard/
