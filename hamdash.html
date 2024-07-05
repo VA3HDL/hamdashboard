@@ -360,8 +360,9 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         aInt[0] = setInterval(() => slide(), 30000);
       } else {
         tileDelay.forEach( function(tile,i) {
-          if(tile<=0){tile=30000}
-          aInt[i] = setInterval(() => slide(i), tile);
+          if (tile>0) {
+            aInt[i] = setInterval(() => slide(i), tile);
+          }
         });
       }
     }
