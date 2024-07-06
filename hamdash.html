@@ -331,6 +331,31 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     help += "Right click on an image to display the next one.\n";
     help += "Images rotates every 30 seconds automatically by default.\n";
 
+    const currentVersion = 'v2024.07.06'; // You can also load this from a config.json file
+
+    async function getLatestVersion() {
+      try {
+        const response = await fetch('https://api.github.com/repos/VA3HDL/hamdashboard/releases/latest');
+        const data = await response.json();
+        return data.tag_name;
+      } catch (error) {
+        console.error('Error fetching the latest version:', error);
+        return currentVersion; // Fallback to the current version if there's an error
+      }
+    }
+
+    function isNewVersionAvailable(currentVersion, latestVersion) {
+      return currentVersion !== latestVersion;
+    }
+
+    async function checkForUpdates() {
+      const latestVersion = await getLatestVersion();
+      if (isNewVersionAvailable(currentVersion, latestVersion)) {
+        aURL.push(["FF0000", "Update", "#", "1", "R"]);
+        alert(`A new version (${latestVersion}) is available in Github.`);
+      }
+    }
+
     const videoExtensions = [".mp4", ".webm", ".ogg", ".ogv"];
 
     function isVideo(src) {
@@ -390,12 +415,13 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         "scale(" + aURL[num][3] + ")";
 
       if (aURL[num][1].toLowerCase() == "back") {
-        // Start refreshes
+        // Start tile refreshes
         setRot();
         //
         wheelzoom(document.querySelectorAll("img"));
       } else if (aURL[num][1].toLowerCase() == "refresh") {
-        // Start refreshes
+        location.reload();
+        // Start tile refreshes
         setRot();
         //
       } else if (aURL[num][1].toLowerCase() == "help") {
@@ -404,6 +430,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         document.getElementById("array1").innerHTML = "<br>" + formatArray(aURL) + "<br><br>";
         document.getElementById("array2").innerHTML = "<br>" + formatArray(aIMG) + "<br>";
         document.getElementById("overlay").style.display = "block";
+      } else if (aURL[num][1].toLowerCase() == "update") {
+        window.open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank").focus();
       }
     }
 
@@ -641,6 +669,9 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
     // Update every second
     setInterval(updateTopBar, 1000);
+
+    // Run the check when the application starts
+    checkForUpdates();
   </script>
   <!--
 d8888b.  .d88b.  d8888b. db    db

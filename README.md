@@ -65,6 +65,10 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 Check updated demo!
 
+### 2024.07.06 Changelog:
+
+- Add version check and minor fixes.
+
 ### 2024.07.05 Changelog:
 
 - Removed 5 minutes page autorefresh. Now all tiles refresh separatelly (at same or different intervals.) So there is no longer needed refresh the entire page.
