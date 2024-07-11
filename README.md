@@ -19,6 +19,8 @@
 
 [YouTube - Live Stream with Temporarily Offline Ham Radio KM9G](https://www.youtube.com/watch?v=ohlHaSsf6B8=400s)
 
+[YouTube - French review and instructions by Jean-Benard F5SVP](https://www.youtube.com/watch?v=o9Dl9A5hqQI)
+
 ### Quick Help:
 * Double click on an image to expand to full screen.
 * Double click again to close full screen view.
