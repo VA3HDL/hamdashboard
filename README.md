@@ -6,6 +6,10 @@
 
 [BCAT N4TDX](https://www.n4tdx.org/dashboard/dashboard.html)  -- User submitted live dashboard by Steve N5NG, in use by the Brevard County (Florida) ARES Team!!!
 
+[FFX DEMS](https://kq4dne.github.io/WeatherDash/WeatherDash.html)  -- User submitted live dashboard by Sandy KQ4DNE for Emergency Management Weather
+
+[FFX ARES](https://kq4dne.github.io/hamdash/hamdash.html)  -- User submitted live dashboard by Sandy KQ4DNE for ARES
+
 ### Instructions:
 1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
 2. Open hamdash.html with any browser of your preference and you done.
@@ -149,6 +153,14 @@ Tutorial contributed by Robert W3RDW
 ![KJ7T Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/KJ7T-sample.png?raw=true)
 
 ![K4HNH Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/K4HNH-sample.jpg?raw=true)
+
+![CT1ETE Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/CT1ETE-sample.jpg?raw=true)
+
+![VK3FS Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/VK3FS-sample.png?raw=true)
+
+![W5EAK Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/W5EAK-sample.jpg?raw=true)
+
+![WI5L Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/WI5L-sample.jpg?raw=true)
 
 ### Dual menu example:
 ![Dual side Menu Sample Dashboard](https://github.com/VA3HDL/hamdashboard/blob/main/examples/DualMenu.png?raw=true)
