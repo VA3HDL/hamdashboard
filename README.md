@@ -25,6 +25,8 @@
 
 [YouTube - French review and instructions by Jean-Benard F5SVP](https://www.youtube.com/watch?v=o9Dl9A5hqQI)
 
+[YouTube - Repaso e instrucciones en Español con Jose EA8EE](https://www.youtube.com/watch?v=3CnsfB3zNuM)
+
 ### Quick Help:
 * Double click on an image to expand to full screen.
 * Double click again to close full screen view.
