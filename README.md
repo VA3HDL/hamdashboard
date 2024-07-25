@@ -73,6 +73,10 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 Check updated demo!
 
+### 2024.07.24 Changelog:
+
+- Added "Discussions" to GitHub options for users to share their menu and image sources and anything else interesting -- https://github.com/VA3HDL/hamdashboard/discussions
+
 ### 2024.07.06 Changelog:
 
 - Add version check and minor fixes.
