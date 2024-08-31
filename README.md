@@ -11,9 +11,10 @@
 [FFX ARES](https://kq4dne.github.io/hamdash/hamdash.html)  -- User submitted live dashboard by Sandy KQ4DNE for ARES
 
 ### Instructions:
-1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
-2. Open hamdash.html with any browser of your preference and you done.
+1. Just download the files from the Github repository (hamdash.html, and wheelzoom.js and the config/ folder).
+2. Copy the config.js.sample file to a new file, config.js, within the config directory.
 3. With any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
+4. Open hamdash.html with any browser of your preference and you done.
 
 [YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
 
@@ -28,6 +29,18 @@
 [YouTube - French review and instructions by Jean-Benard F5SVP](https://www.youtube.com/watch?v=o9Dl9A5hqQI)
 
 [YouTube - Repaso e instrucciones en Español con Jose EA8EE](https://www.youtube.com/watch?v=3CnsfB3zNuM)
+
+### Docker:
+Running the dashboard in docker allows any device on the network to access it from a central location.
+The docker-compose.yml file is designed for use with a reverse-proxy. If you're looking to run without one some modifications may need to be made.
+
+1. Clone github repository
+2. Copy the config.js.sample file to a new file, config.js, within the config directory.
+3. With any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
+4. Run docker compose to build the container.
+```
+docker compose up -d --build
+```
 
 ### Quick Help:
 * Double click on an image to expand to full screen.
