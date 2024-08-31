@@ -334,6 +334,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     const currentVersion = 'v2024.07.06'; // You can also load this from a config.json file
 
     async function getLatestVersion() {
+      return currentVersion;
       try {
         const response = await fetch('https://api.github.com/repos/VA3HDL/hamdashboard/releases/latest');
         const data = await response.json();

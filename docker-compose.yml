@@ -1,0 +1,18 @@
+version: "3.6"
+networks:
+  media-net-routable:
+    external: true
+    name: "media-net-routable"
+services:
+  hamdashboard:
+    container_name: "hamdashboard"
+    build: .
+    restart: "unless-stopped"
+    networks:
+      - "media-net-routable"
+    environment:
+      - "TZ=America/New_York"
+      - 'DB_SQLITE_FILE=/data/database.sqlite'
+    expose:
+      - '80/tcp'
+    hostname: hamdashboard
