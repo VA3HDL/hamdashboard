@@ -16,3 +16,5 @@ services:
     expose:
       - '80/tcp'
     hostname: hamdashboard
+    volumes:
+      - ./config:/usr/share/nginx/html/config
