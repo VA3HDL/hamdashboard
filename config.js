@@ -1,4 +1,4 @@
-const topBarCenterText = `VA3HDL - FN04ga`;
+const topBarCenterText = `NQ0M - EM27hw`;
 // Menu items
 // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
 // The values are [color code, menu text, target link, scale factor, side],
@@ -55,27 +55,28 @@ const aURL = [
 // You can't add more items because there are only 12 placeholders on the dashboard
 // but you can replace the titles and the images with anything you want.
 const aIMG = [
-  ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
+  [
+    "RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif",
+  ],
   [
     "LOCAL RADAR",
-    "https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
+    "https://radar.weather.gov/ridge/standard/KICT_loop.gif",
   ],
   [
     "NOAA D-RAP",
     "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
   ],
   [
-    "ISS & RS-44 POSITION",
-    "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544",
-    "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
+    "",
+    "http://172.17.30.2:9000/get_capture.bmp",
   ],
   [
-    "SATELLITE CAN",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/can/EXTENT3/GOES16-CAN-EXTENT3-1125x560.gif",
+    "SATELLITE US",
+    "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/GOES16-CONUS-GEOCOLOR-625x375.gif",
   ],
   [
-    "SATELLITE CGL",
-    "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/cgl/EXTENT3/GOES16-CGL-EXTENT3-600x600.gif",
+    "LOCAL SAT",
+    "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/umv/GEOCOLOR/GOES16-UMV-GEOCOLOR-600x600.gif",
   ],
   [
     "LIGHTNING",
@@ -83,7 +84,7 @@ const aIMG = [
   ],
   [
     "LIGHTNING LOCAL",
-    "https://www.blitzortung.org/en/Images/image_b_ny.png",
+    "https://www.blitzortung.org/en/Images/image_b_mn.png",
   ],
   ["GREY LINE", "https://www.timeanddate.com/scripts/sunmap.php?iso=now"],
   [
