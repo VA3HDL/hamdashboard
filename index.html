@@ -140,7 +140,19 @@ db   8D    88       88    88booo. 88.     db   8D
         overflow: hidden;
         display: flex;
         justify-content: center; /* Horizontal centering */
-        align-items: center; /* Vertical centering */
+        align-items: center;     /* Vertical centering */
+      }
+
+      .iframe-tile {
+        position: absolute;  /* it must be absolute */
+        float: inline-start;
+        overflow: hidden;
+        display: flex;
+        border: none;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
       }
 
       /* Style for the image */
@@ -331,7 +343,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     help += "Right click on an image to display the next one.\n";
     help += "Images rotates every 30 seconds automatically by default.\n";
 
-    const currentVersion = 'v2024.07.06'; // You can also load this from a config.json file
+    const currentVersion = 'v2024.10.16'; // You can also load this from a config.json file
 
     async function getLatestVersion() {
       try {
@@ -348,11 +360,11 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       return currentVersion !== latestVersion;
     }
 
+    bUpdate = false;
     async function checkForUpdates() {
       const latestVersion = await getLatestVersion();
       if (isNewVersionAvailable(currentVersion, latestVersion)) {
-        aURL.push(["FF0000", "Update", "#", "1", "R"]);
-        alert(`A new version (${latestVersion}) is available in Github.`);
+        bUpdate = true;
       }
     }
 
@@ -367,6 +379,10 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       if (src.includes(".webm")) return "video/webm";
       if (src.includes(".ogg") || src.includes(".ogv")) return "video/ogg";
       return "";
+    }
+
+    function isFrame(src) {
+      return src.includes("iframe|");
     }
 
     function oldformatArray(arr) {
@@ -465,6 +481,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       }
     }
 
+    // Image cache prevention
     // Check if the image URL already include parameters, then avoid the random timestamp
     function imgURL(url) {
       if (url.includes("?")) {
@@ -489,6 +506,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         }
         if (isVideo(aIMG[i][aIdx[i]])) {
           // Is video, event is not attached to videos for now, do nothing
+        } else if (isFrame(aIMG[i][aIdx[i]])) {
+          // Is iFrame, event is not attached to iFrames for now, do nothing
         } else {
           // Is image
           document.getElementById(targetElement.id).src = imgURL(
@@ -506,22 +525,32 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         }
       }
       // console.log(i, aIdx[i], aIMG[i][aIdx[i]]);
+      vid = document.getElementById("Video" + i);
+      img = document.getElementById("Image" + i);
+      ifr = document.getElementById("iFrame" + i);
       if (isVideo(aIMG[i][aIdx[i]])) {
         // Is video
-        vid = document.getElementById("Video" + i);
         vid.src = imgURL(aIMG[i][aIdx[i]]);
         vid.classList.remove("hidden");
-        // Hide image
-        img = document.getElementById("Image" + i);
+        // Hide others
+        img.classList.add("hidden");
+        ifr.classList.add("hidden");
+      } else if (isFrame(aIMG[i][aIdx[i]])) {
+          // Is iFrame
+          newSrc = aIMG[i][aIdx[i]].split("|")
+          ifr.classList.remove("hidden");
+          ifr.src = newSrc[1];
+          ifr.style.zIndex = 0;
+          // Hide others
+          vid.classList.add("hidden");
         img.classList.add("hidden");
       } else {
         // Is image
-        img = document.getElementById("Image" + i);
         img.src = imgURL(aIMG[i][aIdx[i]]);
         img.classList.remove("hidden");
-        // Hide video
-        vid = document.getElementById("Video" + i);
+        // Hide others
         vid.classList.add("hidden");
+        ifr.classList.add("hidden");
       }
     }
 
@@ -545,6 +574,9 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       var parentDivR = document.getElementById("myMenuR");
       // Append the Sources option to the right side menu
       aURL.push(["0dd1a7", "Sources", "#", "1", "R"]);
+      if (bUpdate){
+        aURL.push(["FF0000", "Update", "#", "1", "R"]);
+      }
       // Append the new div to the parent div
       aURL.forEach(function (innerArray, index) {
         // Create a new div element
@@ -565,6 +597,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
       // Get the parent div for Dashboard container
       var parentDiv = document.getElementById("dash");
+
       // Append the new div to the parent div
       aIMG.forEach(function (innerArray, index) {
         // Create a new div element
@@ -586,6 +619,15 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         var newImg = document.createElement("img");
         newImg.id = `Image${index}`;
         newImg.classList.add("hidden");
+        newImg.oncontextmenu = rotate;
+        newImg.ondblclick = larger;
+
+        // append newIframes iFrameNN
+        var newFrame = document.createElement("iframe");
+        newFrame.className = "iframe-tile";
+        newFrame.id = `iFrame${index}`;
+        newFrame.classList.add("hidden");
+        var newSrc = " ";
 
         if (isVideo(innerArray[1])) {
           // Is a video
@@ -593,12 +635,16 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           source.src = innerArray[1];
           source.type = getVideoType(innerArray[1]);
           video.appendChild(source);
+        } else if (isFrame(innerArray[1])) {
+          // Is iFrame
+          newFrame.classList.remove("hidden");
+          newSrc = innerArray[1].split("|")
+          newFrame.src = newSrc[1];
+          newFrame.style.zIndex = 0;
         } else {
           // Is an image
           newImg.classList.remove("hidden");
           newImg.src = imgURL(innerArray[1]);
-          newImg.oncontextmenu = rotate;
-          newImg.ondblclick = larger;
           newImg.onerror = function () {
             text = "Failed to load image";
             console.log(text, this.src);
@@ -617,11 +663,15 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
               newImg.src = "data:image/svg+xml;base64," + window.btoa(el);
             }
           };
+
         }
+
         // append newDivs boxNN
         newDiv.appendChild(video);
         newDiv.appendChild(newImg);
+        newDiv.appendChild(newFrame);
         parentDiv.appendChild(newDiv);
+
         // Create a new div element for img title
         var newTtl = document.createElement("div");
         newTtl.className = "image-title";
