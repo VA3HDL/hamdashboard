@@ -68,7 +68,7 @@ const aIMG = [
   ],
   [
     "",
-    "http://172.17.30.2:9000/get_capture.bmp",
+    "https://hamclock-static.nq0m.com/get_capture.bmp",
   ],
   [
     "SATELLITE US",
