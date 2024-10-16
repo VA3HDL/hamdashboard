@@ -87,7 +87,7 @@ Check updated demo!
 
 ### 2024.10.16 Changelog:
 
-- Added website capability to tiles using "iframe|" keyword before the tile URL. Check the updated config.js file for usage examples.
+- Added website capability to tiles using "iframe|" keyword before the tile URL. Check the updated config.js file for usage examples. The tiles can contain any website that supports embedding using iFrame, including live YouTube videos!
 
 ### 2024.07.24 Changelog:
 
