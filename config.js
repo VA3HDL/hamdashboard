@@ -89,7 +89,7 @@ const aIMG = [
   ["GREY LINE", "https://www.timeanddate.com/scripts/sunmap.php?iso=now"],
   [
     "K-39 Bridge",
-    "https://kscam.carsprogram.org/KDOT_573004_IMAGE001.JPG?1729117020000",
+    "https://kscam.carsprogram.org/KDOT_573004_IMAGE001.JPG",
   ],
   ["10M PROPAGATION", "https://www.tvcomm.co.uk/g7izu/Autosave/NA_ES_AutoSave.JPG"],
   ["HF PROPAGATION",
