@@ -4,7 +4,7 @@ Original VA3HDL [YouTube - Presentation video](https://www.youtube.com/watch?v=s
 
 [Hamdash Demo](https://va3hdl.github.io/hamdash/)  -- Test it here before download
 
-[BCAT N4TDX](https://www.n4tdx.org/dashboard/dashboard.html)  -- by Steve N5NG, in use by the Brevard County (Florida) ARES Team
+[BCAT N4TDX](https://qsl.net/n/n5ng/BCAT/)  -- by Steve N5NG, in use by the Brevard County (Florida) ARES Team
 
 [FFX DEMS](https://kq4dne.github.io/WeatherDash/WeatherDash.html)  -- by Sandy KQ4DNE for Emergency Management Weather
 
