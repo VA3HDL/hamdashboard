@@ -6,6 +6,10 @@ Original VA3HDL [YouTube - Presentation video](https://www.youtube.com/watch?v=s
 
 [BCAT N4TDX](https://qsl.net/n/n5ng/BCAT/)  -- by Steve N5NG, in use by the Brevard County (Florida) ARES Team
 
+* Links for Steve's weather and hamradio config.js as .txt files:
+  * https://qsl.net/n5ng/config.txt
+  * https://qsl.net/n5ng/HAM/config.txt
+
 [FFX DEMS](https://kq4dne.github.io/WeatherDash/WeatherDash.html)  -- by Sandy KQ4DNE for Emergency Management Weather
 
 [FFX ARES](https://kq4dne.github.io/hamdash/hamdash.html)  -- by Sandy KQ4DNE for ARES
