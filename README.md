@@ -1,5 +1,7 @@
 Original VA3HDL [YouTube - Presentation video](https://www.youtube.com/watch?v=sIdqMQTGNSc)
 
+VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v=IBMxELofKVA)
+
 ### User submitted live Dashboards:
 
 [Hamdash Demo](https://va3hdl.github.io/hamdash/)  -- Test it here before download
@@ -88,6 +90,20 @@ As a workaround for these issues, I've tested running a local proxy on my comput
 If you want to upgrade to the latest version, the only file you need to update is hamdash.html (do not overwrite your config.js file.)
 
 Check updated demo!
+
+### 2024.11.13 Changelog:
+
+- Added capability to customize the grid size (any combination of number of columns and number of rows for the dashboard tiles.) See examples below.
+- Removed "VA3HDL" from the page title.
+- Grid size examples
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/2x2.png?raw=true" width="200">
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/3x3.png?raw=true" width="200">
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/4x4.png?raw=true" width="200">
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/5x3.png?raw=true" width="200">
 
 ### 2024.10.16 Changelog:
 

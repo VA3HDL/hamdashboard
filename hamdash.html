@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="VA3HDL Ham Radio Dashboard">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <title>VA3HDL Ham Radio Dashboard</title>
+    <title>Ham Radio Dashboard</title>
     <!--
 	Hamdash
 	License: MIT
@@ -117,10 +118,17 @@ db   8D    88       88    88booo. 88.     db   8D
         font-size: 1.4vw;
       }
 
+      /* Default variables values for grid layout 4 cols x 3 rows */
+      :root {
+        --main-layout: auto auto auto auto;
+        --main-width: 24.9vw;
+        --main-height: 31vh;
+      }
+
       /* Style for the dashboard container */
       .dashboard {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: var(--main-layout);
         grid-gap: 0px;
         border: 0px none;
         margin-bottom: 0px;
@@ -135,8 +143,8 @@ db   8D    88       88    88booo. 88.     db   8D
         float: inline-start;
         margin-right: 0px;
         border: 0px;
-        width: 24.9vw;
-        height: 31vh;
+        width: var(--main-width);
+        height: var(--main-height);
         overflow: hidden;
         display: flex;
         justify-content: center; /* Horizontal centering */
@@ -335,6 +343,21 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
   <script src="wheelzoom.js"></script>
   <script src="config.js"></script>
   <script>
+    // Configurable grid layout logic. Defaults to standard 4 columns by 3 rows if values are missing in config.js file.
+    if (typeof layout_cols === 'undefined'){
+      var layout_cols = 4;
+    }
+    if (typeof layout_rows === 'undefined'){
+      var layout_rows = 3;
+    }
+    var layout_grid = "auto ".repeat(layout_cols);
+    var layout_width = (99.6 / layout_cols) + "vw";
+    var layout_height = (93 / layout_rows) + "vh";
+    document.documentElement.style.setProperty("--main-layout", layout_grid);
+    document.documentElement.style.setProperty("--main-width", layout_width);
+    document.documentElement.style.setProperty("--main-height", layout_height);
+
+    // Default variables
     var largeShow = 0;
     var aIdx = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     var aInt = [null,null,null,null,null,null,null,null,null,null,null,null];
@@ -343,7 +366,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     help += "Right click on an image to display the next one.\n";
     help += "Images rotates every 30 seconds automatically by default.\n";
 
-    const currentVersion = 'v2024.10.16'; // You can also load this from a config.json file
+    const currentVersion = 'v2024.11.13'; // You can also load this from a config.json file
 
     async function getLatestVersion() {
       try {
@@ -444,7 +467,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         alert(help);
       } else if (aURL[num][1].toLowerCase() == "sources") {
         document.getElementById("array1").innerHTML = "<br>" + formatArray(aURL) + "<br><br>";
-        document.getElementById("array2").innerHTML = "<br>" + formatArray(aIMG) + "<br>";
+        document.getElementById("array2").innerHTML = "<br>" + formatArray(aIMG) + "<br><br>";
+        document.getElementById("array3").innerHTML = "<br>Copyright (c) 2024 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>";
         document.getElementById("overlay").style.display = "block";
       } else if (aURL[num][1].toLowerCase() == "update") {
         window.open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank").focus();
@@ -795,6 +819,10 @@ Y8888P'  `Y88P'  Y8888D'    YP
         <div class="array-container">
           <div class="array-title"><B>Image Sources:</B></div>
           <div id="array2" class="array-content"></div>
+        </div>
+        <div class="array-container">
+          <div class="array-title"><B>Development by:</B></div>
+          <div id="array3" class="array-content"></div>
         </div>
       </div>
     </div>

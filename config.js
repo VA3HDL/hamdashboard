@@ -1,4 +1,9 @@
 const topBarCenterText = `VA3HDL - FN04ga`;
+
+// Grid layout
+var layout_cols = 4;
+var layout_rows = 3;
+
 // Menu items
 // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
 // The values are [color code, menu text, target link, scale factor, side],
@@ -65,9 +70,8 @@ const aIMG = [
     "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
   ],
   [
-    "ISS & RS-44 POSITION",
+    "ISS POSITION",
     "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544",
-    "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
   ],
   [
     "SATELLITE CAN",
@@ -92,10 +96,18 @@ const aIMG = [
   ],
   ["VIDEO EXAMPLE", "https://himawari8.nict.go.jp/movie/720/20240611_pifd.mp4"],
   ["HF PROPAGATION",
-  "https://www.hamqsl.com/solar101vhf.php",
-  "https://www.hamqsl.com/solar100sc.php",
-  "https://www.hamqsl.com/solarpich.php"],
+    "https://www.hamqsl.com/solar101vhf.php"],
+  [
+    "RS-44 POSITION",
+    "https://www.heavens-above.com/orbitdisplay.aspx?icon=default&width=600&height=300&mode=M&satid=44909",
+  ],
+  ["Solar WX",
+    "https://services.swpc.noaa.gov/images/animations/suvi/primary/map/latest.png"],
+  ["HF PROPAGATION",
+    "https://www.hamqsl.com/solar100sc.php"],
+  ["HF PROPAGATION",
+    "https://www.hamqsl.com/solarpich.php"],
 ];
 
 // Image rotation intervals in milliseconds per tile - If the line below is commented, all tiles will be rotated every 30000 milliseconds (30s)
-const tileDelay = [11200,10000,11000,10100,10200,10500,10300,10600,30400,60700,60900,10800];
+const tileDelay = [11200,10000,11000,10100,10200,10500,10300,10600,30400,60700,60900,10800,30400,60700,60900,10800];
