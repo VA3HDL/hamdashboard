@@ -85,6 +85,8 @@ There is very little that can be done on the client side if the source site does
 
 As a workaround for these issues, I've tested running a local proxy on my computer to strip out the x-frame-options header coming from the source server and it worked well on some cases. But setting up a proxy adds another layer of complexity to the setup.
 
+Use this online tool to test any URL to see if it can be displayed in an iframe before adding it to the dashboard -> [iFrame Tester online](https://iframetester.com/)
+
 ## Updates
 
 If you want to upgrade to the latest version, the only file you need to update is hamdash.html (do not overwrite your config.js file.)
