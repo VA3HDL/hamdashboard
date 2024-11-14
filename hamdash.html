@@ -353,14 +353,28 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     var layout_grid = "auto ".repeat(layout_cols);
     var layout_width = (99.6 / layout_cols) + "vw";
     var layout_height = (93 / layout_rows) + "vh";
+    var iTiles = layout_cols*layout_rows;
     document.documentElement.style.setProperty("--main-layout", layout_grid);
     document.documentElement.style.setProperty("--main-width", layout_width);
     document.documentElement.style.setProperty("--main-height", layout_height);
+    if (!(aIMG.length==tileDelay.length && aIMG.length==iTiles)){
+      var msg = "\nError detected on config.js file!\n\n";
+      msg += "The number of tile sources (" + aIMG.length + " in aIMG) and\n";
+      msg += "the tile delay (" + tileDelay.length + " in tileDelay) arrays should match\n";
+      msg += "the number of items each one contains and\n";
+      msg += "the number of tiles used on the layout specified (" + iTiles + ").";
+      alert(msg);
+    }
 
-    // Default variables
+    // Default variables initialization
     var largeShow = 0;
-    var aIdx = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    var aInt = [null,null,null,null,null,null,null,null,null,null,null,null];
+    var aIdx = [];
+    var aInt = [];
+    for(var i=1; i<=iTiles; i++) {
+      aIdx.push(1);
+      aInt.push(null);
+    }
+
     var help = "Double click on an image to expand to full screen.\n";
     help += "Double click again to close full screen view.\n";
     help += "Right click on an image to display the next one.\n";
@@ -548,7 +562,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           aIdx[i] = 1;
         }
       }
-      // console.log(i, aIdx[i], aIMG[i][aIdx[i]]);
+      // console.log("aIdx", aIdx);
+      // console.log("i", i, "aIdx[i]", aIdx[i], "aIMG[i][aIdx[i]]", aIMG[i][aIdx[i]]);
       vid = document.getElementById("Video" + i);
       img = document.getElementById("Image" + i);
       ifr = document.getElementById("iFrame" + i);
@@ -560,13 +575,13 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         img.classList.add("hidden");
         ifr.classList.add("hidden");
       } else if (isFrame(aIMG[i][aIdx[i]])) {
-          // Is iFrame
-          newSrc = aIMG[i][aIdx[i]].split("|")
-          ifr.classList.remove("hidden");
-          ifr.src = newSrc[1];
-          ifr.style.zIndex = 0;
-          // Hide others
-          vid.classList.add("hidden");
+        // Is iFrame
+        newSrc = aIMG[i][aIdx[i]].split("|")
+        ifr.classList.remove("hidden");
+        ifr.src = newSrc[1];
+        ifr.style.zIndex = 0;
+        // Hide others
+        vid.classList.add("hidden");
         img.classList.add("hidden");
       } else {
         // Is image
