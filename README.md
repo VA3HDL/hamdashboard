@@ -18,11 +18,17 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [WA4MED](https://dashboard.wa4med.us/hamdash.html)  -- by Matthew WA4MED
 
+[PY3TX](https://dashboard.py3tx.com/) -- South America
+
+[VE7CAS](https://hamradio.smecher.bc.ca/) -- Vancouver, BC
+
+[K6BCW](https://elihickox.com/radio/hamdashboard/hamdash.html) -- San Francisco bay area
+
+[KN6PTQ](https://kn6ptq.com/) -- San Francisco Bay Area
+
 [W2SZ](https://dashboard.w2sz.org/)  -- NE US by Brian W2SZ
 
 [N2YQT](https://dashboard.tourge.net/)  -- NE US by Ryan N2YQT
-
-[K6BCW](https://elihickox.com/radio/hamdashboard/hamdash.html) -- San Francisco bay area
 
 [KC2VWR](https://baef57ae.ham-desktop.pages.dev/) -- NE US
 
@@ -32,15 +38,11 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [KD5PQJ](https://kd5pqj.com/dash/index.html) -- Texas
 
-[KJ7YYI](https://kj7yyi.net/ham-dash/) -- Arizona
-
 [N5GAH](http://n5gah.com/) -- Texas
 
+[KJ7YYI](https://kj7yyi.net/ham-dash/) -- Arizona
+
 [NQ0M](https://hamdash.nq0m.com/#) -- Kansas
-
-[PY3TX](https://dashboard.py3tx.com/) -- South America
-
-[VE7CAS](https://hamradio.smecher.bc.ca/) -- Vacouver, BC
 
 [W3RDW](https://dashboard.w3rdw.radio/) -- Ohio
 
