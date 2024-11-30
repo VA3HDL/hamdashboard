@@ -22,6 +22,8 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [VE7CAS](https://hamradio.smecher.bc.ca/) -- Vancouver, BC
 
+[OK1SLM](https://www.qsl.net/ok1slm/) -- Prague, EU
+
 [K6BCW](https://elihickox.com/radio/hamdashboard/hamdash.html) -- San Francisco bay area
 
 [KN6PTQ](https://kn6ptq.com/) -- San Francisco Bay Area
