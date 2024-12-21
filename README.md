@@ -124,6 +124,12 @@ Check updated demo!
 ### 2024.11.13 Changelog:
 
 - Added capability to customize the grid size (any combination of number of columns and number of rows for the dashboard tiles.) See examples and usage below.
+- Usage: Add these lines to your config.js file and replace "4" and "3" with the number of columns and rows that you desire
+
+        // Grid layout
+        var layout_cols = 4;
+        var layout_rows = 3;
+- Ensure the total number of tiles match your sources and your rotation/refresh delays specified in the config.js file
 - Removed "VA3HDL" from the page title.
 - Grid size examples:
 
@@ -142,12 +148,6 @@ Check updated demo!
 --> 5x3:
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/5x3.png?raw=true" width="200">
-
-- Usage: Add these lines to your config.js file
-
-        // Grid layout
-        var layout_cols = 4;
-        var layout_rows = 3;
 
 
 ### 2024.10.16 Changelog:
