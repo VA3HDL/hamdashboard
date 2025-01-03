@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta http-equiv="Pragma-Control" content="no-cache">
+    <meta http-equiv="Cache-directive" Content="no-cache">
+    <meta http-equiv="Pragma-directive" Content="no-cache">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma-directive: no-cache">
+    <meta http-equiv="Cache-directive: no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="VA3HDL Ham Radio Dashboard">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -521,11 +531,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
     // Image cache prevention
     // Check if the image URL already include parameters, then avoid the random timestamp
-    function imgURL(url) {
-      if (url.includes("?")) {
-        return url;
-      }
-      return url + "?_=" + Date.now();
+    function getImgURL(url) {
+      return url.includes("?") ? url : url + "?_=" + Date.now();
     }
 
     // Manually rotate images
@@ -548,7 +555,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           // Is iFrame, event is not attached to iFrames for now, do nothing
         } else {
           // Is image
-          document.getElementById(targetElement.id).src = imgURL(
+          document.getElementById(targetElement.id).src = getImgURL(
             aIMG[i][aIdx[i]]
           );
         }
@@ -569,7 +576,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       ifr = document.getElementById("iFrame" + i);
       if (isVideo(aIMG[i][aIdx[i]])) {
         // Is video
-        vid.src = imgURL(aIMG[i][aIdx[i]]);
+        vid.src = getImgURL(aIMG[i][aIdx[i]]);
         vid.classList.remove("hidden");
         // Hide others
         img.classList.add("hidden");
@@ -585,7 +592,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         img.classList.add("hidden");
       } else {
         // Is image
-        img.src = imgURL(aIMG[i][aIdx[i]]);
+        img.src = getImgURL(aIMG[i][aIdx[i]]);
         img.classList.remove("hidden");
         // Hide others
         vid.classList.add("hidden");
@@ -683,7 +690,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         } else {
           // Is an image
           newImg.classList.remove("hidden");
-          newImg.src = imgURL(innerArray[1]);
+          newImg.src = getImgURL(innerArray[1]);
           newImg.onerror = function () {
             text = "Failed to load image";
             console.log(text, this.src);
@@ -711,11 +718,13 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         newDiv.appendChild(newFrame);
         parentDiv.appendChild(newDiv);
 
-        // Create a new div element for img title
-        var newTtl = document.createElement("div");
-        newTtl.className = "image-title";
-        newTtl.innerHTML = innerArray[0];
-        newDiv.appendChild(newTtl);
+        // Create a new div element for img title if not empty
+        if(innerArray[0].length>0){
+          var newTtl = document.createElement("div");
+          newTtl.className = "image-title";
+          newTtl.innerHTML = innerArray[0];
+          newDiv.appendChild(newTtl);
+        }
       });
 
       // assign wheelzoom functionality to all 12 images
@@ -827,6 +836,12 @@ Y8888P'  `Y88P'  Y8888D'    YP
     <div id="overlay" class="overlay">
       <div class="close-btn" onclick="hideOverlay()">&#10006;</div>
       <div class="overlay-content">
+        <div class="array-container">
+          <div class="array-title"><B>Full config.js file: </B>
+            <a href="config.js" target="_blank" style="color: white;">(Open in new tab)</a>
+            <p>
+          </div>
+        </div>
         <div class="array-container">
           <div class="array-title"><B>Menu Options:</B></div>
           <div id="array1" class="array-content"></div>
