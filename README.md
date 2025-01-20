@@ -144,6 +144,9 @@ Remove these lines from your config.js file to avoid duplicated menu entries (th
 
 Make sure you also download (in addition to hamdash.html) the new file settings.html that provides the new setup page option
 
+#### New Settings page:
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/settings.png?raw=true" width="800">
 
 ### 2024.11.13 Changelog:
 
