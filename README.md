@@ -53,9 +53,12 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 [W4QAL](https://w4qal.net/dashboard/index.html) -- SE US - West Florida
 
 ### Instructions:
-1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
+1. Just download the files from the Github repository (hamdash.html, settings.html, config.js, and wheelzoom.js) and keep them together on the same folder.
 2. Open hamdash.html with any browser of your preference and you done.
-3. With any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
+3. Use the right menu "Setup" option to load the settings page to configure your dashboard.
+4. Alternatively with any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
+5. Select to load your configuration from browser's Local Storage or config.js file, and save the settings.
+6. For server based hosted installs is recommended to use the settings stored in the config.js file.
 
 ### YouTube coverage:
 [YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
