@@ -123,6 +123,28 @@ If you want to upgrade to the latest version, the only file you need to update i
 
 Check updated demo!
 
+### 2025.01.20 Changelog:
+
+- Added a "Setup" page to configure the dashboard directly from the browser
+- Added the "Setup" option to the menu to loads the settings page
+- Ability to choose the option to load the configuration from: config.js file or Local Storage
+- Use config.js as default if present for backwards compatibility
+- Ability to import existing config.js file into Local Storage
+- Ability to export settings from Local Storage to backup Json file
+- Ability to import settings from backup Json file into Local Storage
+
+#### Upgrade notes:
+
+Remove these lines from your config.js file to avoid duplicated menu entries (these entries are now hardcoded)
+
+        ["add10d", "BACK", "#", "1"],
+        ["add10d", "BACK", "#", "1", "R"],
+        ["ff9100", "Refresh", "#", "1"],
+        ["0dd1a7", "Help", "#", "1"],
+
+Make sure you also download (in addition to hamdash.html) the new file settings.html that provides the new setup page option
+
+
 ### 2024.11.13 Changelog:
 
 - Added capability to customize the grid size (any combination of number of columns and number of rows for the dashboard tiles.) See examples and usage below.

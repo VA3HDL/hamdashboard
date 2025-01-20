@@ -2,18 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Cache" content="no-cache">
-    <meta http-equiv="Pragma-Control" content="no-cache">
-    <meta http-equiv="Cache-directive" Content="no-cache">
-    <meta http-equiv="Pragma-directive" Content="no-cache">
-    <meta http-equiv="Cache-Control" Content="no-cache">
-    <meta http-equiv="Pragma-directive: no-cache">
-    <meta http-equiv="Cache-directive: no-cache">
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache" content="no-cache" />
+    <meta http-equiv="Pragma-Control" content="no-cache" />
+    <meta http-equiv="Cache-directive" content="no-cache" />
+    <meta http-equiv="Pragma-directive" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma-directive: no-cache" />
+    <meta http-equiv="Cache-directive: no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="VA3HDL Ham Radio Dashboard">
+    <meta name="description" content="VA3HDL Ham Radio Dashboard" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -158,11 +161,11 @@ db   8D    88       88    88booo. 88.     db   8D
         overflow: hidden;
         display: flex;
         justify-content: center; /* Horizontal centering */
-        align-items: center;     /* Vertical centering */
+        align-items: center; /* Vertical centering */
       }
 
       .iframe-tile {
-        position: absolute;  /* it must be absolute */
+        position: absolute; /* it must be absolute */
         float: inline-start;
         overflow: hidden;
         display: flex;
@@ -321,7 +324,6 @@ db   8D    88       88    88booo. 88.     db   8D
         box-sizing: border-box;
         z-index: 3;
         font-family: "Roboto Condensed", sans-serif;
-
       }
 
       .overlay-content {
@@ -339,8 +341,8 @@ db   8D    88       88    88booo. 88.     db   8D
         font-size: 20px;
       }
     </style>
-  </head>
-  <!--
+
+    <!--
 .d8888.  .o88b. d8888b. d888888b d8888b. d888888b .d8888.
 88'  YP d8P  Y8 88  `8D   `88'   88  `8D `~~88~~' 88'  YP
 `8bo.   8P      88oobY'    88    88oodD'    88    `8bo.
@@ -350,427 +352,594 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
 
 -->
-  <script src="wheelzoom.js"></script>
-  <script src="config.js"></script>
-  <script>
-    // Configurable grid layout logic. Defaults to standard 4 columns by 3 rows if values are missing in config.js file.
-    if (typeof layout_cols === 'undefined'){
-      var layout_cols = 4;
-    }
-    if (typeof layout_rows === 'undefined'){
-      var layout_rows = 3;
-    }
-    var layout_grid = "auto ".repeat(layout_cols);
-    var layout_width = (99.6 / layout_cols) + "vw";
-    var layout_height = (93 / layout_rows) + "vh";
-    var iTiles = layout_cols*layout_rows;
-    document.documentElement.style.setProperty("--main-layout", layout_grid);
-    document.documentElement.style.setProperty("--main-width", layout_width);
-    document.documentElement.style.setProperty("--main-height", layout_height);
-    if (!(aIMG.length==tileDelay.length && aIMG.length==iTiles)){
-      var msg = "\nError detected on config.js file!\n\n";
-      msg += "The number of tile sources (" + aIMG.length + " in aIMG) and\n";
-      msg += "the tile delay (" + tileDelay.length + " in tileDelay) arrays should match\n";
-      msg += "the number of items each one contains and\n";
-      msg += "the number of tiles used on the layout specified (" + iTiles + ").";
-      alert(msg);
-    }
-
-    // Default variables initialization
-    var largeShow = 0;
-    var aIdx = [];
-    var aInt = [];
-    for(var i=1; i<=iTiles; i++) {
-      aIdx.push(1);
-      aInt.push(null);
-    }
-
-    var help = "Double click on an image to expand to full screen.\n";
-    help += "Double click again to close full screen view.\n";
-    help += "Right click on an image to display the next one.\n";
-    help += "Images rotates every 30 seconds automatically by default.\n";
-
-    const currentVersion = 'v2024.11.13'; // You can also load this from a config.json file
-
-    async function getLatestVersion() {
-      try {
-        const response = await fetch('https://api.github.com/repos/VA3HDL/hamdashboard/releases/latest');
-        const data = await response.json();
-        return data.tag_name;
-      } catch (error) {
-        console.error('Error fetching the latest version:', error);
-        return currentVersion; // Fallback to the current version if there's an error
+    <script src="wheelzoom.js"></script>
+    <script>
+      function minimalConfiguration() {
+        // Default settings
+        // window.settingsSource = "config.js";
+        window.topBarCenterText = "Use 'Setup' to configure your Ham Radio Dashboard";
+        window.layout_cols = 0;
+        window.layout_rows = 0;
+        window.aURL = [];
+        window.aIMG = [];
+        window.tileDelay = [];
+        start();
       }
-    }
 
-    function isNewVersionAvailable(currentVersion, latestVersion) {
-      return currentVersion !== latestVersion;
-    }
-
-    bUpdate = false;
-    async function checkForUpdates() {
-      const latestVersion = await getLatestVersion();
-      if (isNewVersionAvailable(currentVersion, latestVersion)) {
-        bUpdate = true;
+      async function checkIfFileExists(url) {
+        try {
+          const response = await fetch(url, {
+            method: "HEAD",
+            mode: "no-cors",
+          });
+          return response.ok;
+        } catch (error) {
+          console.error("Error checking file:", error);
+          return false;
+        }
       }
-    }
 
-    const videoExtensions = [".mp4", ".webm", ".ogg", ".ogv"];
+      async function loadScriptIfExists(url) {
+        const exists = await checkIfFileExists(url);
+        if (exists) {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        } else {
+          console.log("File does not exist");
+          // Try to recover
+          minimalConfiguration();
+          return Promise.reject("File does not exist");
+        }
+      }
 
-    function isVideo(src) {
-      return videoExtensions.some((ext) => src.includes(ext));
-    }
+      async function loadConfig() {
+        const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+              // console.warn('Running from file system, some features may not work due to browser security restrictions.');
+              // Directly load the script without checking if it exists
+              const script = document.createElement('script');
+              script.src = 'config.js';
+              script.onload = () => {
+                console.log('config.js loaded successfully');
+                start();
+              };
+              script.onerror = (error) => {
+                console.error('Failed to load config.js:', error);
+                // Try to recover
+                minimalConfiguration();
+              };
+              document.head.appendChild(script);
+            } else {
+              await loadScriptIfExists('config.js');
+              console.log('config.js loaded successfully');
+              start();
+            }
+      }
 
-    function getVideoType(src) {
-      if (src.includes(".mp4")) return "video/mp4";
-      if (src.includes(".webm")) return "video/webm";
-      if (src.includes(".ogg") || src.includes(".ogv")) return "video/ogg";
-      return "";
-    }
+      async function main() {
+        try {
+          // Check if settings exist in localStorage
+          const settings = localStorage.getItem('hamdash_config');
+          if (settings) {
+            // console.log('Settings found in localStorage:', settings);
+            console.log('Settings found in localStorage');
+            // Parse the settings JSON string
+            const parsedSettings = JSON.parse(settings);
+            // Copy settings to separate variables
+            window.settingsSource = parsedSettings.settingsSource;
+            if (settingsSource === 'localStorage') {
+              console.log('Loading settings from localStorage');
+              window.topBarCenterText = parsedSettings.topBarCenterText;
+              window.layout_cols = parsedSettings.layout_cols;
+              window.layout_rows = parsedSettings.layout_rows;
+              window.aURL = parsedSettings.aURL;
+              window.aIMG = parsedSettings.aImages;
+              // New array to hold the last elements for tileDelay
+              window.tileDelay = [];
+              // Iterate over the original array of arrays to extract tileDelay
+              aIMG.forEach(subArray => {
+                // Remove the last element from the sub-array and add it to the new array
+                const lastElement = subArray.pop();
+                tileDelay.push(lastElement);
+              });
 
-    function isFrame(src) {
-      return src.includes("iframe|");
-    }
+              // Iterate over the original array of arrays to flatten the sub-arrays
+              aIMG.forEach(subArray => {
+                // Replace the second element with its contents separated by commas and surrounded by quotes
+                if (Array.isArray(subArray[1])) {
+                  subArray[1] = subArray[1].map(element => `${element}`).join(',');
+                }
+                const newElements = subArray[1].split(',');
+                // Replace the second element with the new elements
+                subArray.splice(1, 1, ...newElements);
+              });
 
-    function oldformatArray(arr) {
-      return arr.join("<br>");
-    }
+              // Add more settings as needed
+              // console.log('settingsSource:', settingsSource);
+              // console.log('topBarCenterText:', topBarCenterText);
+              // console.log('layout_cols:', layout_cols);
+              // console.log('layout_rows:', layout_rows);
+              // console.log('aURL:', aURL);
+              // console.log('aIMG:', aIMG);
+              // console.log('tileDelay:', tileDelay);
 
-    function formatArray(arr) {
-        return arr.map(innerArray =>
-            innerArray.map(item => typeof item === 'string' ? `"${item}"` : item).join(', ')
-        ).join('<br>');
-    }
-
-    function setRot(){
-      if (typeof tileDelay === 'undefined') {
-        // If no individual tile rotation is defined then default is 30s or 30000ms
-        aInt[0] = setInterval(() => slide(), 30000);
-      } else {
-        tileDelay.forEach( function(tile,i) {
-          if (tile>0) {
-            aInt[i] = setInterval(() => slide(i), tile);
+              start();
+            } else {
+              console.log('Settings found in localStorage but loading from config.js file');
+              // Load the settings from config.js file
+              loadConfig();
+            }
+          } else {
+            console.log('No settings found in localStorage');
+            // Load the settings from config.js file
+            loadConfig();
           }
-        });
+        } catch (error) {
+          console.error('Failed to load configuration:', error);
+        }
       }
-    }
 
-    function rotStop(){
-      if (typeof tileDelay === 'undefined') {
-        clearTimeout(aInt[0]);
-      } else {
-        tileDelay.forEach( function(tile,i) {
-          clearTimeout(aInt[i]);
-        });
+      var help = "Double click on an image to expand to full screen.\n";
+      help += "Double click again to close full screen view.\n";
+      help += "Right click on an image to display the next one.\n";
+      help += "Images rotates every 30 seconds automatically by default.\n";
+
+      const currentVersion = "v2025.01.20"; // You can also load this from a config.json file
+
+      async function getLatestVersion() {
+        try {
+          const response = await fetch(
+            "https://api.github.com/repos/VA3HDL/hamdashboard/releases/latest"
+          );
+          const data = await response.json();
+          return data.tag_name;
+        } catch (error) {
+          console.error("Error fetching the latest version:", error);
+          return currentVersion; // Fallback to the current version if there's an error
+        }
       }
-    }
 
-    // This function shows the embedded websites
-    function MenuOpt(num) {
-      // Stop refreshes
-      window.stop();
-      rotStop();
-      //
-      document.getElementById("FullScreen").style.display = "block";
-      document.getElementById("iFrameContainer").style.zIndex = 1;
-      document.getElementById("FullScreen").src = aURL[num][2];
-      document.getElementById("FullScreen").style.transform =
-        "scale(" + aURL[num][3] + ")";
-
-      if (aURL[num][1].toLowerCase() == "back") {
-        // Start tile refreshes
-        setRot();
-        //
-        wheelzoom(document.querySelectorAll("img"));
-      } else if (aURL[num][1].toLowerCase() == "refresh") {
-        location.reload();
-        // Start tile refreshes
-        setRot();
-        //
-      } else if (aURL[num][1].toLowerCase() == "help") {
-        alert(help);
-      } else if (aURL[num][1].toLowerCase() == "sources") {
-        document.getElementById("array1").innerHTML = "<br>" + formatArray(aURL) + "<br><br>";
-        document.getElementById("array2").innerHTML = "<br>" + formatArray(aIMG) + "<br><br>";
-        document.getElementById("array3").innerHTML = "<br>Copyright (c) 2024 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>";
-        document.getElementById("overlay").style.display = "block";
-      } else if (aURL[num][1].toLowerCase() == "update") {
-        window.open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank").focus();
+      function isNewVersionAvailable(currentVersion, latestVersion) {
+        return currentVersion !== latestVersion;
       }
-    }
 
-    function hideOverlay() {
-      document.getElementById("overlay").style.display = "none";
-    }
+      bUpdate = false;
+      async function checkForUpdates() {
+        const latestVersion = await getLatestVersion();
+        if (isNewVersionAvailable(currentVersion, latestVersion)) {
+          bUpdate = true;
+        }
+      }
 
-    // This function shows the larger images when double click to enlarge
-    function larger(event) {
-      var targetElement = event.target || event.srcElement;
-      if (largeShow == 1) {
-        // Start refreshes
-        setRot();
-        //
-        largeShow = 0;
-        document.getElementById("imgZoom").style.display = "none";
-        document.getElementById("imgZoom").style.zIndex = -2;
-      } else {
+      const videoExtensions = [".mp4", ".webm", ".ogg", ".ogv"];
+
+      function isVideo(src) {
+        return videoExtensions.some((ext) => src.includes(ext));
+      }
+
+      function getVideoType(src) {
+        if (src.includes(".mp4")) return "video/mp4";
+        if (src.includes(".webm")) return "video/webm";
+        if (src.includes(".ogg") || src.includes(".ogv")) return "video/ogg";
+        return "";
+      }
+
+      function isFrame(src) {
+        return src.includes("iframe|");
+      }
+
+      function oldformatArray(arr) {
+        return arr.join("<br>");
+      }
+
+      function formatArray(arr) {
+        return arr
+          .map((innerArray) =>
+            innerArray
+              .map((item) => (typeof item === "string" ? `"${item}"` : item))
+              .join(", ")
+          )
+          .join("<br>");
+      }
+
+      function setRot() {
+        if (typeof tileDelay === "undefined") {
+          // If no individual tile rotation is defined then default is 30s or 30000ms
+          aInt[0] = setInterval(() => slide(), 30000);
+        } else {
+          tileDelay.forEach(function (tile, i) {
+            if (tile > 0) {
+              aInt[i] = setInterval(() => slide(i), tile);
+            }
+          });
+        }
+      }
+
+      function rotStop() {
+        if (typeof tileDelay === "undefined") {
+          clearTimeout(aInt[0]);
+        } else {
+          tileDelay.forEach(function (tile, i) {
+            clearTimeout(aInt[i]);
+          });
+        }
+      }
+
+      // This function shows the embedded websites
+      function MenuOpt(num) {
         // Stop refreshes
         window.stop();
         rotStop();
         //
-        largeShow = 1;
-        largeIdx = +targetElement.id.match(/\d+/)[0];
-        document.getElementById("imgZoom").style.display = "block";
-        document.getElementById("imgZoom").style.zIndex = 3;
-        document.getElementById("ImageLarge").src =
-          targetElement.style.backgroundImage
-            .replace(/^url\(["']?/, "")
-            .replace(/["']?\)$/, "");
-      }
-    }
+        document.getElementById("FullScreen").style.display = "block";
+        document.getElementById("iFrameContainer").style.zIndex = 1;
+        document.getElementById("FullScreen").src = aURL[num][2];
+        document.getElementById("FullScreen").style.transform =
+          "scale(" + aURL[num][3] + ")";
 
-    // Image cache prevention
-    // Check if the image URL already include parameters, then avoid the random timestamp
-    function getImgURL(url) {
-      return url.includes("?") ? url : url + "?_=" + Date.now();
-    }
-
-    // Manually rotate images
-    function rotate(event) {
-      event.preventDefault();
-      var targetElement = event.target || event.srcElement;
-      if (largeShow == 1) {
-        i = largeIdx;
-      } else {
-        i = +targetElement.id.match(/\d+/)[0];
-      }
-      if (aIMG[i].length > 2) {
-        ++aIdx[i];
-        if (aIdx[i] > aIMG[i].length - 1) {
-          aIdx[i] = 1;
+        if (aURL[num][1].toLowerCase() == "back") {
+          location.reload();
+          // Start tile refreshes
+          setRot();
+          //
+          // wheelzoom(document.querySelectorAll("img"));
+        } else if (aURL[num][1].toLowerCase() == "refresh") {
+          location.reload();
+          // Start tile refreshes
+          setRot();
+          //
+        } else if (aURL[num][1].toLowerCase() == "help") {
+          alert(help);
+        } else if (aURL[num][1].toLowerCase() == "sources") {
+          document.getElementById("array1").innerHTML =
+            "<br>" + formatArray(aURL) + "<br><br>";
+          document.getElementById("array2").innerHTML =
+            "<br>" + formatArray(aIMG) + "<br><br>";
+          document.getElementById("array3").innerHTML =
+            "<br>Copyright (c) 2024 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>";
+          document.getElementById("overlay").style.display = "block";
+        } else if (aURL[num][1].toLowerCase() == "update") {
+          window
+            .open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank")
+            .focus();
         }
+      }
+
+      function hideOverlay() {
+        document.getElementById("overlay").style.display = "none";
+      }
+
+      // This function shows the larger images when double click to enlarge
+      function larger(event) {
+        var targetElement = event.target || event.srcElement;
+        if (largeShow == 1) {
+          // Start refreshes
+          setRot();
+          //
+          largeShow = 0;
+          document.getElementById("imgZoom").style.display = "none";
+          document.getElementById("imgZoom").style.zIndex = -2;
+        } else {
+          // Stop refreshes
+          window.stop();
+          rotStop();
+          //
+          largeShow = 1;
+          largeIdx = +targetElement.id.match(/\d+/)[0];
+          document.getElementById("imgZoom").style.display = "block";
+          document.getElementById("imgZoom").style.zIndex = 3;
+          document.getElementById("ImageLarge").src =
+            targetElement.style.backgroundImage
+              .replace(/^url\(["']?/, "")
+              .replace(/["']?\)$/, "");
+        }
+      }
+
+      // Image cache prevention
+      // Check if the image URL already include parameters, then avoid the random timestamp
+      function getImgURL(url) {
+        return url.includes("?") ? url : url + "?_=" + Date.now();
+      }
+
+      // Manually rotate images
+      function rotate(event) {
+        event.preventDefault();
+        var targetElement = event.target || event.srcElement;
+        if (largeShow == 1) {
+          i = largeIdx;
+        } else {
+          i = +targetElement.id.match(/\d+/)[0];
+        }
+        if (aIMG[i].length > 2) {
+          ++aIdx[i];
+          if (aIdx[i] > aIMG[i].length - 1) {
+            aIdx[i] = 1;
+          }
+          if (isVideo(aIMG[i][aIdx[i]])) {
+            // Is video, event is not attached to videos for now, do nothing
+          } else if (isFrame(aIMG[i][aIdx[i]])) {
+            // Is iFrame, event is not attached to iFrames for now, do nothing
+          } else {
+            // Is image
+            document.getElementById(targetElement.id).src = getImgURL(
+              aIMG[i][aIdx[i]]
+            );
+          }
+        }
+      }
+
+      function imgRot(i) {
+        if (aIMG[i].length > 2) {
+          ++aIdx[i];
+          if (aIdx[i] > aIMG[i].length - 1) {
+            aIdx[i] = 1;
+          }
+        }
+        // console.log("aIdx", aIdx);
+        // console.log("i", i, "aIdx[i]", aIdx[i], "aIMG[i][aIdx[i]]", aIMG[i][aIdx[i]]);
+        vid = document.getElementById("Video" + i);
+        img = document.getElementById("Image" + i);
+        ifr = document.getElementById("iFrame" + i);
         if (isVideo(aIMG[i][aIdx[i]])) {
-          // Is video, event is not attached to videos for now, do nothing
+          // Is video
+          vid.src = getImgURL(aIMG[i][aIdx[i]]);
+          vid.classList.remove("hidden");
+          // Hide others
+          img.classList.add("hidden");
+          ifr.classList.add("hidden");
         } else if (isFrame(aIMG[i][aIdx[i]])) {
-          // Is iFrame, event is not attached to iFrames for now, do nothing
+          // Is iFrame
+          newSrc = aIMG[i][aIdx[i]].split("|");
+          ifr.classList.remove("hidden");
+          ifr.src = newSrc[1];
+          ifr.style.zIndex = 0;
+          // Hide others
+          vid.classList.add("hidden");
+          img.classList.add("hidden");
         } else {
           // Is image
-          document.getElementById(targetElement.id).src = getImgURL(
-            aIMG[i][aIdx[i]]
-          );
+          img.src = getImgURL(aIMG[i][aIdx[i]]);
+          img.classList.remove("hidden");
+          // Hide others
+          vid.classList.add("hidden");
+          ifr.classList.add("hidden");
         }
       }
-    }
 
-    function imgRot(i){
-      if (aIMG[i].length > 2) {
-        ++aIdx[i];
-        if (aIdx[i] > aIMG[i].length - 1) {
-          aIdx[i] = 1;
-        }
-      }
-      // console.log("aIdx", aIdx);
-      // console.log("i", i, "aIdx[i]", aIdx[i], "aIMG[i][aIdx[i]]", aIMG[i][aIdx[i]]);
-      vid = document.getElementById("Video" + i);
-      img = document.getElementById("Image" + i);
-      ifr = document.getElementById("iFrame" + i);
-      if (isVideo(aIMG[i][aIdx[i]])) {
-        // Is video
-        vid.src = getImgURL(aIMG[i][aIdx[i]]);
-        vid.classList.remove("hidden");
-        // Hide others
-        img.classList.add("hidden");
-        ifr.classList.add("hidden");
-      } else if (isFrame(aIMG[i][aIdx[i]])) {
-        // Is iFrame
-        newSrc = aIMG[i][aIdx[i]].split("|")
-        ifr.classList.remove("hidden");
-        ifr.src = newSrc[1];
-        ifr.style.zIndex = 0;
-        // Hide others
-        vid.classList.add("hidden");
-        img.classList.add("hidden");
-      } else {
-        // Is image
-        img.src = getImgURL(aIMG[i][aIdx[i]]);
-        img.classList.remove("hidden");
-        // Hide others
-        vid.classList.add("hidden");
-        ifr.classList.add("hidden");
-      }
-    }
-
-    // Automatically rotate images
-    function slide(i) {
-      // check all tiles or one tile
-      if (typeof i === 'undefined') {
-        // get the locations with multiple images
-        aIMG.forEach(function (innerArray, i) {
+      // Automatically rotate images
+      function slide(i) {
+        // check all tiles or one tile
+        if (typeof i === "undefined") {
+          // get the locations with multiple images
+          aIMG.forEach(function (innerArray, i) {
+            imgRot(i);
+          });
+        } else {
+          // Only one tile as per timeout call
           imgRot(i);
-        });
-      } else {
-        // Only one tile as per timeout call
-        imgRot(i);
-      }
-    }
-
-    function start() {
-      // Get the parent div for Menu container
-      var parentDiv = document.getElementById("myMenu");
-      var parentDivR = document.getElementById("myMenuR");
-      // Append the Sources option to the right side menu
-      aURL.push(["0dd1a7", "Sources", "#", "1", "R"]);
-      if (bUpdate){
-        aURL.push(["FF0000", "Update", "#", "1", "R"]);
-      }
-      // Append the new div to the parent div
-      aURL.forEach(function (innerArray, index) {
-        // Create a new div element
-        var newDiv = document.createElement("div");
-        newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
-        if (innerArray[4] == "R") {
-          // Set some properties for the new div
-          newDiv.id = "mySidenavR";
-          newDiv.className = "sidenavR";
-          parentDivR.appendChild(newDiv);
-        } else {
-          // Set some properties for the new div
-          newDiv.id = "mySidenav";
-          newDiv.className = "sidenav";
-          parentDiv.appendChild(newDiv);
         }
-      });
+      }
 
-      // Get the parent div for Dashboard container
-      var parentDiv = document.getElementById("dash");
+      // .d8888. d888888b  .d8b.  d8888b. d888888b
+      // 88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'
+      // `8bo.      88    88ooo88 88oobY'    88
+      //   `Y8b.    88    88~~~88 88`8b      88
+      // db   8D    88    88   88 88 `88.    88
+      // `8888Y'    YP    YP   YP 88   YD    YP
+      function start() {
+        // Configurable grid layout logic. Defaults to standard 4 columns by 3 rows if values are missing in config.js file.
+        var layout_cols = typeof window.layout_cols === "undefined" ? 4 : window.layout_cols;
+        var layout_rows = typeof window.layout_rows === "undefined" ? 3 : window.layout_rows;
+        var layout_grid = "auto ".repeat(layout_cols);
+        var layout_width = 99.6 / layout_cols + "vw";
+        var layout_height = 93 / layout_rows + "vh";
+        var iTiles = layout_cols * layout_rows;
+        document.documentElement.style.setProperty(
+          "--main-layout",
+          layout_grid
+        );
+        document.documentElement.style.setProperty(
+          "--main-width",
+          layout_width
+        );
+        document.documentElement.style.setProperty(
+          "--main-height",
+          layout_height
+        );
 
-      // Append the new div to the parent div
-      aIMG.forEach(function (innerArray, index) {
-        // Create a new div element
-        var newDiv = document.createElement("div");
-        newDiv.className = "image-container";
-        newDiv.id = `box${index}`;
+        // Default variables initialization
+        window.largeShow = 0;
+        window.aIdx = [];
+        window.aInt = [];
+        for (var i = 1; i <= iTiles; i++) {
+          aIdx.push(1);
+          aInt.push(null);
+        }
+        if (!(aIMG.length == tileDelay.length && aIMG.length == iTiles)) {
+          var msg = "\nError detected on config.js file!\n\n";
+          msg += "The number of tile sources (" + aIMG.length + " in aIMG) and\n";
+          msg += "the tile delay (" + tileDelay.length + " in tileDelay) arrays should match\n";
+          msg += "the number of items each one contains and\n";
+          msg += "the number of tiles used on the layout specified (" + iTiles + ").";
+          alert(msg);
+        }
 
-        // Add video placeholder containers
-        const video = document.createElement("video");
-        video.id = `Video${index}`;
-        video.classList.add("media", "hidden");
-        video.controls = true;
-        video.muted = true;
-        video.autoplay = true;
-        video.loop = true;
-        const source = document.createElement("source");
+        // Get the parent div for Menu container
+        var parentDiv = document.getElementById("myMenu");
+        var parentDivR = document.getElementById("myMenuR");
 
-        // Create a new img element
-        var newImg = document.createElement("img");
-        newImg.id = `Image${index}`;
-        newImg.classList.add("hidden");
-        newImg.oncontextmenu = rotate;
-        newImg.ondblclick = larger;
+        // Preppend the default options to the menu
+        aURL.unshift(
+          ["add10d", "BACK", "?_=" + Date.now(), "1", "L"],
+          ["add10d", "BACK", "?_=" + Date.now(), "1", "R"],
+          ["ff9100", "Refresh", "?_=" + Date.now(), "1"],
+          ["0dd1a7", "Help", "#", "1", "L"]
+        );
 
-        // append newIframes iFrameNN
-        var newFrame = document.createElement("iframe");
-        newFrame.className = "iframe-tile";
-        newFrame.id = `iFrame${index}`;
-        newFrame.classList.add("hidden");
-        var newSrc = " ";
+        // Append the Setup and Sources option to the right side menu
+        aURL.push(
+          ["ff9100", "Setup", "settings.html", "1", "R"],
+          ["0dd1a7", "Sources", "#", "1", "R"]
+        );
 
-        if (isVideo(innerArray[1])) {
-          // Is a video
-          video.classList.remove("hidden");
-          source.src = innerArray[1];
-          source.type = getVideoType(innerArray[1]);
-          video.appendChild(source);
-        } else if (isFrame(innerArray[1])) {
-          // Is iFrame
-          newFrame.classList.remove("hidden");
-          newSrc = innerArray[1].split("|")
-          newFrame.src = newSrc[1];
-          newFrame.style.zIndex = 0;
-        } else {
-          // Is an image
-          newImg.classList.remove("hidden");
-          newImg.src = getImgURL(innerArray[1]);
-          newImg.onerror = function () {
-            text = "Failed to load image";
-            console.log(text, this.src);
-            if (this.src.includes("?")) {
-              // Retry without passing variables first to see if fixes the error
-              console.log("Trying without caching prevention");
-              newImg.src = this.src.split("?")[0];
-            } else {
-              el = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="330">
+        // Append the Update option to the right side menu if needed
+        if (bUpdate) {
+          aURL.push(["FF0000", "Update", "#", "1", "R"]);
+        }
+
+        // Append the new div to the parent div
+        aURL.forEach(function (innerArray, index) {
+          // Create a new div element
+          var newDiv = document.createElement("div");
+          newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
+          if (innerArray[4] == "R") {
+            // Set some properties for the new div
+            newDiv.id = "mySidenavR";
+            newDiv.className = "sidenavR";
+            parentDivR.appendChild(newDiv);
+          } else {
+            // Set some properties for the new div
+            newDiv.id = "mySidenav";
+            newDiv.className = "sidenav";
+            parentDiv.appendChild(newDiv);
+          }
+        });
+
+        // Get the parent div for Dashboard container
+        var parentDiv = document.getElementById("dash");
+
+        // Append the new div to the parent div
+        aIMG.forEach(function (innerArray, index) {
+          // Create a new div element
+          var newDiv = document.createElement("div");
+          newDiv.className = "image-container";
+          newDiv.id = `box${index}`;
+
+          // Add video placeholder containers
+          const video = document.createElement("video");
+          video.id = `Video${index}`;
+          video.classList.add("media", "hidden");
+          video.controls = true;
+          video.muted = true;
+          video.autoplay = true;
+          video.loop = true;
+          const source = document.createElement("source");
+
+          // Create a new img element
+          var newImg = document.createElement("img");
+          newImg.id = `Image${index}`;
+          newImg.classList.add("hidden");
+          newImg.oncontextmenu = rotate;
+          newImg.ondblclick = larger;
+
+          // append newIframes iFrameNN
+          var newFrame = document.createElement("iframe");
+          newFrame.className = "iframe-tile";
+          newFrame.id = `iFrame${index}`;
+          newFrame.classList.add("hidden");
+          var newSrc = " ";
+
+          if (isVideo(innerArray[1])) {
+            // Is a video
+            video.classList.remove("hidden");
+            source.src = innerArray[1];
+            source.type = getVideoType(innerArray[1]);
+            video.appendChild(source);
+          } else if (isFrame(innerArray[1])) {
+            // Is iFrame
+            newFrame.classList.remove("hidden");
+            newSrc = innerArray[1].split("|");
+            newFrame.src = newSrc[1];
+            newFrame.style.zIndex = 0;
+          } else {
+            // Is an image
+            newImg.classList.remove("hidden");
+            newImg.src = getImgURL(innerArray[1]);
+            newImg.onerror = function () {
+              text = "Failed to load image";
+              console.log(text, this.src);
+              if (this.src.includes("?")) {
+                // Retry without passing variables first to see if fixes the error
+                console.log("Trying without caching prevention");
+                newImg.src = this.src.split("?")[0];
+              } else {
+                el = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="330">
                   <g>
                     <text style="font-size:34px; line-height:1.25; white-space:pre; fill:#ffaa00; fill-opacity:1; stroke:#ffaa00; stroke-opacity:1;">
                       <tspan x="100" y="150">${text}</tspan>
                       </text>
                       </g>
                       </svg>`;
-              newImg.src = "data:image/svg+xml;base64," + window.btoa(el);
-            }
-          };
+                newImg.src = "data:image/svg+xml;base64," + window.btoa(el);
+              }
+            };
+          }
 
-        }
+          // append newDivs boxNN
+          newDiv.appendChild(video);
+          newDiv.appendChild(newImg);
+          newDiv.appendChild(newFrame);
+          parentDiv.appendChild(newDiv);
 
-        // append newDivs boxNN
-        newDiv.appendChild(video);
-        newDiv.appendChild(newImg);
-        newDiv.appendChild(newFrame);
-        parentDiv.appendChild(newDiv);
+          // Create a new div element for img title if not empty
+          if (innerArray[0].length > 0) {
+            var newTtl = document.createElement("div");
+            newTtl.className = "image-title";
+            newTtl.innerHTML = innerArray[0];
+            newDiv.appendChild(newTtl);
+          }
+        });
 
-        // Create a new div element for img title if not empty
-        if(innerArray[0].length>0){
-          var newTtl = document.createElement("div");
-          newTtl.className = "image-title";
-          newTtl.innerHTML = innerArray[0];
-          newDiv.appendChild(newTtl);
-        }
-      });
+        // assign wheelzoom functionality to all 12 images
+        wheelzoom(document.querySelectorAll("img"));
 
-      // assign wheelzoom functionality to all 12 images
-      wheelzoom(document.querySelectorAll("img"));
+        window.addEventListener("resize", function () {
+          "use strict";
+          window.location.reload();
+        });
 
-      window.addEventListener("resize", function () {
-        "use strict";
-        window.location.reload();
-      });
+        setRot();
+      }
 
-      setRot();
-    }
+      // This function update the time on the top bar
+      function updateTopBar() {
+        const now = new Date();
+        const localDate = now.toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        });
+        const localTime = now.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZoneName: "short",
+        });
 
-    // This function update the time on the top bar
-    function updateTopBar() {
-      const now = new Date();
-      const localDate = now.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      });
-      const localTime = now.toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        timeZoneName: "short",
-      });
+        const utcDate = now.toISOString().slice(0, 10);
+        const utcTime = now.toISOString().slice(11, 19) + " UTC";
 
-      const utcDate = now.toISOString().slice(0, 10);
-      const utcTime = now.toISOString().slice(11, 19) + " UTC";
+        const topBarLeft = document.getElementById("topBarLeft");
+        topBarLeft.textContent = `${localDate} - ${localTime}`;
+        const topBarCenter = document.getElementById("topBarCenter");
+        topBarCenter.textContent = topBarCenterText;
+        const topBarRight = document.getElementById("topBarRight");
+        topBarRight.textContent = `${utcDate} ${utcTime}`;
+      }
 
-      const topBarLeft = document.getElementById("topBarLeft");
-      topBarLeft.textContent = `${localDate} - ${localTime}`;
-      const topBarCenter = document.getElementById("topBarCenter");
-      topBarCenter.textContent = topBarCenterText;
-      const topBarRight = document.getElementById("topBarRight");
-      topBarRight.textContent = `${utcDate} ${utcTime}`;
-    }
+      // Update every second
+      setInterval(updateTopBar, 1000);
 
-    // Update every second
-    setInterval(updateTopBar, 1000);
-
-    // Run the check when the application starts
-    checkForUpdates();
-  </script>
+      // Run the check when the application starts
+      checkForUpdates();
+    </script>
+  </head>
   <!--
 d8888b.  .d88b.  d8888b. db    db
 88  `8D .8P  Y8. 88  `8D `8b  d8'
@@ -781,7 +950,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
 
 
 -->
-  <body onload="start()">
+  <body onload="main()">
     <div id="iFrameContainer" class="iframe-container">
       <iframe class="full-screen" id="FullScreen" src="" title="Zoom"></iframe>
     </div>
@@ -837,21 +1006,24 @@ Y8888P'  `Y88P'  Y8888D'    YP
       <div class="close-btn" onclick="hideOverlay()">&#10006;</div>
       <div class="overlay-content">
         <div class="array-container">
-          <div class="array-title"><B>Full config.js file: </B>
-            <a href="config.js" target="_blank" style="color: white;">(Open in new tab)</a>
-            <p>
+          <div class="array-title">
+            <b>Full config.js file: </b>
+            <a href="config.js" target="_blank" style="color: white"
+              >(Open in new tab)</a
+            >
+            <p></p>
           </div>
         </div>
         <div class="array-container">
-          <div class="array-title"><B>Menu Options:</B></div>
+          <div class="array-title"><b>Menu Options:</b></div>
           <div id="array1" class="array-content"></div>
         </div>
         <div class="array-container">
-          <div class="array-title"><B>Image Sources:</B></div>
+          <div class="array-title"><b>Image Sources:</b></div>
           <div id="array2" class="array-content"></div>
         </div>
         <div class="array-container">
-          <div class="array-title"><B>Development by:</B></div>
+          <div class="array-title"><b>Development by:</b></div>
           <div id="array3" class="array-content"></div>
         </div>
       </div>

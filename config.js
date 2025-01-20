@@ -9,10 +9,6 @@ var layout_rows = 3;
 // The values are [color code, menu text, target link, scale factor, side],
 // add new lines following the structure for extra menu options. The comma at the end is important!
 const aURL = [
-  ["add10d", "BACK", "#", "1"],
-  ["add10d", "BACK", "#", "1", "R"],
-  ["ff9100", "Refresh", "#", "1"],
-  ["0dd1a7", "Help", "#", "1"],
   ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
   [
     "2196F3",

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ham Radio Dashboard Setup Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 50px;
+        background-color: aliceblue;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"] {
+        width: 99%;
+        padding: 1px;
+        margin-bottom: 10px;
+      }
+      input[type="number"] {
+        width: 20%;
+        padding: 1px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+      }
+      table th,
+      table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      table th {
+        background-color: #f4f4f4;
+      }
+      button {
+        padding: 5px 5px;
+        margin: 5px 0;
+        cursor: pointer;
+        background-image: linear-gradient(#f7f8fa, #e7e9ec);
+        border-color: #adb1b8 #a2a6ac #8d9096;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 3px;
+        box-shadow: rgba(255, 255, 255, 0.6) 0 1px 0 inset;
+        box-sizing: border-box;
+        color: #0f1111;
+        cursor: pointer;
+        display: inline-block;
+        font-family: "Amazon Ember", Arial, sans-serif;
+        font-size: 14px;
+        height: 29px;
+        font-size: 13px;
+        outline: 0;
+        overflow: hidden;
+        padding: 0 11px;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+      }
+      button:active {
+        border-bottom-color: #a2a6ac;
+      }
+      button:active:hover {
+        border-bottom-color: #a2a6ac;
+      }
+      button:hover {
+        border-color: #a2a6ac #979aa1 #82858a;
+      }
+      button:focus {
+        border-color: #e77600;
+        box-shadow: rgba(228, 121, 17, 0.5) 0 0 3px 2px;
+        outline: 0;
+      }
+      .radio-group {
+        display: flex;
+        align-items: center;
+      }
+      .radio-group label {
+        margin-right: 15px;
+        padding-top: 10px;
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Setup Page</h1>
+    <div id="configForm">
+      <!-- Settings Source Selection -->
+      <div class="section">
+        <label>Settings Source:</label>
+        <div class="radio-group">
+          <input
+            type="radio"
+            id="sourceLocalStorage"
+            name="settingsSource"
+            value="localStorage"
+          />
+          <label for="sourceLocalStorage">Browser Local Storage</label>
+          <input
+            type="radio"
+            id="sourceFile"
+            name="settingsSource"
+            value="file"
+          />
+          <label for="sourceFile">config.js File</label>
+        </div>
+      </div>
+
+      <!-- Top Bar Text -->
+      <div class="section">
+        <label for="topBarCenterText">Top Bar Center Text:</label>
+        <input type="text" id="topBarCenterText" />
+      </div>
+
+      <!-- Grid Layout -->
+      <div class="section">
+        <label>Grid Layout:</label>
+        <label for="layout_cols">Columns:</label>
+        <input type="number" id="layout_cols" min="1" />
+        <label for="layout_rows">Rows:</label>
+        <input type="number" id="layout_rows" min="1" />
+      </div>
+
+      <!-- Menu Items -->
+      <div class="section">
+        <label>Menu Items:</label>
+        <table id="menuTable">
+          <thead>
+            <tr>
+              <th>Color</th>
+              <th>Text</th>
+              <th>URL</th>
+              <th>Scale</th>
+              <th>Side</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="addMenuItem">Add Menu Item</button>
+      </div>
+
+      <!-- Dashboard Items -->
+      <div class="section">
+        <label>Dashboard Items:</label>
+        <table id="dashboardTable">
+          <thead>
+            <tr>
+              <th>Tile Title</th>
+              <th>Tile URLs</th>
+              <th>URL Rotation Interval (ms)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Save/Reset Buttons -->
+      <div class="section">
+        <button id="saveConfig">Save Settings</button>
+        <button id="resetConfig">Reset to Defaults</button>
+        <button id="backupConfig">Backup Settings</button>
+        <button id="restoreConfig">Restore Settings</button>
+        <button id="importConfig">Import config.js</button>
+      </div>
+    </div>
+
+    <script>
+      function getColumnHeaderTitle(tableId, columnNumber) {
+        const table = document.getElementById(tableId);
+        if (!table) {
+          console.error(`Table with id ${tableId} not found.`);
+          return null;
+        }
+
+        const headers = table.querySelectorAll("thead th");
+        if (columnNumber < 0 || columnNumber >= headers.length) {
+          console.error(`Invalid column number ${columnNumber}.`);
+          return null;
+        }
+
+        return headers[columnNumber].textContent;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Default Values
+        const defaults = {
+          settingsSource: "localStorage",
+          topBarCenterText: "CALLSIGN - Locator",
+          layout_cols: 4,
+          layout_rows: 3,
+          aURL: [["2196F3", "Photos", "https://picsum.photos/", 1, "L"]],
+          aImages: [
+            ["Tile 1", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 2", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 3", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 4", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 5", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 6", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 7", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 8", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 9", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 10", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 11", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 12", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+          ],
+        };
+
+        // Load from LocalStorage or Defaults
+        const settings = JSON.parse(localStorage.getItem("hamdash_config")) || {
+          ...defaults,
+        };
+
+        if (settings.settingsSource) {
+          document.querySelector(
+            `input[name="settingsSource"][value="${settings.settingsSource}"]`
+          ).checked = true;
+        }
+
+        // Utility to Update Dashboard Items to Match Layout
+        const adjustDashboardItems = () => {
+          const totalItems = settings.layout_cols * settings.layout_rows;
+          const currentItems = settings.aImages.length;
+
+          if (currentItems < totalItems) {
+            // Add new placeholders if there are fewer items than needed
+            for (let i = currentItems; i < totalItems; i++) {
+              settings.aImages.push(["", [""], 5000]); // Default title, image array, and rotation interval
+            }
+          } else if (currentItems > totalItems) {
+            // Remove excess items
+            settings.aImages.splice(totalItems);
+          }
+
+          updateTable("dashboardTable", settings.aImages, [
+            "Tile Title",
+            "Tile URLs",
+            "URL Rotation Interval (ms)",
+          ]);
+        };
+
+        // Utility to Update Tables
+        const updateTable = (tableId, data, columns) => {
+          const tbody = document.querySelector(`#${tableId} tbody`);
+          tbody.innerHTML = "";
+          data.forEach((item, index) => {
+            const row = document.createElement("tr");
+            columns.forEach((col, colIndex) => {
+              const cell = document.createElement("td");
+              if (Array.isArray(item[colIndex])) {
+                // Handle array of image URLs
+                const container = document.createElement("div");
+                item[colIndex].forEach((url, urlIndex) => {
+                  const textarea = document.createElement("input");
+                  textarea.type =
+                    getColumnHeaderTitle(tableId, colIndex) === ""
+                      ? "number"
+                      : "text";
+                  textarea.value = url;
+                  textarea.onchange = (e) =>
+                    (item[colIndex][urlIndex] = e.target.value);
+                  container.appendChild(textarea);
+                  const removeBtn = document.createElement("button");
+                  removeBtn.textContent = "Remove URL";
+                  removeBtn.onclick = () => {
+                    item[colIndex].splice(urlIndex, 1);
+                    updateTable(tableId, data, columns);
+                  };
+                  container.appendChild(document.createElement("br"));
+                  container.appendChild(removeBtn);
+                  container.appendChild(document.createElement("br"));
+                });
+                const addBtn = document.createElement("button");
+                addBtn.textContent = "Add URL";
+                addBtn.onclick = () => {
+                  item[colIndex].push("");
+                  updateTable(tableId, data, columns);
+                };
+                container.appendChild(addBtn);
+                cell.appendChild(container);
+              } else {
+                const input = document.createElement("input");
+                switch (getColumnHeaderTitle(tableId, colIndex)) {
+                  case "Scale":
+                    input.type = "number";
+                    break;
+                  case "URL Rotation Interval (ms)":
+                    input.type = "number";
+                    break;
+                  default:
+                    input.type = "text";
+                }
+                input.value = item[colIndex];
+                input.onchange = (e) =>
+                  (item[colIndex] =
+                    colIndex === 2
+                      ? parseInt(e.target.value, 10)
+                      : e.target.value);
+                cell.appendChild(input);
+              }
+              row.appendChild(cell);
+            });
+
+            const actionsCell = document.createElement("td");
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = () => {
+              data.splice(index, 1);
+              adjustDashboardItems();
+            };
+            actionsCell.appendChild(deleteBtn);
+            row.appendChild(actionsCell);
+
+            tbody.appendChild(row);
+          });
+        };
+
+        // Load Initial Data
+        document.getElementById("topBarCenterText").value =
+          settings.topBarCenterText;
+        document.getElementById("layout_cols").value = settings.layout_cols;
+        document.getElementById("layout_rows").value = settings.layout_rows;
+        updateTable("menuTable", settings.aURL, [
+          "Color",
+          "Text",
+          "URL",
+          "Scale",
+          "Side",
+        ]);
+        adjustDashboardItems(); // Ensure dashboard items match layout on load
+
+        // Save Configuration
+        document.getElementById("saveConfig").onclick = () => {
+          settings.settingsSource = document.querySelector(
+            'input[name="settingsSource"]:checked'
+          ).value;
+          settings.topBarCenterText =
+            document.getElementById("topBarCenterText").value;
+          settings.layout_cols = parseInt(
+            document.getElementById("layout_cols").value,
+            10
+          );
+          settings.layout_rows = parseInt(
+            document.getElementById("layout_rows").value,
+            10
+          );
+
+          adjustDashboardItems(); // Adjust dashboard items before saving
+          localStorage.setItem("hamdash_config", JSON.stringify(settings));
+          alert("Settings saved!");
+        };
+
+        // Reset to Defaults
+        document.getElementById("resetConfig").onclick = () => {
+          localStorage.setItem("hamdash_config", JSON.stringify(defaults));
+          alert("Settings reset to defaults!");
+          location.reload();
+        };
+
+        // Backup Configuration
+        document.getElementById("backupConfig").onclick = () => {
+          const dataStr =
+            "data:text/json;charset=utf-8," +
+            encodeURIComponent(JSON.stringify(settings));
+          const downloadAnchorNode = document.createElement("a");
+          downloadAnchorNode.setAttribute("href", dataStr);
+          downloadAnchorNode.setAttribute(
+            "download",
+            "hamdash_config_backup.json"
+          );
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          downloadAnchorNode.remove();
+        };
+
+        // Restore Configuration
+        document.getElementById("restoreConfig").onclick = () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "application/json";
+          input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const restoredSettings = JSON.parse(e.target.result);
+              localStorage.setItem(
+                "hamdash_config",
+                JSON.stringify(restoredSettings)
+              );
+              alert("Settings restored from backup!");
+              location.reload();
+            };
+            reader.readAsText(file);
+          };
+          input.click();
+        };
+
+        // Import config.js
+        document.getElementById("importConfig").onclick = () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = ".js";
+          input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              // Wrap the content in an IIFE to avoid polluting the global scope
+              const configScript = `(function() {
+                ${e.target.result}
+                return {
+                  topBarCenterText,
+                  layout_cols,
+                  layout_rows,
+                  aURL,
+                  aIMG,
+                  tileDelay
+                };
+              })()`;
+
+              // Evaluate the IIFE and get the variables
+              const config = eval(configScript);
+
+              // Filter out sub-arrays from aURL containing "BACK" or "Refresh"
+              const filteredAURL = config.aURL.filter(
+                (item) =>
+                  !item.some(
+                    (subItem) =>
+                      typeof subItem === "string" &&
+                      (subItem.includes("BACK") ||
+                        subItem.includes("Back") ||
+                        subItem.includes("Refresh") ||
+                        subItem.includes("Help"))
+                  )
+              );
+
+              // Create a JSON structure from the variables
+              const configJSON = {
+                topBarCenterText: config.topBarCenterText,
+                layout_cols: config.layout_cols,
+                layout_rows: config.layout_rows,
+                aURL: filteredAURL,
+                aImages: config.aIMG.map((item, index) => {
+                  // Arrange all items from second to last in a sub-array
+                  const [first, ...rest] = item;
+                  return [first, rest, config.tileDelay[index]];
+                }),
+                settingsSource: "localStorage",
+              };
+
+              // Convert the JSON structure to a string
+              const configJSONString = JSON.stringify(configJSON, null, 2);
+
+              // Output the JSON string (for example, to the console)
+              console.log(configJSONString);
+              localStorage.setItem("hamdash_config",configJSONString);
+              alert("Settings imported from config.js!");
+              location.reload();
+            };
+            reader.readAsText(file);
+          };
+          input.click();
+        };
+
+        // Add New Menu Item
+        document.getElementById("addMenuItem").onclick = () => {
+          settings.aURL.push(["", "", "", "", ""]);
+          updateTable("menuTable", settings.aURL, [
+            "Color",
+            "Text",
+            "URL",
+            "Scale",
+            "Side",
+          ]);
+        };
+
+        // Update Dashboard Items When Layout Changes
+        document
+          .getElementById("layout_cols")
+          .addEventListener("change", () => {
+            settings.layout_cols = parseInt(
+              document.getElementById("layout_cols").value,
+              10
+            );
+            adjustDashboardItems();
+          });
+
+        document
+          .getElementById("layout_rows")
+          .addEventListener("change", () => {
+            settings.layout_rows = parseInt(
+              document.getElementById("layout_rows").value,
+              10
+            );
+            adjustDashboardItems();
+          });
+      });
+    </script>
+  </body>
+</html>
