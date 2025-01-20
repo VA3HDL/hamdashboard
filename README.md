@@ -119,9 +119,9 @@ Use this online tool to test any URL to see if it can be displayed in an iframe 
 
 ## Updates
 
-If you want to upgrade to the latest version, the only file you need to update is hamdash.html (do not overwrite your config.js file.)
+If you want to upgrade to the latest version, please make sure your read the Changelog below (do not overwrite your config.js file.)
 
-Check updated demo!
+Check the updated demos too!
 
 ### 2025.01.20 Changelog:
 
