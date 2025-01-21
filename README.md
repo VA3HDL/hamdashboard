@@ -135,6 +135,7 @@ Check the updated demos too!
 - Ability to import existing config.js file into Local Storage
 - Ability to export settings from Local Storage to backup Json file
 - Ability to import settings from backup Json file into Local Storage
+- Ability to hide the "Setup" option from the menu by adding "const disableSetup = true;" on the config.js file
 
 #### Upgrade notes:
 
@@ -147,7 +148,19 @@ Remove these lines from your config.js file to avoid duplicated menu entries (th
 
 Make sure you also download (in addition to hamdash.html) the new file settings.html that provides the new setup page option
 
-#### New Settings page:
+#### Upgrade notes for public facing dashboards:
+
+The "Setup" link from the right hand side menu do no have any possibility to make changes to the config.js file hosted on the server or even hosted locally.
+If someone using a public dashboard access the "Setup" settings page and change it to Local Storage, will be affecting only him/herself specifically as the Local Storage refer to that user's browser in particular.
+Is perfectly safe and no harm can be done.
+
+However, I have added for users that have public access dashboards, a new option on the config.js file that removes the "Setup" option from the menu.
+
+        const disableSetup = true;
+
+Add the above line to the config.js and rename the settings.html page to anything that you only know and is hard to guess.
+
+#### New Settings page sample:
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/settings.png?raw=true" width="800">
 
