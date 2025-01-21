@@ -4,24 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ham Radio Dashboard Setup Page</title>
+    <!--
+      Ham Radio Dashboard Setup Page
+	    License: MIT
+      Copyright (c) 2025 Pablo Sabbag, VA3HDL
+	    https://www.va3hdl.com/projects/hamdash
+    -->
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 50px;
         background-color: aliceblue;
       }
+      .fixed-section {
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color:cadetblue;
+        padding-top: 7px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
       .section {
         margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
       }
       label {
-        display: block;
-        margin-bottom: 5px;
+        margin: 2px;
         font-weight: bold;
       }
       input[type="text"] {
-        width: 99%;
+        width: 90%;
         padding: 1px;
-        margin-bottom: 10px;
+        margin-right: 5px;
+        margin-bottom: 3px;
       }
       input[type="number"] {
         width: 20%;
@@ -37,13 +56,14 @@
       table td {
         border: 1px solid #ddd;
         padding: 8px;
+        align-content: start;
       }
       table th {
         background-color: #f4f4f4;
       }
       button {
         padding: 5px 5px;
-        margin: 5px 0;
+        margin: 0 0 7px 0;
         cursor: pointer;
         background-image: linear-gradient(#f7f8fa, #e7e9ec);
         border-color: #adb1b8 #a2a6ac #8d9096;
@@ -54,10 +74,9 @@
         box-sizing: border-box;
         color: #0f1111;
         cursor: pointer;
-        display: inline-block;
         font-family: "Amazon Ember", Arial, sans-serif;
         font-size: 14px;
-        height: 29px;
+        height: 23px;
         font-size: 13px;
         outline: 0;
         overflow: hidden;
@@ -90,18 +109,27 @@
       }
       .radio-group label {
         margin-right: 15px;
-        padding-top: 10px;
+        padding-top: 5px;
         font-weight: normal;
       }
     </style>
   </head>
   <body>
-    <h1>Setup Page</h1>
+    <div class="fixed-section">
+      <button id="saveConfig">Save Settings to Local Storage</button>
+      <button id="resetConfig">Reset to Defaults</button>
+      <button id="backupConfig">Backup Settings to JSON file</button>
+      <button id="restoreConfig">Restore Settings from JSON file</button>
+      <button id="importConfig">Import from config.js file</button>
+      <button id="exportConfig">Export to config.js file</button>
+    </div>
+
+    <h1>Dashboard Setup</h1>
     <div id="configForm">
       <!-- Settings Source Selection -->
       <div class="section">
-        <label>Settings Source:</label>
         <div class="radio-group">
+          <label>Select Settings Source:</label>
           <input
             type="radio"
             id="sourceLocalStorage"
@@ -115,7 +143,8 @@
             name="settingsSource"
             value="file"
           />
-          <label for="sourceFile">config.js File</label>
+          <label for="sourceFile">config.js file</label>
+          <font size=2em>(Please choose the source of the settings for the next time the dashboard is loaded.)</font>
         </div>
       </div>
 
@@ -132,6 +161,7 @@
         <input type="number" id="layout_cols" min="1" />
         <label for="layout_rows">Rows:</label>
         <input type="number" id="layout_rows" min="1" />
+        <font size=2em>(The number of Dashboard Items table will adjust automatically for the grid layout selected here.)</font>
       </div>
 
       <!-- Menu Items -->
@@ -167,15 +197,6 @@
           </thead>
           <tbody></tbody>
         </table>
-      </div>
-
-      <!-- Save/Reset Buttons -->
-      <div class="section">
-        <button id="saveConfig">Save Settings</button>
-        <button id="resetConfig">Reset to Defaults</button>
-        <button id="backupConfig">Backup Settings</button>
-        <button id="restoreConfig">Restore Settings</button>
-        <button id="importConfig">Import config.js</button>
       </div>
     </div>
 
@@ -320,6 +341,7 @@
             deleteBtn.textContent = "Delete";
             deleteBtn.onclick = () => {
               data.splice(index, 1);
+              updateTable(tableId, data, columns);
               adjustDashboardItems();
             };
             actionsCell.appendChild(deleteBtn);
@@ -330,8 +352,7 @@
         };
 
         // Load Initial Data
-        document.getElementById("topBarCenterText").value =
-          settings.topBarCenterText;
+        document.getElementById("topBarCenterText").value = settings.topBarCenterText;
         document.getElementById("layout_cols").value = settings.layout_cols;
         document.getElementById("layout_rows").value = settings.layout_rows;
         updateTable("menuTable", settings.aURL, [
@@ -473,6 +494,44 @@
             reader.readAsText(file);
           };
           input.click();
+        };
+
+        document.getElementById("exportConfig").onclick = () => {
+          const settings = JSON.parse(localStorage.getItem("hamdash_config")) || defaults;
+
+          const configJSContent = `// CUT START
+const disableSetup = false; // Manually set to true to disable setup page menu option
+const topBarCenterText = "${settings.topBarCenterText}";
+
+// Grid layout desired
+var layout_cols = ${settings.layout_cols};
+var layout_rows = ${settings.layout_rows};
+
+// Menu items
+// Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
+// The values are [color code, menu text, target link, scale factor, side],
+// add new lines following the structure for extra menu options. The comma at the end is important!
+const aURL = ${JSON.stringify(settings.aURL, null, 2)};
+
+// Dashboard Tiles items
+// Tile Structure is Title, Source URL
+// To display a website on the tiles use "iframe|" keyword before the tile URL
+// [Title, Source URL],
+// the comma at the end is important!
+const aIMG = ${JSON.stringify(settings.aImages.map(item => [item[0], ...item[1].flat()]), null, 2)};
+
+// Image rotation intervals in milliseconds per tile - If the line below is commented, tiles will be rotated every 5000 milliseconds (5s)
+const tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)};
+
+// CUT END`;
+
+          const dataStr = "data:text/javascript;charset=utf-8," + encodeURIComponent(configJSContent);
+          const downloadAnchorNode = document.createElement("a");
+          downloadAnchorNode.setAttribute("href", dataStr);
+          downloadAnchorNode.setAttribute("download", "config.js");
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          downloadAnchorNode.remove();
         };
 
         // Add New Menu Item

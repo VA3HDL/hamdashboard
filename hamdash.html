@@ -31,7 +31,7 @@
     <!--
 	Hamdash
 	License: MIT
-  Copyright (c) 2024 Pablo Sabbag, VA3HDL
+  Copyright (c) 2025 Pablo Sabbag, VA3HDL
 	https://www.va3hdl.com/projects/hamdash
 
   Credits:
@@ -356,7 +356,6 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
     <script>
       function minimalConfiguration() {
         // Default settings
-        // window.settingsSource = "config.js";
         window.disableSetup = false;
         window.topBarCenterText = "Use 'Setup' to configure your Ham Radio Dashboard";
         window.layout_cols = 0;
@@ -435,6 +434,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             window.settingsSource = parsedSettings.settingsSource;
             if (settingsSource === 'localStorage') {
               console.log('Loading settings from localStorage');
+              window.disableSetup = parsedSettings.disableSetup;
               window.topBarCenterText = parsedSettings.topBarCenterText;
               window.layout_cols = parsedSettings.layout_cols;
               window.layout_rows = parsedSettings.layout_rows;
@@ -490,7 +490,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2025.01.20"; // You can also load this from a config.json file
+      const currentVersion = "v2025.01.21"; // You can also load this from a config.json file
 
       async function getLatestVersion() {
         try {
@@ -602,7 +602,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           document.getElementById("array2").innerHTML =
             "<br>" + formatArray(aIMG) + "<br><br>";
           document.getElementById("array3").innerHTML =
-            "<br>Copyright (c) 2024 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>";
+           `<br>Copyright (c) 2025 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>
+            <br>Dashboard codebase version: ${currentVersion}<br><br>`;
           document.getElementById("overlay").style.display = "block";
         } else if (aURL[num][1].toLowerCase() == "update") {
           window

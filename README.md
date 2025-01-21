@@ -126,6 +126,13 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.01.21 Changelog:
+
+- Added ability to export settings to config.js file
+- Bug fix: Delete button for Menu items don't work
+- Moved Setup Page buttons to the top and made them always visible for easy access
+- Added tooltips to the Setup Page (settings.html)
+
 ### 2025.01.20 Changelog:
 
 - Added a "Setup" page to configure the dashboard directly from the browser
