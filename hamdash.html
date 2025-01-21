@@ -357,6 +357,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       function minimalConfiguration() {
         // Default settings
         // window.settingsSource = "config.js";
+        window.disableSetup = false;
         window.topBarCenterText = "Use 'Setup' to configure your Ham Radio Dashboard";
         window.layout_cols = 0;
         window.layout_rows = 0;
@@ -782,8 +783,13 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         );
 
         // Append the Setup and Sources option to the right side menu
+        if (!disableSetup) {
+          aURL.push(
+            ["ff9100", "Setup", "settings.html", "1", "R"]
+          )
+        }
+
         aURL.push(
-          ["ff9100", "Setup", "settings.html", "1", "R"],
           ["0dd1a7", "Sources", "#", "1", "R"]
         );
 
