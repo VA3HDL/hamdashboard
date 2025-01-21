@@ -784,7 +784,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         );
 
         // Append the Setup and Sources option to the right side menu
-        if (!disableSetup) {
+        if (typeof disableSetup === "undefined" || !disableSetup) {
           aURL.push(
             ["ff9100", "Setup", "settings.html", "1", "R"]
           )
