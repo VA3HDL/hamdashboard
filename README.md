@@ -126,6 +126,20 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.01.24 Changelog:
+
+- Merged the settings.html page into the main hamdash.html page for maintenance and upgrade simplification
+- Added a color picker for the menu items background
+- Replaced all CONST declarations on the config.js file with VAR declarations to allow these variables to be changed in realtime via Setup page
+- Fixed issue with Back menu option that refreshed the entire page
+- Unloaded the page iFrame when is not visible (these are the pages loaded by the side menu options)
+
+#### Upgrade notes:
+
+Delete the file settings.html if you have one. This file is no longer needed. Settings are now part of hamdash.html file.
+Exporting the configuration to JSON file is strongly recommended if you are using Browser Local Storage to save your configuration as a backup.
+
+
 ### 2025.01.21 Changelog:
 
 - Added ability to export settings to config.js file

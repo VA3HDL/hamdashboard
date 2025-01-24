@@ -340,6 +340,115 @@ db   8D    88       88    88booo. 88.     db   8D
         float: right;
         font-size: 20px;
       }
+
+      /************************/
+      /* Settings page styles */
+      /************************/
+      .settings-Page {
+        display: none;
+        font-family: Arial, sans-serif;
+        margin: 50px;
+        background-color: aliceblue;
+        height: 100%;
+        overflow-y: auto;
+      }
+      .fixed-section {
+        display: none;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color:cadetblue;
+        padding-top: 7px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: -3;
+      }
+      .section {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      label {
+        margin: 2px;
+        font-weight: bold;
+      }
+      input[type="text"] {
+        width: 90%;
+        padding: 1px;
+        margin-right: 5px;
+        margin-bottom: 3px;
+      }
+      input[type="number"] {
+        width: 20%;
+        padding: 1px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+      }
+      table th,
+      table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        align-content: start;
+      }
+      table th {
+        background-color: #f4f4f4;
+      }
+      button {
+        padding: 5px 5px;
+        margin: 0 0 7px 0;
+        cursor: pointer;
+        background-image: linear-gradient(#f7f8fa, #e7e9ec);
+        border-color: #adb1b8 #a2a6ac #8d9096;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 3px;
+        box-shadow: rgba(255, 255, 255, 0.6) 0 1px 0 inset;
+        box-sizing: border-box;
+        color: #0f1111;
+        cursor: pointer;
+        font-family: "Amazon Ember", Arial, sans-serif;
+        font-size: 14px;
+        height: 23px;
+        font-size: 13px;
+        outline: 0;
+        overflow: hidden;
+        padding: 0 11px;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+      }
+      button:active {
+        border-bottom-color: #a2a6ac;
+      }
+      button:active:hover {
+        border-bottom-color: #a2a6ac;
+      }
+      button:hover {
+        border-color: #a2a6ac #979aa1 #82858a;
+      }
+      button:focus {
+        border-color: #e77600;
+        box-shadow: rgba(228, 121, 17, 0.5) 0 0 3px 2px;
+        outline: 0;
+      }
+      .radio-group {
+        display: flex;
+        align-items: center;
+      }
+      .radio-group label {
+        margin-right: 15px;
+        padding-top: 5px;
+        font-weight: normal;
+      }
     </style>
 
     <!--
@@ -349,14 +458,442 @@ db   8D    88       88    88booo. 88.     db   8D
   `Y8b. 8b      88`8b      88    88~~~      88      `Y8b.
 db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 `8888Y'  `Y88P' 88   YD Y888888P 88         YP    `8888Y'
-
-
 -->
     <script src="wheelzoom.js"></script>
     <script>
+      // Track critical page events
+      window.addEventListener('DOMContentLoaded', () => {
+        console.log('►►► DOMContentLoaded fired');
+      });
+
+      window.addEventListener('load', () => {
+        console.log('►►► Page fully loaded');
+      });
+
+      // Track script execution
+      console.log('►►► Script loaded and running');
+
+      //   .d8888. d88888b d888888b d888888b d888888b d8b   db  d888b  .d8888.      .d8888. d88888b  .o88b. d888888b d888888b  .d88b.  d8b   db
+      //   88'  YP 88'     `~~88~~' `~~88~~'   `88'   888o  88 88' Y8b 88'  YP      88'  YP 88'     d8P  Y8 `~~88~~'   `88'   .8P  Y8. 888o  88
+      //   `8bo.   88ooooo    88       88       88    88V8o 88 88      `8bo.        `8bo.   88ooooo 8P         88       88    88    88 88V8o 88
+      //     `Y8b. 88~~~~~    88       88       88    88 V8o88 88  ooo   `Y8b.        `Y8b. 88~~~~~ 8b         88       88    88    88 88 V8o88
+      //   db   8D 88.        88       88      .88.   88  V888 88. ~8~ db   8D      db   8D 88.     Y8b  d8    88      .88.   `8b  d8' 88  V888
+      //   `8888Y' Y88888P    YP       YP    Y888888P VP   V8P  Y888P  `8888Y'      `8888Y' Y88888P  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P
+
+      function getColumnHeaderTitle(tableId, columnNumber) {
+        const table = document.getElementById(tableId);
+        if (!table) {
+          console.error(`Table with id ${tableId} not found.`);
+          return null;
+        }
+
+        const headers = table.querySelectorAll("thead th");
+        if (columnNumber < 0 || columnNumber >= headers.length) {
+          console.error(`Invalid column number ${columnNumber}.`);
+          return null;
+        }
+
+        return headers[columnNumber].textContent;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Default Values
+        const defaults = {
+          settingsSource: "localStorage",
+          topBarCenterText: "CALLSIGN - Locator",
+          layout_cols: 4,
+          layout_rows: 3,
+          aURL: [["2196F3", "Photos", "https://picsum.photos/", 1, "L"]],
+          aImages: [
+            ["Tile 1", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 2", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 3", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 4", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 5", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 6", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 7", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 8", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 9", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 10", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 11", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+            ["Tile 12", ["https://picsum.photos/seed/picsum/200/300"], 30000],
+          ],
+        };
+
+        // Load from LocalStorage or Defaults
+        settings = JSON.parse(localStorage.getItem("hamdash_config")) || {
+          ...defaults,
+        };
+
+        if (settings.settingsSource) {
+          document.querySelector(
+            `input[name="settingsSource"][value="${settings.settingsSource}"]`
+          ).checked = true;
+        }
+
+        // Utility to Update Dashboard Items to Match Layout
+        adjustDashboardItems = () => {
+          const totalItems = settings.layout_cols * settings.layout_rows;
+          const currentItems = settings.aImages.length;
+
+          if (currentItems < totalItems) {
+            // Add new placeholders if there are fewer items than needed
+            for (let i = currentItems; i < totalItems; i++) {
+              settings.aImages.push(["", [""], 5000]); // Default title, image array, and rotation interval
+            }
+          } else if (currentItems > totalItems) {
+            // Remove excess items
+            settings.aImages.splice(totalItems);
+          }
+
+          updateTable("dashboardTable", settings.aImages, [
+            "Tile Title",
+            "Tile URLs",
+            "URL Rotation Interval (ms)",
+          ]);
+        };
+
+        updateMenuTable = () => {
+          updateTable("menuTable", settings.aURL, [
+            "Color",
+            "Text",
+            "URL",
+            "Scale",
+            "Side",
+          ]);
+        };
+
+        // Utility to Update Tables
+        const updateTable = (tableId, data, columns) => {
+          const tbody = document.querySelector(`#${tableId} tbody`);
+          tbody.innerHTML = "";
+          data.forEach((item, index) => {
+            const row = document.createElement("tr");
+            columns.forEach((col, colIndex) => {
+              const cell = document.createElement("td");
+              if (tableId == "menuTable" && colIndex==0){
+                const colorInput = document.createElement("input");
+                colorInput.type = "color";
+                colorInput.value = "#"+item[colIndex].replace("#", "");
+                colorInput.onchange = (e) => (item[colIndex] = e.target.value);
+                cell.appendChild(colorInput);
+              } else {
+                if (Array.isArray(item[colIndex])) {
+                  // Handle array of image URLs
+                  const container = document.createElement("div");
+                  item[colIndex].forEach((url, urlIndex) => {
+                    const textarea = document.createElement("input");
+                    textarea.type =
+                      getColumnHeaderTitle(tableId, colIndex) === ""
+                        ? "number"
+                        : "text";
+                    textarea.value = url;
+                    textarea.onchange = (e) =>
+                      (item[colIndex][urlIndex] = e.target.value);
+                    container.appendChild(textarea);
+                    const removeBtn = document.createElement("button");
+                    removeBtn.textContent = "Remove URL";
+                    removeBtn.onclick = () => {
+                      item[colIndex].splice(urlIndex, 1);
+                      updateTable(tableId, data, columns);
+                    };
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(removeBtn);
+                    container.appendChild(document.createElement("br"));
+                  });
+                  const addBtn = document.createElement("button");
+                  addBtn.textContent = "Add URL";
+                  addBtn.onclick = () => {
+                    item[colIndex].push("");
+                    updateTable(tableId, data, columns);
+                  };
+                  container.appendChild(addBtn);
+                  cell.appendChild(container);
+                } else {
+                  const input = document.createElement("input");
+                  switch (getColumnHeaderTitle(tableId, colIndex)) {
+                    case "Scale":
+                      input.type = "number";
+                      break;
+                    case "URL Rotation Interval (ms)":
+                      input.type = "number";
+                      break;
+                    default:
+                      input.type = "text";
+                  }
+                  input.value = item[colIndex];
+                  input.onchange = (e) =>
+                    (item[colIndex] =
+                      colIndex === 2
+                        ? parseInt(e.target.value, 10)
+                        : e.target.value);
+                  cell.appendChild(input);
+                }
+              }
+              row.appendChild(cell);
+            });
+
+            const actionsCell = document.createElement("td");
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = () => {
+              data.splice(index, 1);
+              updateTable(tableId, data, columns);
+              adjustDashboardItems();
+            };
+            actionsCell.appendChild(deleteBtn);
+            row.appendChild(actionsCell);
+
+            tbody.appendChild(row);
+          });
+        };
+
+        // Load Initial Data
+        document.getElementById("CenterText").value = settings.topBarCenterText;
+        document.getElementById("layout_cols").value = settings.layout_cols;
+        document.getElementById("layout_rows").value = settings.layout_rows;
+        updateMenuTable();
+        adjustDashboardItems(); // Ensure dashboard items match layout on load
+
+        // Save Configuration
+        document.getElementById("saveConfig").onclick = () => {
+          settings.settingsSource = document.querySelector(
+            'input[name="settingsSource"]:checked'
+          ).value;
+          settings.topBarCenterText =
+            document.getElementById("CenterText").value;
+          settings.layout_cols = parseInt(
+            document.getElementById("layout_cols").value,
+            10
+          );
+          settings.layout_rows = parseInt(
+            document.getElementById("layout_rows").value,
+            10
+          );
+
+          adjustDashboardItems(); // Adjust dashboard items before saving
+          localStorage.setItem("hamdash_config", JSON.stringify(settings));
+          alert("Settings saved!");
+        };
+
+        // Reset to Defaults
+        document.getElementById("resetConfig").onclick = () => {
+          localStorage.setItem("hamdash_config", JSON.stringify(defaults));
+          alert("Settings reset to defaults!");
+          settings = defaults;
+          updateInputs();
+          updateMenuTable();
+          adjustDashboardItems();
+        };
+
+        // Backup Configuration
+        document.getElementById("backupConfig").onclick = () => {
+          const dataStr =
+            "data:text/json;charset=utf-8," +
+            encodeURIComponent(JSON.stringify(settings));
+          const downloadAnchorNode = document.createElement("a");
+          downloadAnchorNode.setAttribute("href", dataStr);
+          downloadAnchorNode.setAttribute(
+            "download",
+            "hamdash_config_backup.json"
+          );
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          downloadAnchorNode.remove();
+        };
+
+        // Restore Configuration
+        document.getElementById("restoreConfig").onclick = () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "application/json";
+          input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              settings = JSON.parse(e.target.result);
+              alert("\nSettings restored from backup!\n\nRemember to Save Settings to Local Storage, Backup, or Export\n\nif you want to make changes permanent.");
+              updateInputs();
+              updateMenuTable();
+              adjustDashboardItems();
+            };
+            reader.readAsText(file);
+          };
+          input.click();
+        };
+
+        // Import config.js
+        document.getElementById("importConfig").onclick = () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = ".js";
+          input.onchange = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              // Wrap the content in an IIFE to avoid polluting the global scope
+              const configScript = `(function() {
+                ${e.target.result}
+                return {
+                  topBarCenterText,
+                  layout_cols,
+                  layout_rows,
+                  aURL,
+                  aIMG,
+                  tileDelay
+                };
+              })()`;
+
+              // Evaluate the IIFE and get the variables
+              const config = eval(configScript);
+
+              // Filter out sub-arrays from aURL containing "BACK" or "Refresh"
+              const filteredAURL = config.aURL.filter(
+                (item) =>
+                  !item.some(
+                    (subItem) =>
+                      typeof subItem === "string" &&
+                      (subItem.includes("BACK") ||
+                        subItem.includes("Back") ||
+                        subItem.includes("Refresh") ||
+                        subItem.includes("Sources") ||
+                        subItem.includes("Update") ||
+                        subItem.includes("Help"))
+                  )
+              );
+
+              // Create a JSON structure from the variables
+              const configJSON = {
+                topBarCenterText: config.topBarCenterText,
+                layout_cols: config.layout_cols,
+                layout_rows: config.layout_rows,
+                aURL: filteredAURL,
+                aImages: config.aIMG.map((item, index) => {
+                  // Arrange all items from second to last in a sub-array
+                  const [first, ...rest] = item;
+                  return [first, rest, config.tileDelay[index]];
+                }),
+                settingsSource: "localStorage",
+              };
+              settings = configJSON;
+              alert("\nSettings imported from config.js!\n\nRemember to Save Settings to Local Storage, Backup, or Export\n\nif you want to make changes permanent.");
+              updateInputs();
+              updateMenuTable();
+              adjustDashboardItems();
+            };
+            reader.readAsText(file);
+          };
+          input.click();
+        };
+
+        document.getElementById("exportConfig").onclick = () => {
+          const settings = JSON.parse(localStorage.getItem("hamdash_config")) || defaults;
+
+          const configJSContent = `// CUT START
+var disableSetup = false; // Manually set to true to disable setup page menu option
+var topBarCenterText = "${settings.topBarCenterText}";
+
+// Grid layout desired
+var layout_cols = ${settings.layout_cols};
+var layout_rows = ${settings.layout_rows};
+
+// Menu items
+// Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
+// The values are [color code, menu text, target link, scale factor, side],
+// add new lines following the structure for extra menu options. The comma at the end is important!
+var aURL = ${JSON.stringify(settings.aURL, null, 2)};
+
+// Dashboard Tiles items
+// Tile Structure is Title, Source URL
+// To display a website on the tiles use "iframe|" keyword before the tile URL
+// [Title, Source URL],
+// the comma at the end is important!
+var aIMG = ${JSON.stringify(settings.aImages.map(item => [item[0], ...item[1].flat()]), null, 2)};
+
+// Image rotation intervals in milliseconds per tile - If the line below is commented, tiles will be rotated every 5000 milliseconds (5s)
+var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)};
+
+// CUT END`;
+
+          const dataStr = "data:text/javascript;charset=utf-8," + encodeURIComponent(configJSContent);
+          const downloadAnchorNode = document.createElement("a");
+          downloadAnchorNode.setAttribute("href", dataStr);
+          downloadAnchorNode.setAttribute("download", "config.js");
+          document.body.appendChild(downloadAnchorNode);
+          downloadAnchorNode.click();
+          downloadAnchorNode.remove();
+        };
+
+        // Add New Menu Item
+        document.getElementById("addMenuItem").onclick = () => {
+          settings.aURL.push(["", "", "", "", ""]);
+          updateMenuTable();
+        };
+
+        // Update Dashboard Items When Layout Changes
+        document
+          .getElementById("layout_cols")
+          .addEventListener("change", () => {
+            settings.layout_cols = parseInt(
+              document.getElementById("layout_cols").value,
+              10
+            );
+            adjustDashboardItems();
+          });
+
+        document
+          .getElementById("layout_rows")
+          .addEventListener("change", () => {
+            settings.layout_rows = parseInt(
+              document.getElementById("layout_rows").value,
+              10
+            );
+            adjustDashboardItems();
+          });
+
+        function updateInputs() {
+          if (settings.settingsSource) {
+            document.querySelector(
+              `input[name="settingsSource"][value="${settings.settingsSource}"]`
+            ).checked = true;
+          }
+          document.getElementById("CenterText").value = settings.topBarCenterText;
+          document.getElementById("layout_cols").value = settings.layout_cols;
+          document.getElementById("layout_rows").value = settings.layout_rows;
+        }
+
+        // Function to update the variable and the display text
+        function updateValue() {
+          topBarCenterText = document.getElementById('CenterText').value;
+          layout_cols = document.getElementById('layout_cols').value;
+          layout_rows = document.getElementById('layout_rows').value;
+          document.getElementById('topBarCenter').textContent = topBarCenterText;
+          document.getElementById('layout_cols').textContent = layout_cols;
+          document.getElementById('layout_rows').textContent = layout_rows;
+          // console.log(settings.aURL);
+          // aURL = JSON.stringify(settings.aURL, null, 2);
+          // aIMG = JSON.stringify(settings.aImages.map(item => [item[0], ...item[1].flat()]), null, 2);
+          // tileDelay = JSON.stringify(settings.aImages.map(item => item[2]), null, 2);
+        }
+        // Add an onblur event listener to the input field
+        document.getElementById('CenterText').onblur = updateValue;
+        document.getElementById('layout_cols').onblur = updateValue;
+        document.getElementById('layout_rows').onblur = updateValue;
+
+      });
+      // End Settings Section
+
+      // db    db d888888b d888888b db      d888888b d888888b db    db      .d8888. d88888b  .o88b. d888888b d888888b  .d88b.  d8b   db
+      // 88    88 `~~88~~'   `88'   88        `88'   `~~88~~' `8b  d8'      88'  YP 88'     d8P  Y8 `~~88~~'   `88'   .8P  Y8. 888o  88
+      // 88    88    88       88    88         88       88     `8bd8'       `8bo.   88ooooo 8P         88       88    88    88 88V8o 88
+      // 88    88    88       88    88         88       88       88           `Y8b. 88~~~~~ 8b         88       88    88    88 88 V8o88
+      // 88b  d88    88      .88.   88booo.   .88.      88       88         db   8D 88.     Y8b  d8    88      .88.   `8b  d8' 88  V888
+      // ~Y8888P'    YP    Y888888P Y88888P Y888888P    YP       YP         `8888Y' Y88888P  `Y88P'    YP    Y888888P  `Y88P'  VP   V8P
+
       function minimalConfiguration() {
         // Default settings
         window.disableSetup = false;
+        window.curSettingsSrc = "None";
         window.topBarCenterText = "Use 'Setup' to configure your Ham Radio Dashboard";
         window.layout_cols = 0;
         window.layout_rows = 0;
@@ -406,6 +943,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
               script.src = 'config.js';
               script.onload = () => {
                 console.log('config.js loaded successfully');
+                window.curSettingsSrc = "config.js from file system";
                 start();
               };
               script.onerror = (error) => {
@@ -417,6 +955,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             } else {
               await loadScriptIfExists('config.js');
               console.log('config.js loaded successfully');
+              window.curSettingsSrc = "config.js from server";
               start();
             }
       }
@@ -468,7 +1007,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
               // console.log('aURL:', aURL);
               // console.log('aIMG:', aIMG);
               // console.log('tileDelay:', tileDelay);
-
+              window.curSettingsSrc = "Browser Local Storage";
               start();
             } else {
               console.log('Settings found in localStorage but loading from config.js file');
@@ -490,7 +1029,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2025.01.21"; // You can also load this from a config.json file
+      const currentVersion = "v2025.01.24";
 
       async function getLatestVersion() {
         try {
@@ -573,29 +1112,53 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
       // This function shows the embedded websites
       function MenuOpt(num) {
-        // Stop refreshes
         window.stop();
         rotStop();
-        //
-        document.getElementById("FullScreen").style.display = "block";
-        document.getElementById("iFrameContainer").style.zIndex = 1;
-        document.getElementById("FullScreen").src = aURL[num][2];
-        document.getElementById("FullScreen").style.transform =
-          "scale(" + aURL[num][3] + ")";
-
-        if (aURL[num][1].toLowerCase() == "back") {
+        if (aURL[num][1].toLowerCase() == "refresh") {
           location.reload();
-          // Start tile refreshes
           setRot();
-          //
-          // wheelzoom(document.querySelectorAll("img"));
-        } else if (aURL[num][1].toLowerCase() == "refresh") {
-          location.reload();
-          // Start tile refreshes
-          setRot();
-          //
         } else if (aURL[num][1].toLowerCase() == "help") {
           alert(help);
+        } else if (aURL[num][1].toLowerCase() == "setup") {
+          // Configure visualization
+          document.getElementById("FullScreen").style.display = "none";
+          document.getElementById("fixedSection").style.display = "block";
+          document.getElementById("settingsPage").style.display = "block";
+          document.getElementById("iFrameContainer").style.zIndex = 1;
+          document.getElementById("iFrameContainer").style.backgroundColor = "aliceblue";
+          if (curSettingsSrc === "local") {
+            document.querySelector(`input[name="settingsSource"][value="localStorage"]`).checked = true;
+          } else if (curSettingsSrc.includes("config.js")) {
+            document.querySelector(`input[name="settingsSource"][value="file"]`).checked = true;
+          }
+          window.settings.topBarCenterText = topBarCenterText;
+          window.settings.layout_cols = window.layout_cols;
+          window.settings.layout_rows = window.layout_rows;
+          document.getElementById("CenterText").value = window.settings.topBarCenterText;
+          document.getElementById("layout_cols").value = window.settings.layout_cols;
+          document.getElementById("layout_rows").value = window.settings.layout_rows;
+          filteredAURL = aURL.filter(
+                (item) =>
+                  !item.some(
+                    (subItem) =>
+                      typeof subItem === "string" &&
+                      (subItem.includes("BACK") ||
+                        subItem.includes("Back") ||
+                        subItem.includes("Refresh") ||
+                        subItem.includes("Setup") ||
+                        subItem.includes("Sources") ||
+                        subItem.includes("Update") ||
+                        subItem.includes("Help"))
+                  )
+              );
+          window.settings.aURL = filteredAURL;
+          window.settings.aImages = aIMG.map((item, index) => {
+                  const [first, ...rest] = item;
+                  return [first, rest, tileDelay[index]];
+                });
+          // Update the visualization on the Setup page
+          updateMenuTable();
+          adjustDashboardItems();
         } else if (aURL[num][1].toLowerCase() == "sources") {
           document.getElementById("array1").innerHTML =
             "<br>" + formatArray(aURL) + "<br><br>";
@@ -609,6 +1172,18 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           window
             .open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank")
             .focus();
+        } else if (aURL[num][1].toLowerCase() == "back"){
+          document.getElementById("FullScreen").src = "about:blank";
+          document.getElementById("iFrameContainer").style.zIndex = -2;
+          document.getElementById("iFrameContainer").style.backgroundColor = "black";
+          document.getElementById("FullScreen").style.display = "none";
+          document.getElementById("settingsPage").style.display = "none";
+          setRot();
+        } else {
+          document.getElementById("iFrameContainer").style.zIndex = 1;
+          document.getElementById("FullScreen").style.display = "block";
+          document.getElementById("FullScreen").src = aURL[num][2];
+          document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
         }
       }
 
@@ -733,6 +1308,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
       //   `Y8b.    88    88~~~88 88`8b      88
       // db   8D    88    88   88 88 `88.    88
       // `8888Y'    YP    YP   YP 88   YD    YP
+
       function start() {
         // Configurable grid layout logic. Defaults to standard 4 columns by 3 rows if values are missing in config.js file.
         var layout_cols = typeof window.layout_cols === "undefined" ? 4 : window.layout_cols;
@@ -753,6 +1329,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           "--main-height",
           layout_height
         );
+
+        document.getElementById("currentSettingsSource").innerHTML = curSettingsSrc;
 
         // Default variables initialization
         window.largeShow = 0;
@@ -777,8 +1355,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
 
         // Preppend the default options to the menu
         aURL.unshift(
-          ["add10d", "BACK", "?_=" + Date.now(), "1", "L"],
-          ["add10d", "BACK", "?_=" + Date.now(), "1", "R"],
+          ["add10d", "BACK", "", "1", "L"],
+          ["add10d", "BACK", "", "1", "R"],
           ["ff9100", "Refresh", "?_=" + Date.now(), "1"],
           ["0dd1a7", "Help", "#", "1", "L"]
         );
@@ -786,7 +1364,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         // Append the Setup and Sources option to the right side menu
         if (typeof disableSetup === "undefined" || !disableSetup) {
           aURL.push(
-            ["ff9100", "Setup", "settings.html", "1", "R"]
+            ["ff9100", "Setup", "#", "1", "R"]
           )
         }
 
@@ -803,7 +1381,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         aURL.forEach(function (innerArray, index) {
           // Create a new div element
           var newDiv = document.createElement("div");
-          newDiv.innerHTML = `<a href="#" style="background-color:#${innerArray[0]};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
+          var color = innerArray[0].replace("#", "");
+          newDiv.innerHTML = `<a href="#" style="background-color:#${color};" onclick="MenuOpt(${index})">${innerArray[1]}</a>`;
           if (innerArray[4] == "R") {
             // Set some properties for the new div
             newDiv.id = "mySidenavR";
@@ -954,12 +1533,98 @@ d8888b.  .d88b.  d8888b. db    db
 88~~~b. 88    88 88   88    88
 88   8D `8b  d8' 88  .8D    88
 Y8888P'  `Y88P'  Y8888D'    YP
-
-
 -->
   <body onload="main()">
     <div id="iFrameContainer" class="iframe-container">
-      <iframe class="full-screen" id="FullScreen" src="" title="Zoom"></iframe>
+      <iframe id="FullScreen" class="full-screen" src="" title="Zoom"></iframe>
+      <!-- Settings Page Div -->
+      <div id="settingsPage" class="settings-Page">
+        <div id="fixedSection" class="fixed-section">
+          <button id="saveConfig">Save Settings to Local Storage</button>
+          <button id="resetConfig">Reset to Defaults</button>
+          <button id="backupConfig">Backup Settings to JSON file</button>
+          <button id="restoreConfig">Restore Settings from JSON file</button>
+          <button id="importConfig">Import from config.js file</button>
+          <button id="exportConfig">Export to config.js file</button>
+        </div>
+
+        <h1>Dashboard Setup</h1>
+        <div id="configForm">
+          <!-- Settings Source Selection -->
+          <label>Current Settings Source:</label><span id="currentSettingsSource"></span>
+          <div class="section">
+            <div class="radio-group">
+              <label>Select Settings Source:</label>
+              <input
+                type="radio"
+                id="sourceLocalStorage"
+                name="settingsSource"
+                value="localStorage"
+              />
+              <label for="sourceLocalStorage">Browser Local Storage</label>
+              <input
+                type="radio"
+                id="sourceFile"
+                name="settingsSource"
+                value="file"
+              />
+              <label for="sourceFile">config.js file</label>
+              <font size=2em>(Please choose the source of the settings for the next time the dashboard is loaded.)</font>
+            </div>
+          </div>
+
+          <!-- Top Bar Text -->
+          <div class="section">
+            <label for="CenterText">Top Bar Center Text:</label>
+            <input type="text" id="CenterText" />
+          </div>
+
+          <!-- Grid Layout -->
+          <div class="section">
+            <label>Grid Layout:</label>
+            <label for="layout_cols">Columns:</label>
+            <input type="number" id="layout_cols" min="1" />
+            <label for="layout_rows">Rows:</label>
+            <input type="number" id="layout_rows" min="1" />
+            <font size=2em>(The number of Dashboard Items table will adjust automatically for the grid layout selected here.)</font>
+          </div>
+
+          <!-- Menu Items -->
+          <div class="section">
+            <label>Menu Items:</label>
+            <table id="menuTable">
+              <thead>
+                <tr>
+                  <th>Color</th>
+                  <th>Text</th>
+                  <th>URL</th>
+                  <th>Scale</th>
+                  <th>Side</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <button id="addMenuItem">Add Menu Item</button>
+          </div>
+
+          <!-- Dashboard Items -->
+          <div class="section">
+            <label>Dashboard Items:</label>
+            <table id="dashboardTable">
+              <thead>
+                <tr>
+                  <th>Tile Title</th>
+                  <th>Tile URLs</th>
+                  <th>URL Rotation Interval (ms)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div> <!-- End of Div Settings page -->
     </div>
 
     <div id="imgZoom" class="img-zoom">
