@@ -52,19 +52,44 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [W4QAL](https://w4qal.net/dashboard/index.html) -- SE US - West Florida
 
-### Instructions:
-1. Just download the files from the Github repository (hamdash.html, settings.html, config.js, and wheelzoom.js) and keep them together on the same folder.
-2. Open hamdash.html with any browser of your preference and you done.
+### Quick Setup Instructions:
+1. Just download the files from the Github repository (hamdash.html, config.js, and wheelzoom.js) and keep them together on the same folder.
+2. Open hamdash.html with any browser of your preference.
 3. Use the right menu "Setup" option to load the settings page to configure your dashboard.
 4. Alternatively with any text editor (like Notepad) you can change the source images (can be more than one per box) or the menu options from the config.js file.
 5. Select to load your configuration from browser's Local Storage or config.js file, and save the settings.
-6. For server based hosted installs is recommended to use the settings stored in the config.js file.
+6. For server based hosted installs is recommended to use the settings stored in the config.js file. (More details below)
 
 #### Settings Buttons
-
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/settings_buttons.png?raw=true" width="800">
 
+##### Save Settings to Local Storage:
+Save the settings on the page to the Local Storage of the current browser in use
 
+##### Reset to Defaults:
+Reset all settings' values to sample default values for testing
+
+##### Backup Settings to JSON file:
+Save all settings values to a JSON file that can be downloaded and imported on a different browser or installation
+
+##### Restore Settings from JSON file:
+Load all settings values from a JSON file saved with the previous button
+
+##### Import from config.js file:
+Load all settings values from a config.js file format (config.js file is the recommended format for server installations)
+
+##### Export to config.js file:
+Save all settings values to a config.js file format (config.js file is the recommended format for server installations)
+
+#### Public facing dashboards:
+
+The "Setup" link from the right hand side menu do no have any possibility to make changes to the config.js file hosted on the server or even hosted locally.
+If someone using a public dashboard access the "Setup" settings page and change it to Local Storage, will be affecting only him/herself specifically as the Local Storage refer to that user's browser in particular.
+Is perfectly safe and no harm can be done.
+
+However, I have added for users that have public access dashboards, a new option on the config.js file that removes the "Setup" option from the menu.
+
+        const disableSetup = true;
 
 ### YouTube coverage:
 [YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
