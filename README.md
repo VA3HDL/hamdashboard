@@ -60,6 +60,12 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 5. Select to load your configuration from browser's Local Storage or config.js file, and save the settings.
 6. For server based hosted installs is recommended to use the settings stored in the config.js file.
 
+#### Settings Buttons
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/settings_buttons.png?raw=true" width="800">
+
+
+
 ### YouTube coverage:
 [YouTube - Configuration instructions contributed by Jason KM4ACK](https://youtu.be/9ZZXg60tN-o)
 
