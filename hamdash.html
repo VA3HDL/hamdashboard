@@ -48,22 +48,27 @@ db   8D    88       88    88booo. 88.     db   8D
 
 -->
     <style>
-      body {
+      body, html {
         background: black;
         font-size: 100%;
         max-width: 100%;
         overflow-x: hidden;
+        height: 100%;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
       }
 
+      /* Style for the div containing the iframe */
       .iframe-container {
         background-color: black;
-        left: 0px;
         border: 0px none;
-        height: 100%;
         position: fixed;
+        height: 100%;
         width: 100%;
-        bottom: 0px;
         z-index: -2;
+        justify-content: center;
+        align-items: center;
       }
 
       .img-zoom {
@@ -71,20 +76,23 @@ db   8D    88       88    88booo. 88.     db   8D
         left: 0px;
         border: 0px none;
         height: 100%;
-        position: fixed;
         width: 100%;
+        position: fixed;
         overflow: hidden;
         bottom: 0px;
         z-index: -2;
       }
 
-      /* Style for the fullscreen container (menu options) */
+      /* Style for the iframe element */
       .full-screen {
+        background-color: black;
         height: 100%;
-        border: 0px none;
         width: 100%;
+        border: 0px none;
         margin-bottom: 0px;
         margin-left: 0px;
+        justify-content: center;
+        align-items: center;
         -ms-zoom: 1;
         -moz-transform: scale(1);
         -moz-transform-origin: 0 0;
@@ -101,8 +109,8 @@ db   8D    88       88    88booo. 88.     db   8D
         left: 0px;
         border: 0px none;
         height: 100%;
-        position: fixed;
         width: 100%;
+        position: fixed;
         overflow: hidden;
         bottom: 0px;
       }
@@ -156,8 +164,8 @@ db   8D    88       88    88booo. 88.     db   8D
         float: inline-start;
         margin-right: 0px;
         border: 0px;
-        width: var(--main-width);
         height: var(--main-height);
+        width: var(--main-width);
         overflow: hidden;
         display: flex;
         justify-content: center; /* Horizontal centering */
@@ -170,8 +178,8 @@ db   8D    88       88    88booo. 88.     db   8D
         overflow: hidden;
         display: flex;
         border: none;
-        width: 100%;
         height: 100%;
+        width: 100%;
         padding: 0;
         margin: 0;
       }
@@ -206,15 +214,15 @@ db   8D    88       88    88booo. 88.     db   8D
         position: relative;
         margin-left: auto;
         margin-right: auto;
-        max-width: 100%;
         max-height: 100%;
-        width: auto;
+        max-width: 100%;
         height: 100%;
+        width: auto;
       }
 
       .media {
-        width: 100%;
         height: 100%;
+        width: 100%;
         cursor: pointer;
       }
 
@@ -227,8 +235,8 @@ db   8D    88       88    88booo. 88.     db   8D
         display: grid;
         grid-gap: 3px;
         position: absolute;
-        width: auto;
         height: auto;
+        width: auto;
         margin-top: 10vh;
         left: calc(-5.2vw - 0px);
         z-index: 2;
@@ -240,8 +248,8 @@ db   8D    88       88    88booo. 88.     db   8D
         display: grid;
         grid-gap: 3px;
         position: absolute;
-        width: 30px;
         height: auto;
+        width: 30px;
         margin-top: 10vh;
         right: -5px;
         z-index: 2;
@@ -316,8 +324,8 @@ db   8D    88       88    88booo. 88.     db   8D
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
         height: 100%;
+        width: 100%;
         background-color: rgba(0, 0, 0, 0.8);
         color: white;
         padding: 50px;
@@ -787,8 +795,6 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         };
 
         document.getElementById("exportConfig").onclick = () => {
-          const settings = JSON.parse(localStorage.getItem("hamdash_config")) || defaults;
-
           const configJSContent = `// CUT START
 var disableSetup = false; // Manually set to true to disable setup page menu option
 var topBarCenterText = "${settings.topBarCenterText}";
@@ -1029,7 +1035,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2025.01.24";
+      const currentVersion = "v2025.01.26";
 
       async function getLatestVersion() {
         try {

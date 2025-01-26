@@ -157,6 +157,11 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.01.26 Changelog:
+
+- Fixed a bug with the "Export to config.js file" button that was saving the "default" values instead of saving the current settings displayed on the page.
+- Thanks to Dave WB5NHL for reporting this issue to me.
+
 ### 2025.01.24 Changelog:
 
 - Merged the settings.html page into the main hamdash.html page for maintenance and upgrade simplification
