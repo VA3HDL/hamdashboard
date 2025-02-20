@@ -163,25 +163,26 @@ db   8D    88       88    88booo. 88.     db   8D
         position: relative;
         float: inline-start;
         margin-right: 0px;
-        border: 0px;
+        border: 0px none;
         height: var(--main-height);
         width: var(--main-width);
         overflow: hidden;
         display: flex;
         justify-content: center; /* Horizontal centering */
         align-items: center; /* Vertical centering */
+        border-radius: 5px; /* Rounded corners */
       }
 
       .iframe-tile {
         position: absolute; /* it must be absolute */
         float: inline-start;
         overflow: hidden;
+        border: 0px none;
         display: flex;
-        border: none;
-        height: 100%;
-        width: 100%;
-        padding: 0;
+        height: var(--main-height);
+        width: var(--main-width);
         margin: 0;
+        border-radius: 5px; /* Rounded corners */
       }
 
       /* Style for the image */
@@ -579,7 +580,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             const row = document.createElement("tr");
             columns.forEach((col, colIndex) => {
               const cell = document.createElement("td");
-              if (tableId == "menuTable" && colIndex==0){
+              if (tableId == "menuTable" && colIndex==0){                        // Color column for Menu options
                 const colorInput = document.createElement("input");
                 colorInput.type = "color";
                 colorInput.value = "#"+item[colIndex].replace("#", "");
@@ -679,9 +680,24 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             10
           );
 
-          adjustDashboardItems(); // Adjust dashboard items before saving
+          // Update aURL from the table
+          const menuTableRows = document.querySelectorAll("#menuTable tbody tr");
+          settings.aURL = Array.from(menuTableRows).map(row => {
+            const cells = row.querySelectorAll("td");
+            return [
+              cells[0].querySelector("input").value,
+              cells[1].querySelector("input").value,
+              cells[2].querySelector("input").value,
+              parseInt(cells[3].querySelector("input").value, 10),
+              cells[4].querySelector("input").value
+            ];
+          });
+          
           localStorage.setItem("hamdash_config", JSON.stringify(settings));
           alert("Settings saved!");
+          updateInputs();
+          updateMenuTable();
+          adjustDashboardItems();
         };
 
         // Reset to Defaults
@@ -1280,6 +1296,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           newSrc = aIMG[i][aIdx[i]].split("|");
           ifr.classList.remove("hidden");
           ifr.src = newSrc[1];
+          if (newSrc[2]) ifr.style.transform = "scale(" + newSrc[2] + ")";
           ifr.style.zIndex = 0;
           // Hide others
           vid.classList.add("hidden");
@@ -1447,6 +1464,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
             newFrame.classList.remove("hidden");
             newSrc = innerArray[1].split("|");
             newFrame.src = newSrc[1];
+            if (newSrc[2]) newFrame.style.transform = "scale(" + newSrc[2] + ")";
             newFrame.style.zIndex = 0;
           } else {
             // Is an image
