@@ -157,6 +157,29 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.03.29 Changelog:
+
+- Added scrolling RSS feed ticker at the bottom section of the dashboard.
+- Feed ticker displayed information is clickable and links will open on a new tab/window.
+- Incorporated some cosmetic tweaks to make the content to look nicer and more accessible.
+
+#### Upgrade notes:
+
+If you are upgrading, you must add the RSS feeds variable to your config.js file.
+If you don't wish to use the RSS functionality, then add an empty array like this:
+
+        var aRSS = [];
+
+If you want to show some feeds, then add them to your config.js file like this:
+
+        var aRSS = [
+          ["https://www.amsat.org/feed/"],          // Example RSS feed
+          ["https://daily.hamweekly.com/atom.xml"], // Example Atom feed
+          ];
+
+If you are using local storage instead of config.js file to save your settings, then you can directly add the RSS feeds using the setup page.
+
+
 ### 2025.01.26 Changelog:
 
 - Fixed a bug with the "Export to config.js file" button that was saving the "default" values instead of saving the current settings displayed on the page.
