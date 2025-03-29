@@ -86,11 +86,11 @@ db   8D    88       88    88booo. 88.     db   8D
       /* Style for the iframe element */
       .full-screen {
         background-color: black;
-        height: 100%;
-        width: 100%;
         border: 0px none;
+        height: 100%;
+        width: 98%;
         margin-bottom: 0px;
-        margin-left: 0px;
+        margin-left: 1%;
         justify-content: center;
         align-items: center;
         -ms-zoom: 1;
@@ -356,9 +356,11 @@ db   8D    88       88    88booo. 88.     db   8D
       .settings-Page {
         display: none;
         font-family: Arial, sans-serif;
-        margin: 50px;
+        margin-top: 37px;
         background-color: aliceblue;
-        height: 100%;
+        height: 98%;        
+        width: 98%;
+        margin-left: 1%;        
         overflow-y: auto;
       }
       .fixed-section {
@@ -366,8 +368,8 @@ db   8D    88       88    88booo. 88.     db   8D
         text-align: center;
         position: fixed;
         top: 0;
-        left: 0;
-        width: 100%;
+        left: 1%;
+        width: 98%;
         background-color:cadetblue;
         padding-top: 7px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -458,6 +460,43 @@ db   8D    88       88    88booo. 88.     db   8D
         padding-top: 5px;
         font-weight: normal;
       }
+
+      /************************/
+      /* Settings RSS styles  */
+      /************************/
+      .rss-ticker {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);        
+        overflow: hidden;
+        white-space: nowrap;
+        box-sizing: border-box;
+        padding: 3px 0;
+        font-family: "Victor Mono", sans-serif;
+        font-size: 1.4vh;
+        font-weight: bold;
+      }
+
+      .rss-ticker-content {
+        display: inline-block;
+        padding-left: 100%;
+        animation: ticker 90s linear infinite;
+      }
+
+      .rss-ticker-content a {
+        text-decoration: none;  
+        color:#e77600;
+      }
+
+      @keyframes ticker {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
     </style>
 
     <!--
@@ -527,6 +566,10 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             ["Tile 11", ["https://picsum.photos/seed/picsum/200/300"], 30000],
             ["Tile 12", ["https://picsum.photos/seed/picsum/200/300"], 30000],
           ],
+          aRSS: [
+            ["https://www.amsat.org/feed/"],          // Example RSS feed
+            ["https://daily.hamweekly.com/atom.xml"], // Example Atom feed
+          ],
         };
 
         // Load from LocalStorage or Defaults
@@ -569,6 +612,12 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             "URL",
             "Scale",
             "Side",
+          ]);
+        };
+
+        updateFeedTable = () => {
+          updateTable("feedTable", settings.aRSS, [            
+            "Feed URL",
           ]);
         };
 
@@ -662,6 +711,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         document.getElementById("layout_cols").value = settings.layout_cols;
         document.getElementById("layout_rows").value = settings.layout_rows;
         updateMenuTable();
+        updateFeedTable();
         adjustDashboardItems(); // Ensure dashboard items match layout on load
 
         // Save Configuration
@@ -692,11 +742,21 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
               cells[4].querySelector("input").value
             ];
           });
+
+          // Update aRSS from the table
+          const feedTableRows = document.querySelectorAll("#feedTable tbody tr");
+          settings.aRSS = Array.from(feedTableRows).map(row => {
+            const cells = row.querySelectorAll("td");
+            return [
+              cells[0].querySelector("input").value
+            ];
+          });
           
           localStorage.setItem("hamdash_config", JSON.stringify(settings));
           alert("Settings saved!");
           updateInputs();
           updateMenuTable();
+          updateFeedTable();
           adjustDashboardItems();
         };
 
@@ -707,6 +767,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           settings = defaults;
           updateInputs();
           updateMenuTable();
+          updateFeedTable();
           adjustDashboardItems();
         };
 
@@ -739,6 +800,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
               alert("\nSettings restored from backup!\n\nRemember to Save Settings to Local Storage, Backup, or Export\n\nif you want to make changes permanent.");
               updateInputs();
               updateMenuTable();
+              updateFeedTable();
               adjustDashboardItems();
             };
             reader.readAsText(file);
@@ -764,6 +826,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
                   layout_rows,
                   aURL,
                   aIMG,
+                  aRSS,
                   tileDelay
                 };
               })()`;
@@ -797,12 +860,14 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
                   const [first, ...rest] = item;
                   return [first, rest, config.tileDelay[index]];
                 }),
+                aRSS: config.aRSS,                
                 settingsSource: "localStorage",
               };
               settings = configJSON;
               alert("\nSettings imported from config.js!\n\nRemember to Save Settings to Local Storage, Backup, or Export\n\nif you want to make changes permanent.");
               updateInputs();
               updateMenuTable();
+              updateFeedTable();
               adjustDashboardItems();
             };
             reader.readAsText(file);
@@ -820,10 +885,15 @@ var layout_cols = ${settings.layout_cols};
 var layout_rows = ${settings.layout_rows};
 
 // Menu items
-// Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
+// Structure is as follows: HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
 // The values are [color code, menu text, target link, scale factor, side],
 // add new lines following the structure for extra menu options. The comma at the end is important!
 var aURL = ${JSON.stringify(settings.aURL, null, 2)};
+
+// Feed items
+// Structure is as follows: target URL
+// The values are [target link]
+var aRSS = ${JSON.stringify(settings.aRSS, null, 2)};
 
 // Dashboard Tiles items
 // Tile Structure is Title, Source URL
@@ -850,6 +920,12 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         document.getElementById("addMenuItem").onclick = () => {
           settings.aURL.push(["", "", "", "", ""]);
           updateMenuTable();
+        };
+
+        // Add New Feed Item
+        document.getElementById("addFeedItem").onclick = () => {
+          settings.aRSS.push([""]);
+          updateFeedTable();
         };
 
         // Update Dashboard Items When Layout Changes
@@ -892,16 +968,11 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           document.getElementById('topBarCenter').textContent = topBarCenterText;
           document.getElementById('layout_cols').textContent = layout_cols;
           document.getElementById('layout_rows').textContent = layout_rows;
-          // console.log(settings.aURL);
-          // aURL = JSON.stringify(settings.aURL, null, 2);
-          // aIMG = JSON.stringify(settings.aImages.map(item => [item[0], ...item[1].flat()]), null, 2);
-          // tileDelay = JSON.stringify(settings.aImages.map(item => item[2]), null, 2);
         }
         // Add an onblur event listener to the input field
         document.getElementById('CenterText').onblur = updateValue;
         document.getElementById('layout_cols').onblur = updateValue;
         document.getElementById('layout_rows').onblur = updateValue;
-
       });
       // End Settings Section
 
@@ -921,6 +992,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         window.layout_rows = 0;
         window.aURL = [];
         window.aIMG = [];
+        window.aRSS = [];
         window.tileDelay = [];
         start();
       }
@@ -1000,6 +1072,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
               window.layout_cols = parsedSettings.layout_cols;
               window.layout_rows = parsedSettings.layout_rows;
               window.aURL = parsedSettings.aURL;
+              window.aRSS = parsedSettings.aRSS;
               window.aIMG = parsedSettings.aImages;
               // New array to hold the last elements for tileDelay
               window.tileDelay = [];
@@ -1020,15 +1093,6 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                 // Replace the second element with the new elements
                 subArray.splice(1, 1, ...newElements);
               });
-
-              // Add more settings as needed
-              // console.log('settingsSource:', settingsSource);
-              // console.log('topBarCenterText:', topBarCenterText);
-              // console.log('layout_cols:', layout_cols);
-              // console.log('layout_rows:', layout_rows);
-              // console.log('aURL:', aURL);
-              // console.log('aIMG:', aIMG);
-              // console.log('tileDelay:', tileDelay);
               window.curSettingsSrc = "Browser Local Storage";
               start();
             } else {
@@ -1051,7 +1115,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2025.02.19";
+      const currentVersion = "v2025.03.29";
 
       async function getLatestVersion() {
         try {
@@ -1147,7 +1211,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           document.getElementById("fixedSection").style.display = "block";
           document.getElementById("settingsPage").style.display = "block";
           document.getElementById("iFrameContainer").style.zIndex = 1;
-          document.getElementById("iFrameContainer").style.backgroundColor = "aliceblue";
+          document.getElementById("iFrameContainer").style.backgroundColor = "black";
           if (curSettingsSrc === "local") {
             document.querySelector(`input[name="settingsSource"][value="localStorage"]`).checked = true;
           } else if (curSettingsSrc.includes("config.js")) {
@@ -1178,8 +1242,10 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                   const [first, ...rest] = item;
                   return [first, rest, tileDelay[index]];
                 });
+          window.settings.aRSS = aRSS;          
           // Update the visualization on the Setup page
           updateMenuTable();
+          updateFeedTable();
           adjustDashboardItems();
         } else if (aURL[num][1].toLowerCase() == "sources") {
           document.getElementById("array1").innerHTML =
@@ -1187,6 +1253,8 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           document.getElementById("array2").innerHTML =
             "<br>" + formatArray(aIMG) + "<br><br>";
           document.getElementById("array3").innerHTML =
+            "<br>" + formatArray(aRSS) + "<br><br>";            
+          document.getElementById("array4").innerHTML =
            `<br>Copyright (c) 2025 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>
             <br>Dashboard codebase version: ${currentVersion}<br><br>`;
           document.getElementById("overlay").style.display = "block";
@@ -1323,6 +1391,62 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           // Only one tile as per timeout call
           imgRot(i);
         }
+      }
+
+      // Function to fetch and display the RSS feed
+      function fetchAndDisplayRss() {            
+        const proxyUrl = "https://corsproxy.io/";
+        const rssTickerContent = document.getElementById("rss-ticker-content");
+            
+        let tickerText = "";
+            
+        // console.log("Fetching RSS feeds...");
+        Promise.all(
+          aRSS.map((rssUrl) =>
+            fetch(proxyUrl + "?url=" + encodeURIComponent(rssUrl))
+              .then((response) => response.text())
+              .then((data) => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, "text/xml");
+              
+                // Automatically detect whether the feed uses "item" or "entry" tags
+                let itmTag = "item"; // Default to RSS
+                if (xmlDoc.querySelector("entry")) {
+                  itmTag = "entry"; // Switch to Atom if "entry" is found
+                }
+              
+                const items = xmlDoc.querySelectorAll(itmTag);
+                // console.log(`Found ${items.length} items in feed: ${rssUrl}`);
+              
+                items.forEach((item) => {
+                  const title = item.querySelector("title").textContent;
+                
+                  // Handle both <link href="..."> and <link>...</link>
+                  const linkElement = item.querySelector("link");
+                  let link = "";
+                  if (linkElement) {
+                    if (linkElement.getAttribute("href")) {
+                      // If <link href="...">
+                      link = linkElement.getAttribute("href");
+                    } else {
+                      // If <link>...</link>
+                      link = linkElement.textContent;
+                    }
+                  }
+                
+                  // console.log("title:", title);
+                  // console.log("link:", link);
+                  tickerText += `<a href="${link}" target="_blank" style="margin-right: 50px;">${title}</a>`;
+                });
+              })
+              .catch((error) => {
+                console.error(`Error fetching RSS feed from ${rssUrl}:`, error);
+              })
+          )
+        ).then(() => {
+          // console.log("All feeds processed.");
+          rssTickerContent.innerHTML = tickerText || "Failed to load RSS feeds.";
+        });
       }
 
       // .d8888. d888888b  .d8b.  d8888b. d888888b
@@ -1513,6 +1637,23 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           window.location.reload();
         });
 
+        if (typeof aRSS !== "undefined" && aRSS.length > 0) {
+          // Dynamically create the RSS ticker div
+          const rssTicker = document.createElement("div");
+          rssTicker.id = "rss-ticker";
+          rssTicker.className = "rss-ticker";
+                
+          const rssTickerContent = document.createElement("div");
+          rssTickerContent.id = "rss-ticker-content";
+          rssTickerContent.className = "rss-ticker-content";
+                
+          rssTicker.appendChild(rssTickerContent);
+          document.body.appendChild(rssTicker); // Add the ticker to the body
+                
+          // Call the function to fetch and display RSS feeds
+          fetchAndDisplayRss();
+        }
+
         setRot();
       }
 
@@ -1647,6 +1788,22 @@ Y8888P'  `Y88P'  Y8888D'    YP
               <tbody></tbody>
             </table>
           </div>
+
+          <!-- Feed Items -->
+          <div class="section">
+            <label>Feed Items:</label>
+            <table id="feedTable">
+              <thead>
+                <tr>
+                  <th>Feed URL</th>
+                  <th>Actions</th>              
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <button id="addFeedItem">Add Feed Item</button>
+          </div>
+
         </div>
       </div> <!-- End of Div Settings page -->
     </div>
@@ -1719,10 +1876,15 @@ Y8888P'  `Y88P'  Y8888D'    YP
           <div id="array2" class="array-content"></div>
         </div>
         <div class="array-container">
-          <div class="array-title"><b>Development by:</b></div>
+          <div class="array-title"><b>Feed Sources:</b></div>
           <div id="array3" class="array-content"></div>
+        </div>
+        <div class="array-container">
+          <div class="array-title"><b>Development by:</b></div>
+          <div id="array4" class="array-content"></div>
         </div>
       </div>
     </div>
+
   </body>
 </html>

@@ -102,3 +102,8 @@ var tileDelay = [
   10200,10500,10300,10600,
   30400,60700,60900,10800
 ];
+
+var aRSS = [
+  ["https://www.amsat.org/feed/"],          // Example RSS feed
+  ["https://daily.hamweekly.com/atom.xml"], // Example Atom feed
+  ];
