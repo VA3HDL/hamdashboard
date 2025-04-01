@@ -481,7 +481,8 @@ db   8D    88       88    88booo. 88.     db   8D
       .rss-ticker-content {
         display: inline-block;
         padding-left: 100%;
-        animation: ticker 90s linear infinite;
+        animation: ticker var(--ticker-duration, 90s) linear infinite;        
+        animation-play-state: running; /* Default state is running */
       }
 
       .rss-ticker-content a {
@@ -491,7 +492,7 @@ db   8D    88       88    88booo. 88.     db   8D
 
       @keyframes ticker {
         0% {
-          transform: translateX(0);
+          transform: translateX(0%);
         }
         100% {
           transform: translateX(-100%);
@@ -567,8 +568,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
             ["Tile 12", ["https://picsum.photos/seed/picsum/200/300"], 30000],
           ],
           aRSS: [
-            ["https://www.amsat.org/feed/"],          // Example RSS feed
-            ["https://daily.hamweekly.com/atom.xml"], // Example Atom feed
+            ["https://www.amsat.org/feed/", 60],           // Example RSS feed
+            ["https://daily.hamweekly.com/atom.xml", 60], // Example Atom feed
           ],
         };
 
@@ -618,6 +619,7 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
         updateFeedTable = () => {
           updateTable("feedTable", settings.aRSS, [            
             "Feed URL",
+            "Refresh Interval (minutes)",
           ]);
         };
 
@@ -748,7 +750,8 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           settings.aRSS = Array.from(feedTableRows).map(row => {
             const cells = row.querySelectorAll("td");
             return [
-              cells[0].querySelector("input").value
+              cells[0].querySelector("input").value,              // Feed URL
+              parseInt(cells[1].querySelector("input").value, 10) // Refresh Interval
             ];
           });
           
@@ -765,6 +768,17 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           localStorage.setItem("hamdash_config", JSON.stringify(defaults));
           alert("Settings reset to defaults!");
           settings = defaults;
+          updateInputs();
+          updateMenuTable();
+          updateFeedTable();
+          adjustDashboardItems();
+        };
+
+        // Delete Configuration from local storage
+        document.getElementById("deleteConfig").onclick = () => {
+          window.localStorage.removeItem('hamdash_config');
+          alert("Deleted local storage settings!");
+          // settings = defaults;
           updateInputs();
           updateMenuTable();
           updateFeedTable();
@@ -973,7 +987,8 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         document.getElementById('CenterText').onblur = updateValue;
         document.getElementById('layout_cols').onblur = updateValue;
         document.getElementById('layout_rows').onblur = updateValue;
-      });
+       
+      }); // End of DOMContentLoaded here
       // End Settings Section
 
       // db    db d888888b d888888b db      d888888b d888888b db    db      .d8888. d88888b  .o88b. d888888b d888888b  .d88b.  d8b   db
@@ -1393,16 +1408,37 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         }
       }
 
+      function updateTickerSpeed() {
+        const rssTickerContent = document.querySelector(".rss-ticker-content");
+        if (rssTickerContent) {
+          // Calculate the width of the content and the container
+          const contentWidth = rssTickerContent.scrollWidth;
+          const containerWidth = rssTickerContent.parentElement.offsetWidth;
+        
+          // Define a base speed (e.g., 180px per second)
+          const baseSpeed = 180; // pixels per second
+        
+          // Calculate the duration based on the content width
+          const duration = (contentWidth + containerWidth) / baseSpeed;
+        
+          // Update the CSS variable for the animation duration
+          rssTickerContent.style.setProperty("--ticker-duration", `${duration}s`);
+          // console.log(`Updated ticker speed: ${duration}s`);
+        }
+      }
+
       // Function to fetch and display the RSS feed
       function fetchAndDisplayRss() {            
         const proxyUrl = "https://corsproxy.io/";
         const rssTickerContent = document.getElementById("rss-ticker-content");
             
-        let tickerText = "";
+        // Array to store the content of each feed
+        const feedContents = new Array(aRSS.length).fill("");
             
-        // console.log("Fetching RSS feeds...");
-        Promise.all(
-          aRSS.map((rssUrl) =>
+        console.log("Fetching RSS feeds...");
+        aRSS.forEach(([rssUrl, interval], index) => {
+          const fetchFeed = () => {
+            console.log(`Fetching feed: ${rssUrl}`);
             fetch(proxyUrl + "?url=" + encodeURIComponent(rssUrl))
               .then((response) => response.text())
               .then((data) => {
@@ -1415,8 +1451,13 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                   itmTag = "entry"; // Switch to Atom if "entry" is found
                 }
               
+                const feedTitle = xmlDoc.querySelector("channel > title, feed > title")?.textContent || "Unknown Feed";
+                const lastUpdated = xmlDoc.querySelector("channel > lastBuildDate, feed > updated")?.textContent || "Unknown Time";
+              
                 const items = xmlDoc.querySelectorAll(itmTag);
-                // console.log(`Found ${items.length} items in feed: ${rssUrl}`);
+                console.log(`Found ${items.length} items in feed: ${rssUrl}`);
+              
+                let feedText = `<span style="font-size: 0.9em; color: #aaa;"> ${feedTitle} - Last Updated: ${lastUpdated} </span> - `;
               
                 items.forEach((item) => {
                   const title = item.querySelector("title").textContent;
@@ -1436,16 +1477,28 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                 
                   // console.log("title:", title);
                   // console.log("link:", link);
-                  tickerText += `<a href="${link}" target="_blank" style="margin-right: 50px;">${title}</a>`;
+                  feedText += `<a href="${link}" target="_blank" style="margin-right: 50px;">${title}</a>`;
                 });
+              
+                // Update the content for this feed in the array
+                feedContents[index] = feedText;
+
+                // Combine all feeds and update the ticker content
+                rssTickerContent.innerHTML = feedContents.join("") || "Failed to load RSS feeds.";
+
+                // Update the ticker speed
+                updateTickerSpeed();
               })
               .catch((error) => {
                 console.error(`Error fetching RSS feed from ${rssUrl}:`, error);
-              })
-          )
-        ).then(() => {
-          // console.log("All feeds processed.");
-          rssTickerContent.innerHTML = tickerText || "Failed to load RSS feeds.";
+              });
+          };
+        
+          // Fetch the feed immediately
+          fetchFeed();
+        
+          // Set up periodic refresh based on the interval (in minutes)
+          setInterval(fetchFeed, interval * 60 * 1000);
         });
       }
 
@@ -1652,6 +1705,15 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                 
           // Call the function to fetch and display RSS feeds
           fetchAndDisplayRss();
+
+          // Add event listeners for pause and resume functionality
+          rssTickerContent.addEventListener("mouseenter", () => {            
+            rssTickerContent.style.animationPlayState = "paused";
+          });
+        
+          rssTickerContent.addEventListener("mouseleave", () => {            
+            rssTickerContent.style.animationPlayState = "running";
+          });
         }
 
         setRot();
@@ -1707,6 +1769,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
         <div id="fixedSection" class="fixed-section">
           <button id="saveConfig">Save Settings to Local Storage</button>
           <button id="resetConfig">Reset to Defaults</button>
+          <button id="deleteConfig">Delete Settings from Local Storage</button>
           <button id="backupConfig">Backup Settings to JSON file</button>
           <button id="restoreConfig">Restore Settings from JSON file</button>
           <button id="importConfig">Import from config.js file</button>
@@ -1796,6 +1859,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
               <thead>
                 <tr>
                   <th>Feed URL</th>
+                  <th>Refresh Interval (minutes)</th>
                   <th>Actions</th>              
                 </tr>
               </thead>
