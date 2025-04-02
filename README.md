@@ -157,6 +157,30 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.04.02 Changelog:
+
+- Added ability to customize RSS feeds refresh times.
+- Added scrolling pause on mouse-over to the ticker, for easy ready and click on links.
+- Incorporated feed name and last feed update timestamp at the beginning of each feed items.
+
+#### Upgrade notes:
+
+If you are upgrading, you must add the RSS feeds variable to your config.js file.
+If you don't wish to use the RSS functionality, then add an empty array like this:
+
+        var aRSS = [];
+
+If you want to show some feeds, then add them to your config.js file like this:
+
+        // RSS feed items
+        // Structure is [feed URL, refresh interval in minutes]
+        var aRSS = [
+          ["https://www.amsat.org/feed/", 60],           // Example RSS feed, refresh every 60 minutes
+          ["https://daily.hamweekly.com/atom.xml", 120], // Example Atom feed, refresh every 120 minutes
+          ];
+
+If you are using local storage instead of config.js file to save your settings, then you can directly add the RSS feeds using the setup page.
+
 ### 2025.03.29 Changelog:
 
 - Added scrolling RSS feed ticker at the bottom section of the dashboard.
