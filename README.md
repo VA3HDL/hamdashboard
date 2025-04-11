@@ -22,6 +22,8 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [VE7CAS](https://hamradio.smecher.bc.ca/) -- Vancouver, BC
 
+[G0IKV](https://g0ikv.qsy.to/) -- Southport, England by David G0IKV
+
 [OK1SLM](https://www.qsl.net/ok1slm/) -- Prague, EU
 
 [VICSCAN](https://www.vicscan.com/hamdash/) -- Melbourne, Australia by @vk3ymml
