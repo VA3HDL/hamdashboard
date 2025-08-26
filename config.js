@@ -1,5 +1,5 @@
 const disableSetup = false;
-var topBarCenterText = `VA3HDL - FN04ga`;
+var topBarCenterText = `ZS6ELI - KG44CF`;
 
 // Grid layout
 var layout_cols = 4;
@@ -10,14 +10,14 @@ var layout_rows = 3;
 // The values are [color code, menu text, target link, scale factor, side],
 // add new lines following the structure for extra menu options. The comma at the end is important!
 var aURL = [
-  ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
+  ["2196F3", "CLUBLOG", "https://clublog.org/livestream/ZS6ELI", "1.7"],
   [
     "2196F3",
     "CONTEST",
     "https://www.contestcalendar.com/fivewkcal.html",
     "1",
   ],
-  ["2196F3", "DX CLUSTER", "https://dxcluster.ha8tks.hu/map/", "1"],
+  ["2196F3", "DX CLUSTER", "http://www.dxsummit.fi/#/?dx_countries=South%20Africa", "1"],
   [
     "2196F3",
     "LIGHTNING",
@@ -29,7 +29,7 @@ var aURL = [
   [
     "2196F3",
     "RADAR",
-    "https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON",
+    "https://www.accuweather.com/en/za/pretoria/305449/weather-radar/305449",
     "1",
     "R"
   ],
@@ -37,7 +37,7 @@ var aURL = [
   [
     "2196F3",
     "WEATHER",
-    "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=44.0157&lon=-79.4591&zoom=5",
+    "https://www.accuweather.com/en/za/pretoria/305449/weather-radar/305449",
     "1",
     "R",
   ],
