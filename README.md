@@ -26,7 +26,7 @@ VA3HDL en español [YouTube - Video en español](https://www.youtube.com/watch?v
 
 [OK1SLM](https://www.qsl.net/ok1slm/) -- Prague, EU
 
-[VICSCAN](https://www.vicscan.com/hamdash/) -- Melbourne, Australia by @vk3ymml
+[VK3VSN](https://www.vicscan.com/hamdash/) -- Melbourne, Australia by Brett VK3VSN
 
 [K6BCW](https://elihickox.com/radio/hamdashboard/hamdash.html) -- San Francisco bay area
 
