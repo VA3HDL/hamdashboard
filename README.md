@@ -174,6 +174,24 @@ If you want to upgrade to the latest version, please make sure your read the Cha
 
 Check the updated demos too!
 
+### 2025.11.12 Changelog
+
+- Added ability to switch the dashboard using different config files (Feature suggested by Bryan VE3OYN)
+- Now you can flip between various configurations by selecting them from the menu options
+
+#### Upgrade notes
+
+If you are upgrading and want to use the new feature... 
+
+1. Create a new config file with a different name, lets say "satellite.js"
+2. Add the file name to the menues including the js extension like this:
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/satellite.png?raw=true" width="200">
+
+3. Make sure you also include the original config.js menu option on the new config file so you can switch back to your original dashboard
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/config.png?raw=true" width="200">
+
 ### 2025.04.02 Changelog
 
 - Added ability to customize RSS feeds refresh times.

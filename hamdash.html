@@ -1066,28 +1066,37 @@ var tileDelay = ${JSON.stringify(
       }
 
       async function loadConfig() {
+        // allow override via URL param: ?config=ops.js
+        const urlParams = new URLSearchParams(window.location.search);
+        const configParam = urlParams.get("config");
+        const configFile = configParam ? configParam : "config.js";
+
         const isFileProtocol = window.location.protocol === "file:";
         if (isFileProtocol) {
-          // console.warn('Running from file system, some features may not work due to browser security restrictions.');
-          // Directly load the script without checking if it exists
+          // running from filesystem — load requested config directly
           const script = document.createElement("script");
-          script.src = "config.js";
+          script.src = configFile;
           script.onload = () => {
-            console.log("config.js loaded successfully");
-            window.curSettingsSrc = "config.js from file system";
+            console.log(`${configFile} loaded successfully (file protocol)`);
+            window.curSettingsSrc = `${configFile} from file system`;
             start();
           };
           script.onerror = (error) => {
-            console.error("Failed to load config.js:", error);
-            // Try to recover
+            console.error(`Failed to load ${configFile}:`, error);
             minimalConfiguration();
           };
           document.head.appendChild(script);
         } else {
-          await loadScriptIfExists("config.js");
-          console.log("config.js loaded successfully");
-          window.curSettingsSrc = "config.js from server";
+          // running from web server — attempt to fetch the configured file
+          try {
+            await loadScriptIfExists(configFile);
+            console.log(`${configFile} loaded successfully (server)`);
+            window.curSettingsSrc = `${configFile} from server`;
           start();
+          } catch (err) {
+            console.error(`Failed to load ${configFile}:`, err);
+            minimalConfiguration();
+          }
         }
       }
 
@@ -1156,7 +1165,7 @@ var tileDelay = ${JSON.stringify(
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2025.04.02";
+      const currentVersion = "v2025.11.12";
 
       async function getLatestVersion() {
         try {
@@ -1241,37 +1250,40 @@ var tileDelay = ${JSON.stringify(
       function MenuOpt(num) {
         window.stop();
         rotStop();
-        if (aURL[num][1].toLowerCase() == "refresh") {
+
+        // If the menu text is a config filename (e.g. "satellite.js"), reload with ?config=
+        const menuText = String(aURL[num][1] || "");
+        if (menuText.toLowerCase().endsWith(".js")) {
+          // Build new URL keeping the same path, add ?config=filename
+          const filename = encodeURIComponent(menuText);
+          const newUrl = window.location.pathname + "?config=" + filename;
+          window.location.href = newUrl;
+          return;
+        }
+
+        if (menuText.toLowerCase() == "refresh") {
           location.reload();
           setRot();
-        } else if (aURL[num][1].toLowerCase() == "help") {
+        } else if (menuText.toLowerCase() == "help") {
           alert(help);
-        } else if (aURL[num][1].toLowerCase() == "setup") {
+        } else if (menuText.toLowerCase() == "setup") {
           // Configure visualization
           document.getElementById("FullScreen").style.display = "none";
           document.getElementById("fixedSection").style.display = "block";
           document.getElementById("settingsPage").style.display = "block";
           document.getElementById("iFrameContainer").style.zIndex = 1;
-          document.getElementById("iFrameContainer").style.backgroundColor =
-            "black";
+          document.getElementById("iFrameContainer").style.backgroundColor = "black";
           if (curSettingsSrc === "local") {
-            document.querySelector(
-              `input[name="settingsSource"][value="localStorage"]`,
-            ).checked = true;
+            document.querySelector(`input[name="settingsSource"][value="localStorage"]`).checked = true;
           } else if (curSettingsSrc.includes("config.js")) {
-            document.querySelector(
-              `input[name="settingsSource"][value="file"]`,
-            ).checked = true;
+            document.querySelector(`input[name="settingsSource"][value="file"]`).checked = true;
           }
           window.settings.topBarCenterText = topBarCenterText;
           window.settings.layout_cols = window.layout_cols;
           window.settings.layout_rows = window.layout_rows;
-          document.getElementById("CenterText").value =
-            window.settings.topBarCenterText;
-          document.getElementById("layout_cols").value =
-            window.settings.layout_cols;
-          document.getElementById("layout_rows").value =
-            window.settings.layout_rows;
+          document.getElementById("CenterText").value = window.settings.topBarCenterText;
+          document.getElementById("layout_cols").value = window.settings.layout_cols;
+          document.getElementById("layout_rows").value = window.settings.layout_rows;
           filteredAURL = aURL.filter(
             (item) =>
               !item.some(
@@ -1283,8 +1295,8 @@ var tileDelay = ${JSON.stringify(
                     subItem.includes("Setup") ||
                     subItem.includes("Sources") ||
                     subItem.includes("Update") ||
-                    subItem.includes("Help")),
-              ),
+                    subItem.includes("Help"))
+                  )
           );
           window.settings.aURL = filteredAURL;
           window.settings.aImages = aIMG.map((item, index) => {
@@ -1296,7 +1308,7 @@ var tileDelay = ${JSON.stringify(
           updateMenuTable();
           updateFeedTable();
           adjustDashboardItems();
-        } else if (aURL[num][1].toLowerCase() == "sources") {
+        } else if (menuText.toLowerCase() == "sources") {
           document.getElementById("array1").innerHTML =
             "<br>" + formatArray(aURL) + "<br><br>";
           document.getElementById("array2").innerHTML =
@@ -1307,15 +1319,14 @@ var tileDelay = ${JSON.stringify(
             `<br>Copyright (c) 2025 Pablo Sabbag, VA3HDL | Open Source License: MIT<br>
             <br>Dashboard codebase version: ${currentVersion}<br><br>`;
           document.getElementById("overlay").style.display = "block";
-        } else if (aURL[num][1].toLowerCase() == "update") {
+        } else if (menuText.toLowerCase() == "update") {
           window
             .open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank")
             .focus();
-        } else if (aURL[num][1].toLowerCase() == "back") {
+        } else if (menuText.toLowerCase() == "back"){
           document.getElementById("FullScreen").src = "about:blank";
           document.getElementById("iFrameContainer").style.zIndex = -2;
-          document.getElementById("iFrameContainer").style.backgroundColor =
-            "black";
+          document.getElementById("iFrameContainer").style.backgroundColor = "black";
           document.getElementById("FullScreen").style.display = "none";
           document.getElementById("settingsPage").style.display = "none";
           setRot();
@@ -1323,8 +1334,7 @@ var tileDelay = ${JSON.stringify(
           document.getElementById("iFrameContainer").style.zIndex = 1;
           document.getElementById("FullScreen").style.display = "block";
           document.getElementById("FullScreen").src = aURL[num][2];
-          document.getElementById("FullScreen").style.transform =
-            "scale(" + aURL[num][3] + ")";
+          document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
         }
       }
 
