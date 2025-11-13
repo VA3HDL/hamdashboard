@@ -184,13 +184,26 @@ Check the updated demos too!
 If you are upgrading and want to use the new feature... 
 
 1. Create a new config file with a different name, lets say "satellite.js"
-2. Add the file name to the menues including the js extension like this:
+2. Add the new config file name to the menues (on the original config.js file) including the js extension like this:
 
-<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/satellite.png?raw=true" width="200">
+        on config.js add...
+
+        var aURL = [
+                ["f3de21ff", "satellite.js"],
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/satellite.png?raw=true" width="600">
+
 
 3. Make sure you also include the original config.js menu option on the new config file so you can switch back to your original dashboard
 
-<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/config.png?raw=true" width="200">
+        on satellite.js add...
+
+        var aURL = [
+                ["f3de21ff", "config.js"],  
+
+<img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/config.png?raw=true" width="600">
+
+4. Now when you click on satellite.js menu option the dashboard will switch to the example on the screen capture above
 
 ### 2025.04.02 Changelog
 
