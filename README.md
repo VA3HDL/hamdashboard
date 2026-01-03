@@ -104,7 +104,7 @@ This screenshot shows Pi-Star settings:
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/pistar.png?raw=true" width="400">
 
-iFrame tips
+## iFrame tips
 
 If the source server forbids embedding and you cannot change its headers, options are limited. A local proxy that strips the header can work but adds complexity. Use the online tool to test a URL before adding it to a tile: [iFrame Tester online](https://iframetester.com/)
 
@@ -144,6 +144,8 @@ Grid examples
 ## More notes and history
 
 The repository includes a detailed changelog documenting fixes, features, and upgrade instructions dating back through 2024. Please review the changelog entries below before performing upgrades.
+
+[Releases & Change logs](https://github.com/VA3HDL/hamdashboard/releases)
 
 ## Host with Cloudflare Pages (free)
 
