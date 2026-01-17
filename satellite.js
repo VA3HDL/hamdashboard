@@ -10,8 +10,7 @@ var layout_rows = 2;
 // Structure is as follows HTML Color code, Option, target URL, scaling 1=Original Size, side (optional, nothing is Left, "R" is Right)
 // The values are [color code, menu text, target link, scale factor, side],
 // add new lines following the structure for extra menu options. The comma at the end is important!
-var aURL = [
-  ["f3de21ff", "config.js"],
+var aURL = [  
   [
     "2196F3",
     "LIGHTNING",
