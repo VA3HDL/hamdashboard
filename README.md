@@ -112,6 +112,7 @@ If the source server forbids embedding and you cannot change its headers, option
 
 See the chronological entries below for full details. Notable recent changes:
 
+- 2026.01.17 — Ability to load any config files via the menu.
 - 2025.11.12 — Switch between multiple config files (e.g., `satellite.js`) via the menu.
 - 2025.04.02 — RSS feed refresh times configurable; feed ticker added.
 - 2025.03.29 — Scrolling RSS ticker and clickable feed items.
@@ -122,10 +123,10 @@ Upgrade notes
 - Read the specific upgrade notes in the changelog below before replacing `config.js`.
 - To use multiple config files, add a menu entry in `config.js` such as:
 
-```js
-var aURL = [
-  ["f3de21ff", "satellite.js"],
-  ["f3de21ff", "config.js"]
+```
+var aURL = [  
+  ["f3de21ff", "SATS", "satellite.js"],
+  ["f3de21ff", "WX", "weather.js", "1", "R"]
 ];
 ```
 
