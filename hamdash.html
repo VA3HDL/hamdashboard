@@ -1657,29 +1657,35 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         var parentDivL = document.getElementById("myMenuL");
         var parentDivR = document.getElementById("myMenuR");
 
+        // Preppend the Load Cfg option to the right side menu
+        if (typeof disableLdCfg === "undefined" || !disableLdCfg) {
+          aURL.unshift(
+            ["FF0000", "Load Cfg", "", "1", "R"]
+          )
+        }
+
         // Preppend the default options to the menu
         aURL.unshift(
           ["add10d", "BACK", "", "1", "L"],
+          ["0dd1a7", "Help", "", "1", "L"],
           ["add10d", "BACK", "", "1", "R"],
-          ["ff9100", "Refresh", "?_=" + Date.now(), "1"],
-          ["FF0000", "Load Cfg", "#", "1", "R"],
-          ["0dd1a7", "Help", "#", "1", "L"]
+          ["ff9100", "Refresh", "?_=" + Date.now()],
         );
 
         // Append the Setup and Sources option to the right side menu
         if (typeof disableSetup === "undefined" || !disableSetup) {
           aURL.push(
-            ["ff9100", "Setup", "#", "1", "R"]
+            ["ff9100", "Setup", "", "1", "R"]
           )
         }
 
         aURL.push(
-          ["0dd1a7", "Sources", "#", "1", "R"]
+          ["0dd1a7", "Sources", "", "1", "R"]
         );
 
         // Append the Update option to the right side menu if needed
         if (bUpdate) {
-          aURL.push(["FF0000", "Update", "#", "1", "R"]);
+          aURL.push(["FF0000", "Update", "", "1", "R"]);
         }
 
         // Append the new div to the parent div

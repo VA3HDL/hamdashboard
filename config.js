@@ -1,4 +1,5 @@
 const disableSetup = false;
+const disableLdCfg = false;
 var topBarCenterText = `VA3HDL - FN04ga`;
 
 // Grid layout
