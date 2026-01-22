@@ -32,7 +32,7 @@ var aURL = [
   [
     "2196F3",
     "RADAR",
-    "https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON",
+    "dark|https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON",
     "1",
     "R"
   ],
@@ -62,12 +62,12 @@ var aURL = [
 var aIMG = [
   ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
   [
-    "LOCAL RADAR",
-    "https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
+    "LOCAL RADAR (inverted)",
+    "invert|https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
   ],
   [
-    "NOAA D-RAP",
-    "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png",
+    "NOAA D-RAP (inverted)",
+    "invert|https://s.w-x.co/staticmaps/wu/wxtype/county_loc/bgm/animate.png",
   ],
   [
     "ISS POSITION",

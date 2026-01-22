@@ -112,6 +112,7 @@ If the source server forbids embedding and you cannot change its headers, option
 
 See the chronological entries below for full details. Notable recent changes:
 
+- 2026.01.22 — Added directives to load images and iframes with colors inverted. Full details on the release notes.
 - 2026.01.17 — Ability to load any config files via the menu.
 - 2025.11.12 — Switch between multiple config files (e.g., `satellite.js`) via the menu.
 - 2025.04.02 — RSS feed refresh times configurable; feed ticker added.

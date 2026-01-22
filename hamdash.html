@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="Cache-Control"
-      content="no-cache, no-store, must-revalidate"
-    />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta http-equiv="Cache" content="no-cache" />
@@ -17,17 +15,12 @@
     <meta http-equiv="Cache-directive: no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="VA3HDL Ham Radio Dashboard" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+    <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css?family=Victor Mono|Audiowide|Bebas Neue"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Victor Mono|Audiowide|Bebas Neue" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap" rel="stylesheet" />
     <title>Ham Radio Dashboard</title>
     <!--
 	Hamdash
@@ -49,7 +42,8 @@ db   8D    88       88    88booo. 88.     db   8D
 
 -->
     <style>
-      body, html {
+    body,
+    html {
         background: black;
         font-size: 100%;
         max-width: 100%;
@@ -169,13 +163,17 @@ db   8D    88       88    88booo. 88.     db   8D
         width: var(--main-width);
         overflow: hidden;
         display: flex;
-        justify-content: center; /* Horizontal centering */
-        align-items: center; /* Vertical centering */
-        border-radius: 5px; /* Rounded corners */
+        justify-content: center;
+        /* Horizontal centering */
+        align-items: center;
+        /* Vertical centering */
+        border-radius: 5px;
+        /* Rounded corners */
       }
 
       .iframe-tile {
-        position: absolute; /* it must be absolute */
+        position: absolute;
+      /* it must be absolute */
         float: inline-start;
         overflow: hidden;
         border: 0px none;
@@ -183,7 +181,8 @@ db   8D    88       88    88booo. 88.     db   8D
         height: var(--main-height);
         width: var(--main-width);
         margin: 0;
-        border-radius: 5px; /* Rounded corners */
+        border-radius: 5px;
+      /* Rounded corners */
       }
 
       /* Style for the image */
@@ -198,7 +197,8 @@ db   8D    88       88    88booo. 88.     db   8D
         bottom: 6%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: white; /* font color */
+        color: white;
+      /* font color */
         background-color: black;
         font-size: 1vw;
         border-left: 0.25vw solid black;
@@ -323,9 +323,9 @@ db   8D    88       88    88booo. 88.     db   8D
       
       .menu-link.menu-core::before { 
         content: '★'; 
-        margin-right:0px;
-        margin-left:0px;
-        opacity:0.8;
+        margin-right: 0px;
+        margin-left: 0px;
+        opacity: 0.8;
         /*
         position: absolute;
         top: 1px;
@@ -335,9 +335,9 @@ db   8D    88       88    88booo. 88.     db   8D
       
       .menu-link.menu-config::before { 
         content: '⚙️'; 
-        margin-right:0px;
-        margin-left:0px;
-        opacity:0.8; 
+        margin-right: 0px;
+        margin-left: 0px;
+        opacity: 0.8;
         display: inline-block; 
         transform: scale(0.7); 
         transform-origin: center;
@@ -348,7 +348,10 @@ db   8D    88       88    88booo. 88.     db   8D
         */
       }
 
-      .menu-link.menu-user::before { content: ''; margin-right:1px; }
+      .menu-link.menu-user::before {
+        content: '';
+        margin-right: 1px;
+      }
 
       .overlay {
         display: none;
@@ -369,7 +372,8 @@ db   8D    88       88    88booo. 88.     db   8D
         background-color: #333;
         padding: 20px;
         border-radius: 10px;
-        max-height: 80vh; /* Ensures the overlay content is scrollable if it exceeds the viewport height */
+        max-height: 80vh;
+      /* Ensures the overlay content is scrollable if it exceeds the viewport height */
         overflow-y: auto;
       }
 
@@ -393,6 +397,7 @@ db   8D    88       88    88booo. 88.     db   8D
         margin-left: 1%;
         overflow-y: auto;
       }
+
       .fixed-section {
         display: none;
         text-align: center;
@@ -400,45 +405,53 @@ db   8D    88       88    88booo. 88.     db   8D
         top: 0;
         left: 1%;
         width: 98%;
-        background-color:cadetblue;
+        background-color: cadetblue;
         padding-top: 7px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         z-index: -3;
       }
+
       .section {
         margin-bottom: 20px;
         display: flex;
         flex-wrap: wrap;
       }
+
       label {
         margin: 2px;
         font-weight: bold;
       }
+
       input[type="text"] {
         width: 90%;
         padding: 1px;
         margin-right: 5px;
         margin-bottom: 3px;
       }
+
       input[type="number"] {
         width: 20%;
         padding: 1px;
         margin-bottom: 10px;
       }
+
       table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 10px;
       }
+
       table th,
       table td {
         border: 1px solid #ddd;
         padding: 8px;
         align-content: start;
       }
+
       table th {
         background-color: #f4f4f4;
       }
+
       button {
         padding: 5px 5px;
         margin: 0 0 7px 0;
@@ -467,24 +480,30 @@ db   8D    88       88    88booo. 88.     db   8D
         touch-action: manipulation;
         white-space: nowrap;
       }
+
       button:active {
         border-bottom-color: #a2a6ac;
       }
+
       button:active:hover {
         border-bottom-color: #a2a6ac;
       }
+
       button:hover {
         border-color: #a2a6ac #979aa1 #82858a;
       }
+
       button:focus {
         border-color: #e77600;
         box-shadow: rgba(228, 121, 17, 0.5) 0 0 3px 2px;
         outline: 0;
       }
+
       .radio-group {
         display: flex;
         align-items: center;
       }
+
       .radio-group label {
         margin-right: 15px;
         padding-top: 5px;
@@ -512,18 +531,20 @@ db   8D    88       88    88booo. 88.     db   8D
         display: inline-block;
         padding-left: 100%;
         animation: ticker var(--ticker-duration, 90s) linear infinite;
-        animation-play-state: running; /* Default state is running */
+        animation-play-state: running;
+      /* Default state is running */
       }
 
       .rss-ticker-content a {
         text-decoration: none;
-        color:#e77600;
+        color: #e77600;
       }
 
       @keyframes ticker {
         0% {
           transform: translateX(0%);
         }
+
         100% {
           transform: translateX(-100%);
         }
@@ -660,11 +681,11 @@ db   8D Y8b  d8 88 `88.   .88.   88         88    db   8D
           data.forEach((item, index) => {
             const row = document.createElement("tr");
             columns.forEach((col, colIndex) => {
-              const cell = document.createElement("td");
-              if (tableId == "menuTable" && colIndex==0){                        // Color column for Menu options
+            const cell = document.createElement("td");
+            if (tableId == "menuTable" && colIndex == 0) {                        // Color column for Menu options
                 const colorInput = document.createElement("input");
                 colorInput.type = "color";
-                colorInput.value = "#"+item[colIndex].replace("#", "");
+                colorInput.value = "#" + item[colIndex].replace("#", "");
                 colorInput.onchange = (e) => (item[colIndex] = e.target.value);
                 cell.appendChild(colorInput);
               } else {
@@ -1217,7 +1238,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
       help += "Right click on an image to display the next one.\n";
       help += "Images rotates every 30 seconds automatically by default.\n";
 
-      const currentVersion = "v2026.01.17";
+      const currentVersion = "v2026.01.22";
 
       async function getLatestVersion() {
         try {
@@ -1258,7 +1279,19 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
       }
 
       function isFrame(src) {
-        return src.includes("iframe|");
+        return src.includes("iframe|") || src.includes("iframedark|");
+      }
+  
+      function isDarkFrame(src) {
+        return src.includes("iframedark|");
+      }
+  
+      function isDark(src) {
+        return src.includes("dark|");
+      }
+  
+      function isInvert(src) {
+        return src.includes("invert|");
       }
 
       function oldformatArray(arr) {
@@ -1381,7 +1414,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           window
             .open("https://github.com/VA3HDL/hamdashboard/releases/", "_blank")
             .focus();
-        } else if (menuText.toLowerCase() == "back"){
+        } else if (menuText.toLowerCase() == "back") {
           document.getElementById("FullScreen").src = "about:blank";
           document.getElementById("iFrameContainer").style.zIndex = -2;
           document.getElementById("iFrameContainer").style.backgroundColor = "black";
@@ -1391,8 +1424,15 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
         } else {
           document.getElementById("iFrameContainer").style.zIndex = 1;
           document.getElementById("FullScreen").style.display = "block";
-          document.getElementById("FullScreen").src = aURL[num][2];
-          document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
+          var src = aURL[num][2];
+          if (isDark(src)) {
+            document.getElementById("FullScreen").style.filter = "invert(1) hue-rotate(180deg)";
+            src = src.replace("dark|", "");
+          } else {
+            document.getElementById("FullScreen").style.filter = "none";
+          }
+            document.getElementById("FullScreen").src = src;
+            document.getElementById("FullScreen").style.transform = "scale(" + aURL[num][3] + ")";
         }
       }
 
@@ -1452,9 +1492,14 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
             // Is iFrame, event is not attached to iFrames for now, do nothing
           } else {
             // Is image
-            document.getElementById(targetElement.id).src = getImgURL(
-              aIMG[i][aIdx[i]]
-            );
+            var src = aIMG[i][aIdx[i]];
+            if (isInvert(src)) {
+              document.getElementById(targetElement.id).style.filter = "invert(1)";
+              src = src.replace("invert|", "");
+            } else {
+              document.getElementById(targetElement.id).style.filter = "none";
+            }
+            document.getElementById(targetElement.id).src = getImgURL(src);
           }
         }
       }
@@ -1480,17 +1525,37 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           ifr.classList.add("hidden");
         } else if (isFrame(aIMG[i][aIdx[i]])) {
           // Is iFrame
-          newSrc = aIMG[i][aIdx[i]].split("|");
+          var src = aIMG[i][aIdx[i]];
+          var newSrc = [];
+          if (isDarkFrame(src)) {
+            newSrc = src.split("iframedark|");
+            ifr.style.filter = "invert(1) hue-rotate(180deg)";
+          } else {
+            newSrc = src.split("iframe|");
+            ifr.style.filter = "none";
+          }
           ifr.classList.remove("hidden");
-          ifr.src = newSrc[1];
-          if (newSrc[2]) ifr.style.transform = "scale(" + newSrc[2] + ")";
+          // Handle optional scale parameter: prefix|URL|SCALE
+          var content = newSrc[1];
+          var contentParts = content.split("|");
+          ifr.src = contentParts[0];
+          if (contentParts[1]) {
+            ifr.style.transform = "scale(" + contentParts[1] + ")";
+          }
           ifr.style.zIndex = 0;
           // Hide others
           vid.classList.add("hidden");
           img.classList.add("hidden");
         } else {
           // Is image
-          img.src = getImgURL(aIMG[i][aIdx[i]]);
+          var src = aIMG[i][aIdx[i]];
+          if (isInvert(src)) {
+            img.style.filter = "invert(1)";
+            src = src.replace("invert|", "");
+          } else {
+            img.style.filter = "none";
+          }
+          img.src = getImgURL(src);
           img.classList.remove("hidden");
           // Hide others
           vid.classList.add("hidden");
@@ -1695,7 +1760,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           const link = String(innerArray[2] || '').trim();
           const titleLower = title.toLowerCase();
           const linkLower = link.toLowerCase();
-          const coreNames = ['back','refresh','load cfg','help','setup','sources','update']; 
+          const coreNames = ['back', 'refresh', 'load cfg', 'help', 'setup', 'sources', 'update'];
           
           // Create a new div element
           var newDiv = document.createElement("div");
@@ -1765,14 +1830,33 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
           } else if (isFrame(innerArray[1])) {
             // Is iFrame
             newFrame.classList.remove("hidden");
-            newSrc = innerArray[1].split("|");
-            newFrame.src = newSrc[1];
-            if (newSrc[2]) newFrame.style.transform = "scale(" + newSrc[2] + ")";
-            newFrame.style.zIndex = 0;
-          } else {
-            // Is an image
-            newImg.classList.remove("hidden");
-            newImg.src = getImgURL(innerArray[1]);
+            var src = innerArray[1];
+            var newSrc = [];
+            if (isDarkFrame(src)) {
+              newSrc = src.split("iframedark|");
+              newFrame.style.filter = "invert(1) hue-rotate(180deg)";
+            } else {
+              newSrc = src.split("iframe|");
+              newFrame.style.filter = "none";
+            }
+            var content = newSrc[1];
+            var contentParts = content.split("|");
+            newFrame.src = contentParts[0];
+            if (contentParts[1]) {
+              newFrame.style.transform = "scale(" + contentParts[1] + ")";
+            }
+              newFrame.style.zIndex = 0;
+            } else {
+              // Is an image
+              newImg.classList.remove("hidden");
+            var src = innerArray[1];
+            if (isInvert(src)) {
+              newImg.style.filter = "invert(1)";
+              src = src.replace("invert|", "");
+            } else {
+              newImg.style.filter = "none";
+            }
+            newImg.src = getImgURL(src);
             newImg.onerror = function () {
               text = "Failed to load image";
               console.log(text, this.src);
@@ -1887,6 +1971,7 @@ d8888b.  .d88b.  d8888b. db    db
 88   8D `8b  d8' 88  .8D    88
 Y8888P'  `Y88P'  Y8888D'    YP
 -->
+
   <body onload="main()">
     <div id="iFrameContainer" class="iframe-container">
       <iframe id="FullScreen" class="full-screen" src="" title="Zoom"></iframe>
@@ -1909,19 +1994,9 @@ Y8888P'  `Y88P'  Y8888D'    YP
           <div class="section">
             <div class="radio-group">
               <label>Select Settings Source:</label>
-              <input
-                type="radio"
-                id="sourceLocalStorage"
-                name="settingsSource"
-                value="localStorage"
-              />
+              <input type="radio" id="sourceLocalStorage" name="settingsSource" value="localStorage" />
               <label for="sourceLocalStorage">Browser Local Storage</label>
-              <input
-                type="radio"
-                id="sourceFile"
-                name="settingsSource"
-                value="file"
-              />
+              <input type="radio" id="sourceFile" name="settingsSource" value="file" />
               <label for="sourceFile">config.js file</label>
               <font size=2em>(Please choose the source of the settings for the next time the dashboard is loaded.)</font>
             </div>
@@ -1999,13 +2074,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
     </div>
 
     <div id="imgZoom" class="img-zoom">
-      <img
-        class="image-large"
-        id="ImageLarge"
-        alt="pic"
-        ondblclick="larger(event);"
-        oncontextmenu="rotate(event);"
-      />
+    <img class="image-large" id="ImageLarge" alt="pic" ondblclick="larger(event);" oncontextmenu="rotate(event);" />
     </div>
 
     <div id="myMenuL" class="menuL">
@@ -2018,25 +2087,13 @@ Y8888P'  `Y88P'  Y8888D'    YP
 
     <div id="defaultFrame" class="default-frame">
       <div class="top-bar">
-        <div
-          id="topBarLeft"
-          class="child"
-          style="text-align: left; padding-left: 7px; color: blanchedalmond"
-        >
+      <div id="topBarLeft" class="child" style="text-align: left; padding-left: 7px; color: blanchedalmond">
           &nbsp;
         </div>
-        <div
-          id="topBarCenter"
-          class="child"
-          style="text-align: center; color: rgb(0, 119, 255)"
-        >
+      <div id="topBarCenter" class="child" style="text-align: center; color: rgb(0, 119, 255)">
           &nbsp;
         </div>
-        <div
-          id="topBarRight"
-          class="child"
-          style="text-align: right; padding-right: 5px; color: aquamarine"
-        >
+      <div id="topBarRight" class="child" style="text-align: right; padding-right: 5px; color: aquamarine">
           &nbsp;
         </div>
       </div>
@@ -2051,9 +2108,7 @@ Y8888P'  `Y88P'  Y8888D'    YP
         <div class="array-container">
           <div class="array-title">
             <b>Full config.js file: </b>
-            <a href="config.js" target="_blank" style="color: white"
-              >(Open in new tab)</a
-            >
+          <a href="config.js" target="_blank" style="color: white">(Open in new tab)</a>
             <p></p>
           </div>
         </div>
@@ -2077,4 +2132,5 @@ Y8888P'  `Y88P'  Y8888D'    YP
     </div>
 
   </body>
+
 </html>
