@@ -1,0 +1,37 @@
+{
+  "disableSetup": false,
+  "disableLdCfg": false,
+  "topBarCenterText": "VA3HDL - FN04ga - JSON",
+  "layout_cols": 4,
+  "layout_rows": 3,
+  "aURL": [
+    ["f3de21", "SATS", "satellite.js"],
+    ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
+    ["2196F3", "CONTEST", "https://www.contestcalendar.com/fivewkcal.html", "1"],
+    ["2196F3", "DX CLUSTER", "https://dxcluster.ha8tks.hu/map/", "1"],
+    ["2196F3", "LIGHTNING", "https://map.blitzortung.org/#3.87/36.5/-89.41", "1", "R"],
+    ["2196F3", "PISTAR", "http://pi-star.local/", "1.2"],
+    ["2196F3", "RADAR", "dark|https://weather.gc.ca/?layers=alert,radar&center=43.39961001,-78.53212031&zoom=6&alertTableFilterProv=ON", "1", "R"],
+    ["2196F3", "TIME.IS", "https://time.is/", "1", "R"],
+    ["2196F3", "WEATHER", "https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=44.0157&lon=-79.4591&zoom=5", "1", "R"],
+    ["2196F3", "WINDS", "https://earth.nullschool.net/#current/wind/surface/level/orthographic=-78.79,44.09,3000", "1", "R"]
+  ],
+  "aIMG": [
+    [["Radar CONUS", "Radar Small"], ["https://radar.weather.gov/ridge/standard/CONUS-LARGE_loop.gif", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"], 60100],
+    ["LOCAL RADAR (inverted)", "invert|https://radar.weather.gov/ridge/standard/KNQA_loop.gif", 10000],
+    ["NOAA D-RAP (inverted)", "invert|https://s.w-x.co/staticmaps/wu/wxtype/county_loc/bgm/animate.png", 11000],
+    ["ISS POSITION", "https://www.heavens-above.com/orbitdisplay.aspx?icon=iss&width=600&height=300&mode=M&satid=25544", 10100],
+    ["SATELLITE CAN", "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/can/EXTENT3/GOES16-CAN-EXTENT3-1125x560.gif", 10200],
+    ["SATELLITE CGL", "https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/cgl/EXTENT3/GOES16-CGL-EXTENT3-600x600.gif", 10500],
+    ["LIGHTNING", "https://images.lightningmaps.org/blitzortung/america/index.php?animation=usa", 10300],
+    ["LIGHTNING LOCAL", "https://www.blitzortung.org/en/Images/image_b_ny.png", 10600],
+    ["YOUTUBE EXAMPLE", "iframe|https://www.youtube.com/embed/fzPFaXAV_2Y?autoplay=1&mute=1", 30400],
+    ["WEBSITE EXAMPLE", "iframe|https://globe.adsbexchange.com/?airport=YYZ", 60700],
+    ["VIDEO EXAMPLE", "https://himawari8.nict.go.jp/movie/720/20240611_pifd.mp4", 60900],
+    ["HF PROPAGATION", "https://www.hamqsl.com/solar101vhf.php", 10800]
+  ],  
+  "aRSS": [
+    ["https://www.amsat.org/feed/", 60],
+    ["https://daily.hamweekly.com/atom.xml", 120]
+  ]
+}

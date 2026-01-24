@@ -43,9 +43,11 @@ These live dashboards were shared by members of the ham community:
 4. Alternatively, edit `config.js` in a text editor to set sources, menus, and layout.
 5. Load configuration from the browser (Local Storage) or from `config.js`, then save your settings.
 
-Notes
+**Notes**
 - For hosted (server) installations, store settings in `config.js` so the server serves the same configuration to all visitors.
 - For personal use or testing, Local Storage keeps changes specific to your browser session.
+- Now is possible to use a pure Json file format for the configuration load on hosted environments
+- For file:// access (non-hosted usage) a newer JsonP-style format is available for the configuration load
 
 ## Settings UI
 
@@ -62,10 +64,11 @@ The settings UI provides buttons to manage configurations and backups:
 
 ## Public dashboards and safety
 
-The "Setup" UI cannot modify the server-side `config.js` file. When a visitor switches a public dashboard to Local Storage, the change affects only that visitor's browser. To hide the Setup option on public installations, add the following line to your `config.js`:
+The "Setup" UI cannot modify the server-side `config.js` file. When a visitor switches a public dashboard to Local Storage, the change affects only that visitor's browser. To hide the **Setup** option or **Load Cfg** option on public installations, add the following lines to your `config.js`:
 
 ```
 const disableSetup = true;
+const disableLdCfg = true;
 ```
 
 ## Video guides
@@ -87,6 +90,7 @@ Michael Stevens maintains a Docker image: [michaelsteven/hamdashboard](https://r
 - Double-click an image to view full-screen; double-click again to close.
 - Right-click an image to cycle to the next image (if multiple images are assigned to a tile).
 - Tiles refresh independently (default refresh behavior: every 5 minutes for most sources).
+- Tiles with iFrames: double click to unlock the tile and interact with the content
 
 ## Pi-Star iFrame embedding (fix)
 
@@ -108,9 +112,21 @@ This screenshot shows Pi-Star settings:
 
 If the source server forbids embedding and you cannot change its headers, options are limited. A local proxy that strips the header can work but adds complexity. Use the online tool to test a URL before adding it to a tile: [iFrame Tester online](https://iframetester.com/)
 
-## Changelog highlights (recent)
+## Changelog highlights (most recent)
 
 See the chronological entries below for full details. Notable recent changes:
+
+- 2026.01.24 — Added 10 features:
+  1. JSON & JSONP Configuration Support (example .json and JsonP .js files added to the repo)
+  2. Dynamic Date Placeholders
+  3. Rotating Tile **Titles** - Requested by multiple users, see example in all 3 config files
+  4. Smart Mixed-Media Interactivity (for tiles mixing images, videos, iFrames)
+  5. Enhanced Full-Screen Navigation
+  6. Setup UI Improvements
+  7. Enhanced Breadcrumb Navigation to provide always a return path to previous configs
+  8. PREVIOUS Menu Button
+  9. Enhanced Config File Detection to support various file formats
+  10. File Picker Integration to load different dashboards on the fly
 
 - 2026.01.22 — Added directives to load images and iframes with colors inverted. Full details on the release notes.
 - 2026.01.17 — Ability to load any config files via the menu.
@@ -119,9 +135,10 @@ See the chronological entries below for full details. Notable recent changes:
 - 2025.03.29 — Scrolling RSS ticker and clickable feed items.
 - 2025.01.24 — Settings merged into `hamdash.html`; realtime variable changes enabled.
 
-Upgrade notes
+## Upgrade notes
 
-- Read the specific upgrade notes in the changelog below before replacing `config.js`.
+- For simpler sintax you can now use Json or JsonP files for config files
+- Read the specific upgrade notes in the changelog below before replacing `config.js`
 - To use multiple config files, add a menu entry in `config.js` such as:
 
 ```
@@ -130,7 +147,17 @@ var aURL = [
   ["f3de21ff", "WX", "weather.js", "1", "R"]
 ];
 ```
+**Rotating Tile Titles Usage:**
 
+Pass an array as the first element of a tile configuration.
+```javascript
+// Example in config.js
+[
+  ["Radar CONUS", "Radar Local"], 
+  "https://radar.com/map1.gif", 
+  "https://radar.com/map2.gif"
+]
+```
 ## Example images
 
 <img src="https://github.com/VA3HDL/hamdashboard/blob/main/examples/satellite.png?raw=true" width="600">

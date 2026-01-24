@@ -1,6 +1,6 @@
 const disableSetup = false;
 const disableLdCfg = false;
-var topBarCenterText = `VA3HDL - FN04ga`;
+var topBarCenterText = `VA3HDL - FN04ga - .js`;
 
 // Grid layout
 var layout_cols = 4;
@@ -11,7 +11,7 @@ var layout_rows = 3;
 // The values are [color code, menu text, target link, scale factor, side],
 // add new lines following the structure for extra menu options. The comma at the end is important!
 var aURL = [
-  ["f3de21ff", "SATS", "satellite.js"],
+  ["f3de21", "SATS", "satellite.js"],
   
   ["2196F3", "CLUBLOG", "https://clublog.org/livestream/VA3HDL", "1.7"],
   [
@@ -60,7 +60,7 @@ var aURL = [
 // You can't add more items because there are only 12 placeholders on the dashboard
 // but you can replace the titles and the images with anything you want.
 var aIMG = [
-  ["RADAR", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
+  [["Radar CONUS", "Radar Small"], "https://radar.weather.gov/ridge/standard/CONUS-LARGE_loop.gif", "https://radar.weather.gov/ridge/standard/CONUS_loop.gif"],
   [
     "LOCAL RADAR (inverted)",
     "invert|https://radar.weather.gov/ridge/standard/KNQA_loop.gif",
