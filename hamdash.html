@@ -1915,31 +1915,59 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
       }
     }
 
+    // Store interval IDs to prevent duplicates
+    let rssIntervals = [];
+    let fetchingFeeds = new Set();
+      
     // Function to fetch and display the RSS feed
     function fetchAndDisplayRss() {
+      // Clear any existing intervals first
+      rssIntervals.forEach(intervalId => clearInterval(intervalId));
+      rssIntervals = [];
+      fetchingFeeds.clear();
+      
       // List of CORS proxies to try (in order of preference)
+      // Reordered and expanded based on reliability
       const corsProxies = [
         (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
         (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+        (url) => `https://cors-anywhere.herokuapp.com/${url}`, // May require request access
+        (url) => `https://thingproxy.freeboard.io/fetch/${url}`
       ];
       
       const rssTickerContent = document.getElementById("rss-ticker-content");
       const feedContents = new Array(aRSS.length).fill("");
       let successfulFeeds = 0;
-
+    
       console.log("Fetching RSS feeds...");
       
       aRSS.forEach(([rssUrl, interval], index) => {
-        const fetchFeed = async () => {
-          console.log(`Fetching feed: ${rssUrl}`);
+        const fetchFeed = async (retryCount = 0, maxRetries = 2) => {
+          // Prevent multiple simultaneous fetches of the same feed
+          if (fetchingFeeds.has(rssUrl)) {
+            console.log(`Skipping ${rssUrl} - already fetching`);
+            return;
+          }
+          
+          fetchingFeeds.add(rssUrl);
+          console.log(`Fetching feed: ${rssUrl}${retryCount > 0 ? ` (retry ${retryCount})` : ''}`);
+          
+          let lastError = null;
           
           // Try each proxy in sequence
           for (let proxyIndex = 0; proxyIndex < corsProxies.length; proxyIndex++) {
             const proxyUrl = corsProxies[proxyIndex](rssUrl);
             
             try {
-              const response = await fetch(proxyUrl);
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+              
+              const response = await fetch(proxyUrl, { 
+                signal: controller.signal,
+                cache: 'no-cache'
+              });
+              clearTimeout(timeoutId);
               
               if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
@@ -1954,7 +1982,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
               
               const parser = new DOMParser();
               const xmlDoc = parser.parseFromString(data, "text/xml");
-
+              
               // Check for XML parsing errors
               const parserError = xmlDoc.querySelector('parsererror');
               if (parserError) {
@@ -1966,22 +1994,22 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
               if (xmlDoc.querySelector("entry")) {
                 itmTag = "entry"; // Switch to Atom if "entry" is found
               }
-
+            
               const feedTitle = xmlDoc.querySelector("channel > title, feed > title")?.textContent || "Unknown Feed";
               const lastUpdated = xmlDoc.querySelector("channel > lastBuildDate, feed > updated")?.textContent || "Unknown Time";
-
+            
               const items = xmlDoc.querySelectorAll(itmTag);
               console.log(`✓ Found ${items.length} items in feed: ${rssUrl} (proxy ${proxyIndex + 1})`);
             
               if (items.length === 0) {
                 throw new Error('No items found in feed');
               }
-
+            
               let feedText = `<span style="font-size: 0.9em; color: #aaa;"> ${feedTitle} - Last Updated: ${lastUpdated} </span> - `;
-
+            
               items.forEach((item) => {
                 const title = item.querySelector("title")?.textContent || "No title";
-
+              
                 // Handle both <link href="..."> and <link>...</link>
                 const linkElement = item.querySelector("link");
                 let link = "";
@@ -1992,43 +2020,52 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                     link = linkElement.textContent;
                   }
                 }
-
+              
                 feedText += `<a href="${link}" target="_blank" style="margin-right: 50px;">${title}</a>`;
               });
-
+            
               // Update the content for this feed in the array
               feedContents[index] = feedText;
               successfulFeeds++;
-
+            
               // Combine all feeds and update the ticker content
               rssTickerContent.innerHTML = feedContents.filter(f => f).join("") || 
                 '<span style="color: #f88;">Loading feeds...</span>';
-
+            
               // Update the ticker speed
               updateTickerSpeed();
               
-              // Success! Break out of proxy loop
-              break;
+              // Success! Remove from tracking and return
+              fetchingFeeds.delete(rssUrl);
+              return;
               
             } catch (error) {
+              lastError = error;
               console.warn(`✗ Proxy ${proxyIndex + 1} failed for ${rssUrl}:`, error.message);
-              
-              // If this was the last proxy, show error
-              if (proxyIndex === corsProxies.length - 1) {
-                console.error(`❌ All proxies failed for ${rssUrl}`);
-                feedContents[index] = `<span style="color: #f88; margin-right: 50px;">Failed to load: ${rssUrl.split('/')[2]}</span>`;
-                rssTickerContent.innerHTML = feedContents.filter(f => f).join("") || 
-                  '<span style="color: #f88;">Failed to load RSS feeds. Check console for details.</span>';
-              }
             }
           }
+          
+          // All proxies failed - try retry if we haven't exceeded max retries
+          if (retryCount < maxRetries) {
+            console.log(`⟳ Retrying ${rssUrl} in ${(retryCount + 1) * 2} seconds...`);
+            fetchingFeeds.delete(rssUrl);
+            setTimeout(() => fetchFeed(retryCount + 1, maxRetries), (retryCount + 1) * 2000);
+          } else {
+            // Final failure
+            console.error(`❌ All proxies and retries failed for ${rssUrl}`);
+            feedContents[index] = `<span style="color: #f88; margin-right: 50px;">Failed to load: ${rssUrl.split('/')[2]}</span>`;
+            rssTickerContent.innerHTML = feedContents.filter(f => f).join("") || 
+              '<span style="color: #f88;">Failed to load RSS feeds. Check console for details.</span>';
+            fetchingFeeds.delete(rssUrl);
+          }
         };
-
+      
         // Fetch the feed immediately
         fetchFeed();
-
+      
         // Set up periodic refresh based on the interval (in minutes)
-        setInterval(fetchFeed, interval * 60 * 1000);
+        const intervalId = setInterval(() => fetchFeed(), interval * 60 * 1000);
+        rssIntervals.push(intervalId);
       });
     }
 
