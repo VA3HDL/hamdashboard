@@ -1505,7 +1505,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
     help += "Right click on an image to display the next one.\n";
     help += "Images rotates every 30 seconds automatically by default.\n";
 
-    const currentVersion = "v2026.01.24";
+    const currentVersion = "v2026.01.30";
 
     async function getLatestVersion() {
       try {
@@ -1917,22 +1917,50 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
 
     // Function to fetch and display the RSS feed
     function fetchAndDisplayRss() {
-      const proxyUrl = "https://corsproxy.io/";
+      // List of CORS proxies to try (in order of preference)
+      const corsProxies = [
+        (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+      ];
+      
       const rssTickerContent = document.getElementById("rss-ticker-content");
-
-      // Array to store the content of each feed
       const feedContents = new Array(aRSS.length).fill("");
+      let successfulFeeds = 0;
 
       console.log("Fetching RSS feeds...");
+      
       aRSS.forEach(([rssUrl, interval], index) => {
-        const fetchFeed = () => {
+        const fetchFeed = async () => {
           console.log(`Fetching feed: ${rssUrl}`);
-          fetch(proxyUrl + "?url=" + encodeURIComponent(rssUrl))
-            .then((response) => response.text())
-            .then((data) => {
+          
+          // Try each proxy in sequence
+          for (let proxyIndex = 0; proxyIndex < corsProxies.length; proxyIndex++) {
+            const proxyUrl = corsProxies[proxyIndex](rssUrl);
+            
+            try {
+              const response = await fetch(proxyUrl);
+              
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+              }
+              
+              const data = await response.text();
+              
+              // Check if we actually got XML (not an HTML error page)
+              if (!data.trim().startsWith('<?xml') && !data.trim().startsWith('<rss') && !data.trim().startsWith('<feed')) {
+                throw new Error('Response is not XML');
+              }
+              
               const parser = new DOMParser();
               const xmlDoc = parser.parseFromString(data, "text/xml");
 
+              // Check for XML parsing errors
+              const parserError = xmlDoc.querySelector('parsererror');
+              if (parserError) {
+                throw new Error('XML parsing error: ' + parserError.textContent);
+              }
+            
               // Automatically detect whether the feed uses "item" or "entry" tags
               let itmTag = "item"; // Default to RSS
               if (xmlDoc.querySelector("entry")) {
@@ -1943,43 +1971,57 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
               const lastUpdated = xmlDoc.querySelector("channel > lastBuildDate, feed > updated")?.textContent || "Unknown Time";
 
               const items = xmlDoc.querySelectorAll(itmTag);
-              console.log(`Found ${items.length} items in feed: ${rssUrl}`);
+              console.log(`✓ Found ${items.length} items in feed: ${rssUrl} (proxy ${proxyIndex + 1})`);
+            
+              if (items.length === 0) {
+                throw new Error('No items found in feed');
+              }
 
               let feedText = `<span style="font-size: 0.9em; color: #aaa;"> ${feedTitle} - Last Updated: ${lastUpdated} </span> - `;
 
               items.forEach((item) => {
-                const title = item.querySelector("title").textContent;
+                const title = item.querySelector("title")?.textContent || "No title";
 
                 // Handle both <link href="..."> and <link>...</link>
                 const linkElement = item.querySelector("link");
                 let link = "";
                 if (linkElement) {
                   if (linkElement.getAttribute("href")) {
-                    // If <link href="...">
                     link = linkElement.getAttribute("href");
                   } else {
-                    // If <link>...</link>
                     link = linkElement.textContent;
                   }
                 }
 
-                // console.log("title:", title);
-                // console.log("link:", link);
                 feedText += `<a href="${link}" target="_blank" style="margin-right: 50px;">${title}</a>`;
               });
 
               // Update the content for this feed in the array
               feedContents[index] = feedText;
+              successfulFeeds++;
 
               // Combine all feeds and update the ticker content
-              rssTickerContent.innerHTML = feedContents.join("") || "Failed to load RSS feeds.";
+              rssTickerContent.innerHTML = feedContents.filter(f => f).join("") || 
+                '<span style="color: #f88;">Loading feeds...</span>';
 
               // Update the ticker speed
               updateTickerSpeed();
-            })
-            .catch((error) => {
-              console.error(`Error fetching RSS feed from ${rssUrl}:`, error);
-            });
+              
+              // Success! Break out of proxy loop
+              break;
+              
+            } catch (error) {
+              console.warn(`✗ Proxy ${proxyIndex + 1} failed for ${rssUrl}:`, error.message);
+              
+              // If this was the last proxy, show error
+              if (proxyIndex === corsProxies.length - 1) {
+                console.error(`❌ All proxies failed for ${rssUrl}`);
+                feedContents[index] = `<span style="color: #f88; margin-right: 50px;">Failed to load: ${rssUrl.split('/')[2]}</span>`;
+                rssTickerContent.innerHTML = feedContents.filter(f => f).join("") || 
+                  '<span style="color: #f88;">Failed to load RSS feeds. Check console for details.</span>';
+              }
+            }
+          }
         };
 
         // Fetch the feed immediately

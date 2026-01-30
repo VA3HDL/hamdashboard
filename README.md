@@ -116,6 +116,8 @@ If the source server forbids embedding and you cannot change its headers, option
 
 See the chronological entries below for full details. Notable recent changes:
 
+- 2026.01.30 — Fixed RSS feeds not loading on some hosting situations due to a CORS issue.
+
 - 2026.01.24 — Added 10 features:
   1. JSON & JSONP Configuration Support (example .json and JsonP .js files added to the repo)
   2. Dynamic Date Placeholders
