@@ -81,6 +81,10 @@ const disableLdCfg = true;
 - [French review — Jean-Benard F5SVP](https://www.youtube.com/watch?v=o9Dl9A5hqQI)
 - [Spanish instructions — Jose EA8EE](https://www.youtube.com/watch?v=3CnsfB3zNuM)
 
+## Getting help
+
+Always check the [Q&A section](https://github.com/VA3HDL/hamdashboard/discussions/categories/q-a) for solutions to common issues.
+
 ## Docker
 
 Michael Stevens maintains a Docker image: [michaelsteven/hamdashboard](https://registry.hub.docker.com/r/michaelsteven/hamdashboard)
