@@ -120,6 +120,8 @@ If the source server forbids embedding and you cannot change its headers, option
 
 See the chronological entries below for full details. Notable recent changes:
 
+- 2026.07.01 — Replaced several RSS proxies causing feeds not loading, with api.rss2json.com service.
+
 - 2026.01.30 — Fixed RSS feeds not loading on some hosting situations due to a CORS issue.
 
 - 2026.01.24 — Added 10 features:
