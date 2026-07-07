@@ -120,6 +120,8 @@ If the source server forbids embedding and you cannot change its headers, option
 
 See the chronological entries below for full details. Notable recent changes:
 
+- 2026.07.07 — Fixed RSS updated timestamp issue. The rss2json.com API doesn't return an updated field in the feed object. Changed to use data.items?.[0]?.pubDate which contains the timestamp of the most recent feed item (e.g., "2026-07-05 00:00:54").
+
 - 2026.07.01 — Replaced several RSS proxies causing feeds not loading, with api.rss2json.com service.
 
 - 2026.01.30 — Fixed RSS feeds not loading on some hosting situations due to a CORS issue.

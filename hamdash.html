@@ -1976,7 +1976,7 @@ var tileDelay = ${JSON.stringify(settings.aImages.map(item => item[2]), null, 2)
                   }
                 
               const feedTitle = data.feed?.title || "Unknown Feed";
-              const lastUpdated = data.feed?.updated || "Unknown Time";
+              const lastUpdated = data.items?.[0]?.pubDate || "Unknown Time";
               const items = data.items;
               
               console.log(`Loaded ${items.length} items from ${rssUrl}`);
